@@ -1,0 +1,8 @@
+﻿versioning:
+  enabled: true
+  max_versions: 50
+  max_age_days: 90
+  triggers:
+    before_prepare: true
+    on_import: true
+    daily: true

@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "logs\\.c689ef6d3bb2e1471719d0b6c735d7a4b57ac629-audit.json",
+    "files": [
+        {
+            "date": 1779491443784,
+            "name": "logs\\toolformer-2026-05-23.log",
+            "hash": "ead8dedd4a8f9d0286212f7f42d9252c39d28a079efd6926b19339f6769911d5"
+        }
+    ],
+    "hashType": "sha256"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "532a3c06-f0f8-4ff0-ac0c-e71f46e0e927",
+  "name": "C:\\ahmed\\ccp",
+  "projectResources": {
+    "resources": [
+      {
+        "gitFolder": {
+          "folderUri": "file://C:/ahmed/ccp",
+          "allowWrite": true
+        }
+      }
+    ]
+  }
+}

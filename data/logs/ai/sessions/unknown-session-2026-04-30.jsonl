@@ -1,0 +1,2 @@
+{"timestamp":"2026-04-30T07:22:14.741Z","sessionId":"unknown-session","section":7,"module":"LLM","name":"Inference Complete","data":{"provider":"ollama","model":"phi:2.7b","processingTime":91295,"message":"Réponse Ollama générée en 91295ms"}}
+{"timestamp":"2026-04-30T07:22:14.743Z","sessionId":"unknown-session","section":8,"module":"LLM","name":"Inference Success","data":{"model":"phi:2.7b","tokensGenerated":114,"vitesse":"2.9 tok/s","durationMs":91122,"evalDuration":"39.3s"}}

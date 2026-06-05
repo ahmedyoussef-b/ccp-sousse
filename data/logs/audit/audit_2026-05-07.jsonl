@@ -1,0 +1,4 @@
+{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"bonjour","answerLength":40,"modelUsed":"phi:2.7b"},"success":true,"duration":7626,"id":"audit_1778158986646_egf31q","timestamp":"2026-05-07T13:03:06.646Z"}
+{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"pupitre poste d'eau","answerLength":975,"modelUsed":"phi:2.7b"},"success":true,"duration":87958,"id":"audit_1778159126524_xviqwm","timestamp":"2026-05-07T13:05:26.524Z"}
+{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"donne l'image pupitre cr1","answerLength":351,"modelUsed":"phi:2.7b"},"success":true,"duration":92295,"id":"audit_1778159394368_4vnndx","timestamp":"2026-05-07T13:09:54.368Z"}
+{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"donne l'image pupitre cr1","answerLength":73,"modelUsed":"phi:2.7b"},"success":true,"duration":22191,"id":"audit_1778159458145_liqdbb","timestamp":"2026-05-07T13:10:58.145Z"}

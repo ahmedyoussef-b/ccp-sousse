@@ -1,0 +1,10 @@
+{
+    "colab.activityBarResourceView": true,
+    "colab.serverMounting": true,
+    "colab.terminal": true,
+    "chatgpt.gpt3.provider": "Gemini",
+    "chatgpt.gpt3.apiKey": "AIzaSyB6i7P7fSNxmzRqxKsp1IjF8QlrxvckChk",
+    "chatgpt.gpt3.apiBaseUrl": "https://generativelanguage.googleapis.com/v1beta/openai/",
+    "chatgpt.gpt3.model": "gemini-2.5-flash",
+    "chatgpt.gpt3.maxTokens": 2048
+}

@@ -1,0 +1,51 @@
+# Configuration for AI training
+# config.yaml - Configuration d'entraînement optimisée
+
+model:
+  base: "unsloth/phi-4"
+  max_seq_length: 2048
+  use_4bit: true
+  compute_dtype: "float16"
+  quant_type: "nf4"
+
+lora:
+  rank: 16
+  alpha: 16
+  dropout: 0.0
+  use_rslora: true
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training:
+  batch_size: 2
+  gradient_accumulation_steps: 4
+  num_epochs: 3
+  learning_rate: 2.0e-4
+  warmup_steps: 5
+  weight_decay: 0.01
+  optimizer: "adamw_8bit"
+  scheduler: "linear"
+
+monitoring:
+  logging_steps: 1
+  eval_steps: 50
+  save_steps: 100
+  early_stopping_patience: 3
+  early_stopping_threshold: 0.001
+  gradient_checkpointing: true
+
+quantization:
+  dynamic_v2: true
+  formats:
+    - "q4_k_m"
+    - "q8_0"
+
+export:
+  format: "gguf"
+  quantization: "dynamic_v2_0"

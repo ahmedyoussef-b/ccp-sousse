@@ -1,0 +1,801 @@
+📁 .claude
+│   ├───agents
+│   │   └───kfc
+│   │       ├───spec-design.md
+│   │       ├───spec-impl.md
+│   │       ├───spec-judge.md
+│   │       ├───spec-requirements.md
+│   │       ├───spec-system-prompt-loader.md
+│   │       ├───spec-tasks.md
+│   │       └───spec-test.md
+│   ├───settings
+│   │   └───kfc-settings.json
+│   ├───specs
+│   └───system-prompts
+│       └───spec-workflow-starter.md
+📁 config
+│   └───versioning.yaml
+📁 data
+│   ├───_problematiques
+│   │   └───PID Turbine à Gaz.pdf
+│   ├───centrale_documents
+│   │   ├───A0_DIVERS
+│   │   │   ├───alarmes
+│   │   │   ├───documents_bruts
+│   │   │   ├───equipements
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   ├───B0_AUXILIAIRES
+│   │   │   ├───alarmes
+│   │   │   ├───documents_bruts
+│   │   │   ├───equipements
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   ├───B1_HRSG_TG1
+│   │   │   ├───alarmes
+│   │   │   ├───documents_bruts
+│   │   │   ├───equipements
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   ├───B2_HRSG_TG2
+│   │   │   ├───alarmes
+│   │   │   ├───documents_bruts
+│   │   │   ├───equipements
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   ├───B3_TV_PE
+│   │   │   ├───alarmes
+│   │   │   ├───documents_bruts
+│   │   │   ├───equipements
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   ├───HR
+│   │   │   ├───competences
+│   │   │   ├───documents_bruts
+│   │   │   ├───formations
+│   │   │   ├───organigramme
+│   │   │   ├───plannings
+│   │   │   ├───reunions
+│   │   │   └───ahmed_abbes_profile.txt
+│   │   ├───MAINTENANCE
+│   │   │   ├───documents_bruts
+│   │   │   ├───gammes
+│   │   │   ├───historique
+│   │   │   ├───pieces_rechange
+│   │   │   └───plannings
+│   │   ├───TG1
+│   │   │   ├───alarmes_hmi
+│   │   │   ├───alarmes_techniques
+│   │   │   ├───composants
+│   │   │   ├───documents_bruts
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   ├───TG2
+│   │   │   ├───alarmes_hmi
+│   │   │   ├───alarmes_techniques
+│   │   │   ├───composants
+│   │   │   ├───documents_bruts
+│   │   │   ├───images
+│   │   │   ├───procedures
+│   │   │   └───synoptiques
+│   │   └───_SHARED
+│   │       ├───formation_commune
+│   │       ├───historique_general
+│   │       ├───reglementations
+│   │       ├───securite_generale
+│   │       ├───supervision_globale
+│   │       └───synoptiques_transverses
+│   ├───chromadb
+│   │   ├───12503664-dca4-493d-83f4-e023069f8757
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───1aaea9de-efe2-4100-b92d-a2dd4ede7cd2
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───30f6136d-81b0-4ff9-abcb-c4da94e47969
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───778c1fa4-174a-407f-afe0-fa66d6006982
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───b11ab3f1-b86b-4882-84eb-276270e88c74
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───c639a027-b181-40bd-b954-aaf56804dc8a
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───d3512370-a5a1-4666-9637-597a15422181
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   ├───d7099db8-b2d8-4bf7-a370-905604c00a8d
+│   │   │   ├───data_level0.bin
+│   │   │   ├───header.bin
+│   │   │   ├───length.bin
+│   │   │   └───link_lists.bin
+│   │   └───chroma.sqlite3
+│   ├───logs
+│   │   ├───ai
+│   │   │   ├───errors
+│   │   │   ├───pipeline
+│   │   │   │   ├───2026-04-08.jsonl
+│   │   │   │   └───2026-04-09.jsonl
+│   │   │   └───sessions
+│   │   │       ├───api-13d88d10-2026-04-08.jsonl
+│   │   │       ├───api-2b33fb0f-2026-04-09.jsonl
+│   │   │       ├───api-416dbe69-2026-04-08.jsonl
+│   │   │       ├───api-a442ad03-2026-04-09.jsonl
+│   │   │       ├───api-b56dbeff-2026-04-09.jsonl
+│   │   │       ├───api-beb961b5-2026-04-08.jsonl
+│   │   │       ├───api-ca1ede87-2026-04-08.jsonl
+│   │   │       ├───api-d4189a97-2026-04-08.jsonl
+│   │   │       ├───api-d7d9da8b-2026-04-09.jsonl
+│   │   │       └───test-session-v9-2026-04-08.jsonl
+│   │   ├───audit
+│   │   │   ├───audit_2026-04-08.jsonl
+│   │   │   └───audit_2026-04-09.jsonl
+│   │   ├───chromadb
+│   │   │   ├───chromadb_audit_2026-04-08.jsonl
+│   │   │   └───chromadb_audit_2026-04-09.jsonl
+│   │   ├───performance
+│   │   │   ├───alerts.jsonl
+│   │   │   └───metrics.jsonl
+│   │   ├───roles
+│   │   │   ├───roles_2026-04-08.jsonl
+│   │   │   └───roles_2026-04-09.jsonl
+│   │   └───traces
+│   │       ├───traces_2026-04-08.jsonl
+│   │       └───traces_2026-04-09.jsonl
+│   ├───models
+│   │   ├───extracted
+│   │   │   └───ccp_model
+│   │   │       ├───checkpoint-25
+│   │   │       │   ├───README.md
+│   │   │       │   ├───adapter_config.json
+│   │   │       │   ├───adapter_model.safetensors
+│   │   │       │   ├───optimizer.pt
+│   │   │       │   ├───rng_state.pth
+│   │   │       │   ├───scaler.pt
+│   │   │       │   ├───scheduler.pt
+│   │   │       │   ├───tokenizer.json
+│   │   │       │   ├───tokenizer_config.json
+│   │   │       │   ├───trainer_state.json
+│   │   │       │   └───training_args.bin
+│   │   │       ├───README.md
+│   │   │       ├───adapter_config.json
+│   │   │       ├───adapter_model.safetensors
+│   │   │       ├───tokenizer.json
+│   │   │       └───tokenizer_config.json
+│   │   ├───gguf
+│   │   │   └───ccp_model
+│   │   │       ├───checkpoint-25
+│   │   │       │   ├───README.md
+│   │   │       │   ├───adapter_config.json
+│   │   │       │   ├───adapter_model.safetensors
+│   │   │       │   ├───optimizer.pt
+│   │   │       │   ├───rng_state.pth
+│   │   │       │   ├───scaler.pt
+│   │   │       │   ├───scheduler.pt
+│   │   │       │   ├───tokenizer.json
+│   │   │       │   ├───tokenizer_config.json
+│   │   │       │   ├───trainer_state.json
+│   │   │       │   └───training_args.bin
+│   │   │       ├───Modelfile
+│   │   │       ├───README.md
+│   │   │       ├───adapter_config.json
+│   │   │       ├───adapter_model.safetensors
+│   │   │       ├───tokenizer.json
+│   │   │       └───tokenizer_config.json
+│   │   ├───merged
+│   │   │   ├───ccp_model
+│   │   │   │   ├───checkpoint-25
+│   │   │   │   │   ├───README.md
+│   │   │   │   │   ├───adapter_config.json
+│   │   │   │   │   ├───adapter_model.safetensors
+│   │   │   │   │   ├───optimizer.pt
+│   │   │   │   │   ├───rng_state.pth
+│   │   │   │   │   ├───scaler.pt
+│   │   │   │   │   ├───scheduler.pt
+│   │   │   │   │   ├───tokenizer.json
+│   │   │   │   │   ├───tokenizer_config.json
+│   │   │   │   │   ├───trainer_state.json
+│   │   │   │   │   └───training_args.bin
+│   │   │   │   ├───Modelfile
+│   │   │   │   ├───README.md
+│   │   │   │   ├───adapter_config.json
+│   │   │   │   ├───adapter_model.safetensors
+│   │   │   │   ├───tokenizer.json
+│   │   │   │   └───tokenizer_config.json
+│   │   │   ├───Modelfile
+│   │   │   └───merge.py
+│   │   ├───uploaded
+│   │   ├───uploads
+│   │   │   ├───ccp_model_finetuned.zip
+│   │   │   └───test.zip
+│   │   ├───ccp_model_2026-04-04T23-28-59-619Z.zip
+│   │   ├───convert_prep.py
+│   │   ├───merge_script.py
+│   │   └───registry.json
+│   ├───procedures
+│   │   └───demarrage-chaudiere.json
+│   ├───stt
+│   │   └───temp
+│   ├───training
+│   │   ├───archive
+│   │   │   ├───import1_1775339983674.json
+│   │   │   ├───pompe_crf_1775402781943.json
+│   │   │   ├───pompe_crf_trip_1775402781946.json
+│   │   │   ├───pompe_refrigeration_auxiliaire_trip_1775402781948.json
+│   │   │   ├───reprise_secours_pompes_crf_1775402782082.json
+│   │   │   ├───seuils_temperature_paliers_1775402782084.json
+│   │   │   └───systemes_refroidis_crf_1775402782086.json
+│   │   ├───exports
+│   │   ├───imports
+│   │   │   └───questions_ccp.json
+│   │   ├───logs
+│   │   │   └───versioning.log
+│   │   ├───versions
+│   │   │   ├───examples_v1_2026-04-04_20260404_203242.json
+│   │   │   ├───examples_v2_2026-04-04_20260404_225943.json
+│   │   │   ├───examples_v3_2026-04-04_20260404_225945.json
+│   │   │   ├───examples_v4_2026-04-05_20260405_100722.json
+│   │   │   ├───examples_v5_2026-04-05_20260405_162621.json
+│   │   │   └───examples_v6_2026-04-05_20260405_162622.json
+│   │   ├───dataset.jsonl
+│   │   ├───examples.json
+│   │   ├───feedback_alerts.json
+│   │   ├───feedbacks.json
+│   │   └───preparation_report.json
+│   ├───tts
+│   │   ├───cache
+│   │   │   ├───02250cfddffeaf0a60c9f0510f01e15f.mp3
+│   │   │   ├───07a380ab2a2d6ef9f4c3c1b693819137.mp3
+│   │   │   ├───0c880c6ee4ea3c2c73bb84b165651961.mp3
+│   │   │   ├───0f8128cd35ecae0fab8575935dc3ed8e.mp3
+│   │   │   ├───0feceb454165b010fa0582e8d0a690c4.mp3
+│   │   │   ├───135eda692df0d692d408c4871aaeba22.mp3
+│   │   │   ├───172b95bd1ac15d3926689cf2262c736c.mp3
+│   │   │   ├───1dc8667a1a815b285361d4d85b2d6627.mp3
+│   │   │   ├───1f6ed7fc263dc968a59a69a47d5b84d8.mp3
+│   │   │   ├───20391182f755aeac54e6f03fbb9ab726.mp3
+│   │   │   ├───255023be82e6bbd33bc041a69961433d.mp3
+│   │   │   ├───25c8f04fe7107d66ec72f047a105e2e1.mp3
+│   │   │   ├───261895a575945bd7d07d75b948e41948.mp3
+│   │   │   ├───34667c00e985813f81361c5f5b7dad54.mp3
+│   │   │   ├───3dab51db6a99962bc24820a242231d20.mp3
+│   │   │   ├───3f02310b03a3537f8c368a1621fac71e.mp3
+│   │   │   ├───4179485f88e5ecc742e7b96fea128d37.mp3
+│   │   │   ├───45f24b72497d040f16fbfe44b84fe32a.mp3
+│   │   │   ├───4ae62aa61954e306e02b75966c4861f0.mp3
+│   │   │   ├───4eac87a038c89ac4274f3994e60fd322.mp3
+│   │   │   ├───53bc164fbc1f7ddf142a769693822f7e.mp3
+│   │   │   ├───5c4b540a1054d478e337a390e4d10529.mp3
+│   │   │   ├───67642bf0c66f499658629353c3cd785f.mp3
+│   │   │   ├───6857967afac62e19ce0031ac126dd41d.mp3
+│   │   │   ├───72788bad851dbe4b6fb99b3593c1aa6a.mp3
+│   │   │   ├───81d2952529835b22f965469050626ff1.mp3
+│   │   │   ├───8dbb7cbc47c90381f0e0970d43d58a0d.mp3
+│   │   │   ├───94aa428e3ef6a0027dffe1d37c997555.mp3
+│   │   │   ├───9b4052a22df3644d4d13f95656ebeff2.mp3
+│   │   │   ├───a8de75a7d78b340fbdbd6f0d49a509ac.mp3
+│   │   │   ├───bed15b5b9f55497f6bfdc556052fa7da.mp3
+│   │   │   ├───ca3cd1732dc9fda5dd62d73a0e80b5aa.mp3
+│   │   │   ├───cccf33405b76a0700c8813ea2fba9729.mp3
+│   │   │   ├───dd9c33269ae1ff1c08307b69e8872976.mp3
+│   │   │   ├───ddc1035588e3a3571e5f4d44c480c132.mp3
+│   │   │   ├───e0b78fa7c1da8bf62ae74cbf695422c0.mp3
+│   │   │   ├───e50bcc0ee3a7475333d2ae9340e8ef5e.mp3
+│   │   │   ├───e5b8409bb43afa92afc5077d0b5cbcf3.mp3
+│   │   │   ├───e82b4b1c7c99e4774d36ceb193977b5e.mp3
+│   │   │   ├───ec9609cc2012da13238dac99defefd31.mp3
+│   │   │   ├───edee2212c5df0636a8df15fbf9ab245b.mp3
+│   │   │   ├───eee12fd31f32370a2fdebe5ad85aa592.mp3
+│   │   │   ├───f724bafebf915768121bdd48021ddc0a.mp3
+│   │   │   └───ff1a7126363c670f6c77eabad35713ef.mp3
+│   │   ├───models
+│   │   │   ├───fr_FR-siwis-medium.json
+│   │   │   └───fr_FR-siwis-medium.onnx
+│   │   └───temp
+│   │       ├───123ab9a9-35c3-450d-bd2f-bd0455b42b88.mp3
+│   │       └───c9bb6433-e181-44fc-be96-31a46d6ead50.mp3
+│   └───Nouveau document texte.txt
+📁 src
+│   ├───ai
+│   │   ├───actions
+│   │   │   ├───async-workflow.ts
+│   │   │   ├───contextual-validator.ts
+│   │   │   ├───demonstration-learner.ts
+│   │   │   ├───hierarchical-planner.ts
+│   │   │   ├───predictive-engine.ts
+│   │   │   ├───reversible-executor.ts
+│   │   │   └───toolformer-local.ts
+│   │   ├───agent
+│   │   │   ├───config
+│   │   │   │   └───agent.config.ts
+│   │   │   ├───utils
+│   │   │   │   └───logger.ts
+│   │   │   ├───agent-core.ts
+│   │   │   ├───agent-learner.ts
+│   │   │   ├───mcp.ts
+│   │   │   ├───task-executor.ts
+│   │   │   ├───task-planner.ts
+│   │   │   └───tool-registry.ts
+│   │   ├───cache
+│   │   │   ├───config
+│   │   │   │   └───cache.config.ts
+│   │   │   └───cache-manager.ts
+│   │   ├───config
+│   │   │   └───models.config.ts
+│   │   ├───flows
+│   │   │   ├───agent-flow.ts
+│   │   │   ├───chat-flow.ts
+│   │   │   ├───delete-document-flow.ts
+│   │   │   ├───generate-homepage-content-draft.ts
+│   │   │   ├───ingest-document-flow.ts
+│   │   │   └───procedure-help-flow.ts
+│   │   ├───learning
+│   │   │   ├───utils
+│   │   │   │   └───logger.ts
+│   │   │   ├───analytics.ts
+│   │   │   ├───collaborative-network.ts
+│   │   │   ├───concept-hierarchy.ts
+│   │   │   ├───cross-user-learning.ts
+│   │   │   ├───curriculum.ts
+│   │   │   ├───episodic-memory.ts
+│   │   │   ├───implicit-rl.ts
+│   │   │   ├───knowledge-distillation.ts
+│   │   │   ├───meta-learning.ts
+│   │   │   ├───spaced-repetition.ts
+│   │   │   └───transfer-learning.ts
+│   │   ├───mcp
+│   │   │   └───service.ts
+│   │   ├───orchestration
+│   │   │   ├───agentic-loop.ts
+│   │   │   └───multi-agent-system.ts
+│   │   ├───prompts
+│   │   │   └───meta-prompt-generator.ts
+│   │   ├───providers
+│   │   │   ├───claude-local-provider.ts
+│   │   │   ├───hybrid-provider.ts
+│   │   │   └───ollama-client.ts
+│   │   ├───rag
+│   │   │   ├───config
+│   │   │   │   └───rag.config.ts
+│   │   │   ├───interfaces
+│   │   │   │   └───vector-store.ts
+│   │   │   ├───schemas
+│   │   │   │   └───query.schema.ts
+│   │   │   ├───utils
+│   │   │   │   ├───logger.ts
+│   │   │   │   └───stats-manager.ts
+│   │   │   ├───context-assembler.ts
+│   │   │   ├───intelligent-retriever.ts
+│   │   │   ├───local-llm.ts
+│   │   │   ├───procedure-detector.ts
+│   │   │   ├───procedure-extractor.ts
+│   │   │   ├───query-analyzer.ts
+│   │   │   └───rag-learning-loop.ts
+│   │   ├───reasoning
+│   │   │   ├───analogical.ts
+│   │   │   ├───collaborative.ts
+│   │   │   ├───confidence-scorer.ts
+│   │   │   ├───contrastive.ts
+│   │   │   ├───counterfactual.ts
+│   │   │   ├───dynamic-cot.ts
+│   │   │   ├───latent-tree.ts
+│   │   │   ├───metacognition.ts
+│   │   │   ├───modular.ts
+│   │   │   └───self-consistency.ts
+│   │   ├───router
+│   │   │   ├───model-router.ts
+│   │   │   ├───smart-router.ts
+│   │   │   └───smart-router.ts.bak
+│   │   ├───training
+│   │   │   ├───colab
+│   │   │   │   ├───requirements.txt
+│   │   │   │   ├───sync.py
+│   │   │   │   └───training.py
+│   │   │   ├───dashboard
+│   │   │   │   └───route.ts
+│   │   │   ├───real
+│   │   │   │   ├───adapter.ts
+│   │   │   │   ├───config.yaml
+│   │   │   │   ├───evaluate.py
+│   │   │   │   ├───requirements-minimal.txt
+│   │   │   │   ├───requirements.txt
+│   │   │   │   └───train.py
+│   │   │   ├───colab-bridge.ts
+│   │   │   ├───colab-trigger.service.ts
+│   │   │   ├───continuous-training.ts
+│   │   │   ├───daily-learning-cycle.ts
+│   │   │   ├───data-collector.ts
+│   │   │   ├───data-preparer.ts
+│   │   │   ├───feedback-loop.ts
+│   │   │   ├───inference-engine.ts
+│   │   │   ├───model-evaluator.ts
+│   │   │   ├───model-registry.ts
+│   │   │   ├───model-trainer.ts
+│   │   │   ├───personalized-recommender.ts
+│   │   │   ├───training-pipeline.ts
+│   │   │   └───types.ts
+│   │   ├───validation
+│   │   │   └───context-validator.ts
+│   │   ├───vector
+│   │   │   ├───chromadb-manager.ts
+│   │   │   ├───chromadb-schema.ts
+│   │   │   ├───collection-sync.service.ts
+│   │   │   ├───dynamic-revectorization.ts
+│   │   │   └───embeddings.ts
+│   │   ├───adaptive-tuning.ts
+│   │   ├───continuous-learning.ts
+│   │   ├───dynamic-prompt.ts
+│   │   ├───genkit.ts
+│   │   ├───graph-store.ts
+│   │   ├───knowledge-graph-builder.ts
+│   │   ├───query-intent-analyzer.ts
+│   │   └───semantic-cache.ts
+│   ├───app
+│   │   ├───admin
+│   │   │   ├───documents
+│   │   │   │   └───[...path]
+│   │   │   │       └───page.tsx
+│   │   │   ├───logs
+│   │   │   │   └───page.tsx
+│   │   │   └───page.tsx
+│   │   ├───api
+│   │   │   ├───admin
+│   │   │   │   ├───collections
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───diagnostics
+│   │   │   │       └───route.ts
+│   │   │   ├───agent
+│   │   │   │   ├───dashboard
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───route.ts
+│   │   │   ├───chat
+│   │   │   │   ├───claude-compatible
+│   │   │   │   │   ├───models
+│   │   │   │   │   │   └───route.js
+│   │   │   │   │   └───route.js
+│   │   │   │   ├───route.ts
+│   │   │   │   └───route.ts.backup
+│   │   │   ├───chromadb
+│   │   │   │   └───audit
+│   │   │   │       └───route.ts
+│   │   │   ├───config
+│   │   │   │   └───active-model
+│   │   │   │       └───route.ts
+│   │   │   ├───documents
+│   │   │   │   ├───[id]
+│   │   │   │   │   ├───metadata
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   ├───sync
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   ├───text
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───collection
+│   │   │   │   │   └───[name]
+│   │   │   │   │       └───route.ts
+│   │   │   │   ├───collections
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───delete
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───detail
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───mkdir
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───raw
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───rename
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───search
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───tree
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───upload
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───vectorize
+│   │   │   │       └───route.ts
+│   │   │   ├───feedback
+│   │   │   │   ├───export
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───route.ts
+│   │   │   ├───feedback-alerts
+│   │   │   │   └───route.ts
+│   │   │   ├───health
+│   │   │   │   └───route.ts
+│   │   │   ├───ingest
+│   │   │   │   ├───stream
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───route.ts
+│   │   │   ├───learning
+│   │   │   │   └───dashboard
+│   │   │   │       └───route.ts
+│   │   │   ├───logs
+│   │   │   │   └───route.ts
+│   │   │   ├───ml
+│   │   │   │   └───dashboard
+│   │   │   │       └───route.ts
+│   │   │   ├───ollama
+│   │   │   │   ├───import
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───models
+│   │   │   │   │   ├───[name]
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───status
+│   │   │   │       └───route.ts
+│   │   │   ├───procedure
+│   │   │   │   └───route.ts
+│   │   │   ├───rag
+│   │   │   │   └───dashboard
+│   │   │   │       └───route.ts
+│   │   │   ├───train
+│   │   │   │   └───route.ts
+│   │   │   ├───training
+│   │   │   │   ├───colab
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───convert-gguf
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───dashboard
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───dataset
+│   │   │   │   │   ├───delete
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   ├───folder
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   ├───prepare
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   ├───stats
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   └───tree
+│   │   │   │   │       └───route.ts
+│   │   │   │   ├───download-model
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───examples
+│   │   │   │   │   ├───[id]
+│   │   │   │   │   │   └───route.ts
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───export
+│   │   │   │   │   └───jsonl
+│   │   │   │   │       └───route.ts
+│   │   │   │   ├───extract-model
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───import-ollama
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───merge-lora
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───receive-model
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───upload-dataset
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───validate-model
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───versions
+│   │   │   │       └───route.ts
+│   │   │   ├───vision
+│   │   │   │   ├───diagnose
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───register
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───search
+│   │   │   │       └───route.ts
+│   │   │   ├───voice
+│   │   │   │   ├───health
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───stt
+│   │   │   │   │   └───route.ts
+│   │   │   │   ├───synthesize
+│   │   │   │   │   └───route.ts
+│   │   │   │   └───voices
+│   │   │   │       └───route.ts
+│   │   │   └───ws
+│   │   │       └───route.ts
+│   │   ├───docs
+│   │   │   └───page.tsx
+│   │   ├───documents
+│   │   │   ├───[id]
+│   │   │   │   └───page.tsx
+│   │   │   ├───manage
+│   │   │   │   └───page.tsx
+│   │   │   └───upload
+│   │   │       └───page.tsx
+│   │   ├───help
+│   │   │   └───page.tsx
+│   │   ├───lib
+│   │   │   ├───data
+│   │   │   │   └───chromadb
+│   │   │   │       ├───c33ce60d-6467-45b0-8f6a-67b8256dfdcd
+│   │   │   │       │   ├───data_level0.bin
+│   │   │   │       │   ├───header.bin
+│   │   │   │       │   ├───length.bin
+│   │   │   │       │   └───link_lists.bin
+│   │   │   │       └───chroma.sqlite3
+│   │   │   └───placeholder-images.json
+│   │   ├───prompts
+│   │   │   └───page.tsx
+│   │   ├───training
+│   │   │   ├───dataset-manager
+│   │   │   │   └───page.tsx
+│   │   │   ├───integration
+│   │   │   │   └───page.tsx
+│   │   │   ├───layout.tsx
+│   │   │   └───page.tsx
+│   │   ├───vision
+│   │   │   └───page.tsx
+│   │   ├───favicon.ico
+│   │   ├───globals.css
+│   │   ├───layout.tsx
+│   │   └───page.tsx
+│   ├───components
+│   │   ├───chat
+│   │   │   ├───Chat.tsx
+│   │   │   ├───ClaudeModelSelector.tsx
+│   │   │   ├───FeedbackHistory.tsx
+│   │   │   ├───FeedbackStars.tsx
+│   │   │   ├───ProcedureGuide.tsx
+│   │   │   ├───ProcedureProposal.tsx
+│   │   │   ├───ProcedureSteps.tsx
+│   │   │   ├───VoiceControls.tsx
+│   │   │   ├───VoiceInput.tsx
+│   │   │   └───VoiceMessage.tsx
+│   │   ├───document
+│   │   │   ├───DocumentPreview.tsx
+│   │   │   ├───ExtractionPanel.tsx
+│   │   │   ├───MetadataPanel.tsx
+│   │   │   ├───StatisticsPanel.tsx
+│   │   │   └───SyncStatusIndicator.tsx
+│   │   ├───document-manager
+│   │   │   ├───DocumentManager.tsx
+│   │   │   ├───FileTree.tsx
+│   │   │   ├───SyncStatus.tsx
+│   │   │   └───UploadZone.tsx
+│   │   ├───layout
+│   │   │   └───Sidebar.tsx
+│   │   ├───procedure
+│   │   │   └───StepByStepGuide.tsx
+│   │   ├───training
+│   │   │   ├───ColabLauncher.tsx
+│   │   │   ├───ColabWorkflow.tsx
+│   │   │   ├───DataCollection.tsx
+│   │   │   ├───FeedbackDashboard.tsx
+│   │   │   ├───FeedbackPanel.tsx
+│   │   │   ├───JSONUploader.tsx
+│   │   │   ├───JSONUploader.tsx.bak
+│   │   │   ├───KnowledgeInjector.tsx
+│   │   │   ├───ManualTrainingInterface.tsx
+│   │   │   ├───ManualTrainingInterface.tsx.bak
+│   │   │   ├───MetricsCards.tsx
+│   │   │   ├───ModelIntegrationWizard.tsx
+│   │   │   ├───ModelPerformance.tsx
+│   │   │   ├───OllamaCommandsPanel.tsx
+│   │   │   ├───OllamaModelManager.tsx
+│   │   │   ├───RealTimeStatus.tsx
+│   │   │   ├───ResponseQuality.tsx
+│   │   │   ├───TrainingControls.tsx
+│   │   │   ├───TrainingDashboard.tsx
+│   │   │   ├───TrainingHistory.tsx
+│   │   │   ├───TrainingProgress.tsx
+│   │   │   └───VersionHistory.tsx
+│   │   ├───ui
+│   │   │   ├───AudioPlayer.tsx
+│   │   │   ├───accordion.tsx
+│   │   │   ├───alert-dialog.tsx
+│   │   │   ├───alert.tsx
+│   │   │   ├───avatar.tsx
+│   │   │   ├───badge.tsx
+│   │   │   ├───button.tsx
+│   │   │   ├───calendar.tsx
+│   │   │   ├───card.tsx
+│   │   │   ├───carousel.tsx
+│   │   │   ├───chart.tsx
+│   │   │   ├───checkbox.tsx
+│   │   │   ├───collapsible.tsx
+│   │   │   ├───dialog.tsx
+│   │   │   ├───dropdown-menu.tsx
+│   │   │   ├───form.tsx
+│   │   │   ├───input.tsx
+│   │   │   ├───label.tsx
+│   │   │   ├───menubar.tsx
+│   │   │   ├───popover.tsx
+│   │   │   ├───progress.tsx
+│   │   │   ├───radio-group.tsx
+│   │   │   ├───scroll-area.tsx
+│   │   │   ├───select.tsx
+│   │   │   ├───separator.tsx
+│   │   │   ├───sheet.tsx
+│   │   │   ├───sidebar.tsx
+│   │   │   ├───skeleton.tsx
+│   │   │   ├───slider.tsx
+│   │   │   ├───switch.tsx
+│   │   │   ├───table.tsx
+│   │   │   ├───tabs.tsx
+│   │   │   ├───tagInput.tsx
+│   │   │   ├───textarea.tsx
+│   │   │   ├───toast.tsx
+│   │   │   ├───toaster.tsx
+│   │   │   └───tooltip.tsx
+│   │   ├───upload
+│   │   │   ├───DocumentManager.tsx
+│   │   │   ├───DocumentUploader.tsx
+│   │   │   └───Upload.tsx.back
+│   │   ├───vision
+│   │   │   ├───CameraCapture.tsx
+│   │   │   ├───VisionConfirmDialog.tsx
+│   │   │   └───VisionResults.tsx
+│   │   └───Navbar.tsx
+│   ├───hooks
+│   │   ├───use-mobile.tsx
+│   │   ├───use-toast.ts
+│   │   ├───useCamera.ts
+│   │   ├───useVisionSearch.ts
+│   │   ├───useVoice.ts
+│   │   ├───useVoiceEnhanced.ts
+│   │   ├───useVoiceRecognition.ts
+│   │   └───useWebSocket.ts
+│   ├───lib
+│   │   ├───api
+│   │   │   └───client.ts
+│   │   ├───document-manager
+│   │   │   ├───config.ts
+│   │   │   ├───document-processor.ts
+│   │   │   ├───document-utils.ts
+│   │   │   ├───file-service.ts
+│   │   │   └───ocrspace-service.ts
+│   │   ├───logger
+│   │   │   ├───ai-logger.ts
+│   │   │   ├───audit-logger.ts
+│   │   │   ├───chromadb-audit.ts
+│   │   │   ├───performance-logger.ts
+│   │   │   ├───request-context.ts
+│   │   │   ├───request-logger.ts
+│   │   │   └───role-logger.ts
+│   │   ├───services
+│   │   │   ├───sttProviders
+│   │   │   │   ├───voskProvider.ts
+│   │   │   │   └───webSpeechProvider.ts
+│   │   │   ├───ttsProviders
+│   │   │   │   ├───edgeProvider.ts
+│   │   │   │   └───piperProvider.ts
+│   │   │   ├───sttService.ts
+│   │   │   ├───ttsCache.ts
+│   │   │   ├───ttsService.ts
+│   │   │   └───visionService.ts
+│   │   ├───utils
+│   │   │   ├───performance-optimizer.ts
+│   │   │   └───textCleaner.ts
+│   │   ├───logger.ts
+│   │   └───utils.ts
+│   ├───middleware
+│   │   └───logging-middleware.ts
+│   ├───schemas
+│   │   └───industrial.schema.ts
+│   └───types
+│       ├───genkitx-ollama.d.ts
+│       ├───global.d.ts
+│       ├───handlebars.d.ts
+│       ├───index.ts
+│       ├───industrial.ts
+│       ├───jest.d.ts
+│       ├───vision.ts
+│       └───voice.ts

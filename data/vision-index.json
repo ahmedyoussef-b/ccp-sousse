@@ -1,0 +1,458 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-04-26T00:02:09.740Z",
+  "imageCount": 4,
+  "organeCount": 20,
+  "organes": [
+    {
+      "nom": "CONDENSEUR",
+      "bbox": [
+        100,
+        150,
+        250,
+        200
+      ],
+      "centreX": 175,
+      "centreY": 175,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.95,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\HMI\\8264a477-7dbc-497a-b2db-53fcb5e5bd71.jpg",
+      "imageFilename": "photo_ahmed_abbes",
+      "imageId": "8264a477-7dbc-497a-b2db-53fcb5e5bd71",
+      "imageDescription": "chef_de_bloc_TG2",
+      "imageTags": [
+        "ahmed abbes"
+      ],
+      "imageFolder": "HMI",
+      "indexedAt": "2026-04-26T00:02:09.736Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CIRCUIT HP",
+      "bbox": [
+        300,
+        100,
+        450,
+        150
+      ],
+      "centreX": 375,
+      "centreY": 125,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.92,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\HMI\\8264a477-7dbc-497a-b2db-53fcb5e5bd71.jpg",
+      "imageFilename": "photo_ahmed_abbes",
+      "imageId": "8264a477-7dbc-497a-b2db-53fcb5e5bd71",
+      "imageDescription": "chef_de_bloc_TG2",
+      "imageTags": [
+        "ahmed abbes"
+      ],
+      "imageFolder": "HMI",
+      "indexedAt": "2026-04-26T00:02:09.736Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BP",
+      "bbox": [
+        50,
+        300,
+        120,
+        340
+      ],
+      "centreX": 85,
+      "centreY": 320,
+      "largeur": 70,
+      "hauteur": 40,
+      "confiance": 0.88,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\HMI\\8264a477-7dbc-497a-b2db-53fcb5e5bd71.jpg",
+      "imageFilename": "photo_ahmed_abbes",
+      "imageId": "8264a477-7dbc-497a-b2db-53fcb5e5bd71",
+      "imageDescription": "chef_de_bloc_TG2",
+      "imageTags": [
+        "ahmed abbes"
+      ],
+      "imageFolder": "HMI",
+      "indexedAt": "2026-04-26T00:02:09.736Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BALLON PURGES",
+      "bbox": [
+        200,
+        350,
+        380,
+        400
+      ],
+      "centreX": 290,
+      "centreY": 375,
+      "largeur": 180,
+      "hauteur": 50,
+      "confiance": 0.91,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\HMI\\8264a477-7dbc-497a-b2db-53fcb5e5bd71.jpg",
+      "imageFilename": "photo_ahmed_abbes",
+      "imageId": "8264a477-7dbc-497a-b2db-53fcb5e5bd71",
+      "imageDescription": "chef_de_bloc_TG2",
+      "imageTags": [
+        "ahmed abbes"
+      ],
+      "imageFolder": "HMI",
+      "indexedAt": "2026-04-26T00:02:09.736Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "ATM",
+      "bbox": [
+        400,
+        300,
+        470,
+        335
+      ],
+      "centreX": 435,
+      "centreY": 318,
+      "largeur": 70,
+      "hauteur": 35,
+      "confiance": 0.89,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\HMI\\8264a477-7dbc-497a-b2db-53fcb5e5bd71.jpg",
+      "imageFilename": "photo_ahmed_abbes",
+      "imageId": "8264a477-7dbc-497a-b2db-53fcb5e5bd71",
+      "imageDescription": "chef_de_bloc_TG2",
+      "imageTags": [
+        "ahmed abbes"
+      ],
+      "imageFolder": "HMI",
+      "indexedAt": "2026-04-26T00:02:09.736Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CONDENSEUR",
+      "bbox": [
+        100,
+        150,
+        250,
+        200
+      ],
+      "centreX": 175,
+      "centreY": 175,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.95,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_CR2\\1c9009fe-9cb2-48f1-a977-664b721b76dd.jpg",
+      "imageFilename": "pupitre_CR2.jpg",
+      "imageId": "1c9009fe-9cb2-48f1-a977-664b721b76dd",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_CR2",
+      "indexedAt": "2026-04-26T00:02:09.737Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CIRCUIT HP",
+      "bbox": [
+        300,
+        100,
+        450,
+        150
+      ],
+      "centreX": 375,
+      "centreY": 125,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.92,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_CR2\\1c9009fe-9cb2-48f1-a977-664b721b76dd.jpg",
+      "imageFilename": "pupitre_CR2.jpg",
+      "imageId": "1c9009fe-9cb2-48f1-a977-664b721b76dd",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_CR2",
+      "indexedAt": "2026-04-26T00:02:09.737Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BP",
+      "bbox": [
+        50,
+        300,
+        120,
+        340
+      ],
+      "centreX": 85,
+      "centreY": 320,
+      "largeur": 70,
+      "hauteur": 40,
+      "confiance": 0.88,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_CR2\\1c9009fe-9cb2-48f1-a977-664b721b76dd.jpg",
+      "imageFilename": "pupitre_CR2.jpg",
+      "imageId": "1c9009fe-9cb2-48f1-a977-664b721b76dd",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_CR2",
+      "indexedAt": "2026-04-26T00:02:09.737Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BALLON PURGES",
+      "bbox": [
+        200,
+        350,
+        380,
+        400
+      ],
+      "centreX": 290,
+      "centreY": 375,
+      "largeur": 180,
+      "hauteur": 50,
+      "confiance": 0.91,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_CR2\\1c9009fe-9cb2-48f1-a977-664b721b76dd.jpg",
+      "imageFilename": "pupitre_CR2.jpg",
+      "imageId": "1c9009fe-9cb2-48f1-a977-664b721b76dd",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_CR2",
+      "indexedAt": "2026-04-26T00:02:09.737Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "ATM",
+      "bbox": [
+        400,
+        300,
+        470,
+        335
+      ],
+      "centreX": 435,
+      "centreY": 318,
+      "largeur": 70,
+      "hauteur": 35,
+      "confiance": 0.89,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_CR2\\1c9009fe-9cb2-48f1-a977-664b721b76dd.jpg",
+      "imageFilename": "pupitre_CR2.jpg",
+      "imageId": "1c9009fe-9cb2-48f1-a977-664b721b76dd",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_CR2",
+      "indexedAt": "2026-04-26T00:02:09.737Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CONDENSEUR",
+      "bbox": [
+        100,
+        150,
+        250,
+        200
+      ],
+      "centreX": 175,
+      "centreY": 175,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.95,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_poste-d_eau\\0d9dd1ff-41fa-4536-8590-b02f48367f14.jpg",
+      "imageFilename": "pupitre_poste-d'eau.jpg",
+      "imageId": "0d9dd1ff-41fa-4536-8590-b02f48367f14",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_poste-d_eau",
+      "indexedAt": "2026-04-26T00:02:09.739Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CIRCUIT HP",
+      "bbox": [
+        300,
+        100,
+        450,
+        150
+      ],
+      "centreX": 375,
+      "centreY": 125,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.92,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_poste-d_eau\\0d9dd1ff-41fa-4536-8590-b02f48367f14.jpg",
+      "imageFilename": "pupitre_poste-d'eau.jpg",
+      "imageId": "0d9dd1ff-41fa-4536-8590-b02f48367f14",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_poste-d_eau",
+      "indexedAt": "2026-04-26T00:02:09.739Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BP",
+      "bbox": [
+        50,
+        300,
+        120,
+        340
+      ],
+      "centreX": 85,
+      "centreY": 320,
+      "largeur": 70,
+      "hauteur": 40,
+      "confiance": 0.88,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_poste-d_eau\\0d9dd1ff-41fa-4536-8590-b02f48367f14.jpg",
+      "imageFilename": "pupitre_poste-d'eau.jpg",
+      "imageId": "0d9dd1ff-41fa-4536-8590-b02f48367f14",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_poste-d_eau",
+      "indexedAt": "2026-04-26T00:02:09.739Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BALLON PURGES",
+      "bbox": [
+        200,
+        350,
+        380,
+        400
+      ],
+      "centreX": 290,
+      "centreY": 375,
+      "largeur": 180,
+      "hauteur": 50,
+      "confiance": 0.91,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_poste-d_eau\\0d9dd1ff-41fa-4536-8590-b02f48367f14.jpg",
+      "imageFilename": "pupitre_poste-d'eau.jpg",
+      "imageId": "0d9dd1ff-41fa-4536-8590-b02f48367f14",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_poste-d_eau",
+      "indexedAt": "2026-04-26T00:02:09.739Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "ATM",
+      "bbox": [
+        400,
+        300,
+        470,
+        335
+      ],
+      "centreX": 435,
+      "centreY": 318,
+      "largeur": 70,
+      "hauteur": 35,
+      "confiance": 0.89,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_poste-d_eau\\0d9dd1ff-41fa-4536-8590-b02f48367f14.jpg",
+      "imageFilename": "pupitre_poste-d'eau.jpg",
+      "imageId": "0d9dd1ff-41fa-4536-8590-b02f48367f14",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_poste-d_eau",
+      "indexedAt": "2026-04-26T00:02:09.739Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CONDENSEUR",
+      "bbox": [
+        100,
+        150,
+        250,
+        200
+      ],
+      "centreX": 175,
+      "centreY": 175,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.95,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_TV\\59117f17-fda9-46a1-8911-538a6fbc30df.jpg",
+      "imageFilename": "pupitre_TV.jpg",
+      "imageId": "59117f17-fda9-46a1-8911-538a6fbc30df",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_TV",
+      "indexedAt": "2026-04-26T00:02:09.740Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "CIRCUIT HP",
+      "bbox": [
+        300,
+        100,
+        450,
+        150
+      ],
+      "centreX": 375,
+      "centreY": 125,
+      "largeur": 150,
+      "hauteur": 50,
+      "confiance": 0.92,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_TV\\59117f17-fda9-46a1-8911-538a6fbc30df.jpg",
+      "imageFilename": "pupitre_TV.jpg",
+      "imageId": "59117f17-fda9-46a1-8911-538a6fbc30df",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_TV",
+      "indexedAt": "2026-04-26T00:02:09.740Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BP",
+      "bbox": [
+        50,
+        300,
+        120,
+        340
+      ],
+      "centreX": 85,
+      "centreY": 320,
+      "largeur": 70,
+      "hauteur": 40,
+      "confiance": 0.88,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_TV\\59117f17-fda9-46a1-8911-538a6fbc30df.jpg",
+      "imageFilename": "pupitre_TV.jpg",
+      "imageId": "59117f17-fda9-46a1-8911-538a6fbc30df",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_TV",
+      "indexedAt": "2026-04-26T00:02:09.740Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "BALLON PURGES",
+      "bbox": [
+        200,
+        350,
+        380,
+        400
+      ],
+      "centreX": 290,
+      "centreY": 375,
+      "largeur": 180,
+      "hauteur": 50,
+      "confiance": 0.91,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_TV\\59117f17-fda9-46a1-8911-538a6fbc30df.jpg",
+      "imageFilename": "pupitre_TV.jpg",
+      "imageId": "59117f17-fda9-46a1-8911-538a6fbc30df",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_TV",
+      "indexedAt": "2026-04-26T00:02:09.740Z",
+      "methode": "analysis_json"
+    },
+    {
+      "nom": "ATM",
+      "bbox": [
+        400,
+        300,
+        470,
+        335
+      ],
+      "centreX": 435,
+      "centreY": 318,
+      "largeur": 70,
+      "hauteur": 35,
+      "confiance": 0.89,
+      "imagePath": "C:\\ahmed\\ccp\\data\\banque_images_ia\\pupitre\\pupitre_TV\\59117f17-fda9-46a1-8911-538a6fbc30df.jpg",
+      "imageFilename": "pupitre_TV.jpg",
+      "imageId": "59117f17-fda9-46a1-8911-538a6fbc30df",
+      "imageDescription": "Uploadée via Admin",
+      "imageTags": [],
+      "imageFolder": "pupitre > pupitre_TV",
+      "indexedAt": "2026-04-26T00:02:09.740Z",
+      "methode": "analysis_json"
+    }
+  ]
+}

@@ -1,0 +1,561 @@
+{
+    "procedure": {
+      "id": "DEMARRAGE_CHAUDIERE_V1",
+      "nom": "Démarrage Chaudière Cycle Combiné",
+      "description": "Procédure complète de démarrage de la chaudière en 6 phases principales",
+      "version": "2.0.0",
+      "date_mise_a_jour": "2026-03-17",
+      "duree_estimee": "45 minutes",
+      "niveau_securite": "CRITIQUE",
+      "responsable": "Opérateur salle de contrôle",
+      "verification_finale": "Confirmation du chimiste requise"
+    },
+    
+    "phases": [
+      {
+        "numero": 1,
+        "nom": "PRÉPARATION DE LA CHAUDIÈRE",
+        "description": "Mise en condition initiale des équipements",
+        "duree_estimee": "15 minutes",
+        "etapes": [
+          {
+            "numero": 1.1,
+            "titre": "Mise en service Turbine à Gaz",
+            "instruction": "Mettre la TG en service et stabiliser la charge",
+            "valeur_attendue": "70 à 80 MW",
+            "methode_verification": "Lire puissance sur écran de contrôle salle",
+            "consigne_securite": "Ne pas dépasser 80 MW - Risque de surcharge",
+            "duree_estimee": "5 min",
+            "action_suivante": "Passer à l'étape 1.2 après stabilisation"
+          },
+          {
+            "numero": 1.2,
+            "titre": "Remplissage réchauffeur",
+            "instruction": "Remplir le réchauffeur via circuit SER",
+            "action": "Ouvrir évent HV701",
+            "valeur_attendue": "Sortie d'eau à l'évent",
+            "methode_verification": "Observation visuelle",
+            "action_fermeture": "Fermer HV701 dès sortie d'eau",
+            "consigne_securite": "Ne pas laisser ouvert trop longtemps",
+            "duree_estimee": "2 min"
+          },
+          {
+            "numero": 1.3,
+            "titre": "Remplissage économiseurs HP/BP",
+            "instruction": "Remplir les économiseurs via circuit SER",
+            "action": "Ouvrir évents HV701 et HV702",
+            "valeur_attendue": "Sortie d'eau aux évents",
+            "methode_verification": "Observation visuelle",
+            "action_fermeture": "Fermer évents après sortie eau",
+            "consigne_securite": "Vérifier les deux évents",
+            "duree_estimee": "3 min"
+          },
+          {
+            "numero": 1.4,
+            "titre": "Mise en service pompes alimentaires",
+            "instruction": "Démarrer les pompes alimentaires",
+            "actions_detaillees": [
+              "Mettre en service APH (Haute Pression)",
+              "Mettre en service APB (Basse Pression)",
+              "Ouvrir entrée HV001",
+              "Ouvrir évents"
+            ],
+            "valeur_attendue": {
+              "debit_aph": "225 T/H",
+              "debit_apb": "110 T/H"
+            },
+            "methode_verification": "Lire débitmètres",
+            "consigne_securite": "Vérifier Delta P correct sur les deux pompes",
+            "duree_estimee": "3 min"
+          },
+          {
+            "numero": 1.5,
+            "titre": "Ouverture évents motorisés",
+            "instruction": "Ouvrir les évents motorisés",
+            "actions": [
+              "Ouvrir FSR UV008",
+              "Ouvrir FLB UV008"
+            ],
+            "methode_verification": "Vérifier voyants ouverts",
+            "duree_estimee": "1 min"
+          },
+          {
+            "numero": 1.6,
+            "titre": "Purges condensat",
+            "instruction": "Ouvrir les purges de condensat",
+            "actions": [
+              "Ouvrir FSR UV010",
+              "Ouvrir FLB UV010"
+            ],
+            "methode_verification": "Vérifier écoulement",
+            "duree_estimee": "1 min"
+          },
+          {
+            "numero": 1.7,
+            "titre": "Ligne démarrage HP",
+            "instruction": "Préparer ligne démarrage HP",
+            "action": "Ouvrir UV050C et LCV050C",
+            "objectif": "Remplissage ballon HP",
+            "methode_verification": "Vérifier niveau ballon HP",
+            "duree_estimee": "2 min"
+          },
+          {
+            "numero": 1.8,
+            "titre": "Vérification niveaux démarrage",
+            "instruction": "Vérifier les niveaux des ballons",
+            "valeurs_attendues": {
+              "ballon_hp": "-475 mm (+150 mm gonflement)",
+              "ballon_bp": "-580 mm (+100 mm gonflement)"
+            },
+            "methode_verification": "Lecture indicateurs niveau",
+            "note_technique": "Le niveau de gonflement est le niveau de référence",
+            "duree_estimee": "2 min"
+          },
+          {
+            "numero": 1.9,
+            "titre": "Mise en circulation",
+            "instruction": "Démarrer la circulation",
+            "action": "Faire fonctionner une pompe FSR et une pompe FLB",
+            "methode_verification": "Vérifier débits circulation",
+            "duree_estimee": "1 min"
+          }
+        ],
+        "validation_phase": "Toutes les étapes 1.1 à 1.9 complétées"
+      },
+  
+      {
+        "numero": 2,
+        "nom": "CONDITIONS D'ARMEMENT",
+        "description": "Vérification des conditions de sécurité avant armement",
+        "duree_estimee": "5 minutes",
+        "etapes": [
+          {
+            "numero": 2.1,
+            "titre": "Vérification définition armement",
+            "verifications": [
+              {
+                "element": "Chaudière armée",
+                "condition": "Registre ouvert"
+              },
+              {
+                "element": "TV armée",
+                "condition": "Vannes d'arrêt ouvertes"
+              }
+            ],
+            "duree_estimee": "1 min"
+          },
+          {
+            "numero": 2.2,
+            "titre": "Vérification sécurité chaudière FSE",
+            "instruction": "Vérifier les 10 conditions de sécurité",
+            "conditions": [
+              {
+                "numero": 1,
+                "description": "Turbine à Gaz associée liée et synchronisée",
+                "etat_requis": "OK",
+                "verification": "Vérifier écran contrôle TG"
+              },
+              {
+                "numero": 2,
+                "description": "Au moins une pompe APH en service",
+                "etat_requis": "OK",
+                "verification": "Vérifier voyant APH"
+              },
+              {
+                "numero": 3,
+                "description": "Au moins une pompe APB en service",
+                "etat_requis": "OK",
+                "verification": "Vérifier voyant APB"
+              },
+              {
+                "numero": 4,
+                "description": "Une pompe CEX en service",
+                "etat_requis": "OK",
+                "verification": "Vérifier voyant CEX"
+              },
+              {
+                "numero": 5,
+                "description": "Une pompe FSR en service et Delta P correct",
+                "etat_requis": "OK",
+                "verification": "Vérifier FSR et ΔP"
+              },
+              {
+                "numero": 6,
+                "description": "Une pompe FLB en service et Delta P correct",
+                "etat_requis": "OK",
+                "verification": "Vérifier FLB et ΔP"
+              },
+              {
+                "numero": 7,
+                "description": "Niveau de gonflement ballon HP détecté",
+                "etat_requis": "-475 mm",
+                "verification": "Lecture niveau HP"
+              },
+              {
+                "numero": 8,
+                "description": "Niveau de gonflement ballon BP détecté",
+                "etat_requis": "-580 mm",
+                "verification": "Lecture niveau BP"
+              },
+              {
+                "numero": 9,
+                "description": "Absence d'eau - pot condensat surchauffe HP",
+                "etat_requis": "SEC",
+                "verification": "Vérifier purge"
+              },
+              {
+                "numero": 10,
+                "description": "Absence d'eau - pot condensat surchauffe BP",
+                "etat_requis": "SEC",
+                "verification": "Vérifier purge"
+              }
+            ],
+            "alerte_securite": "⚠️ Si une condition manque, la chaudière déclenche et le registre ferme à grande vitesse. Après 40 secondes, la TG déclenche si le fin de course registre ne ferme pas.",
+            "duree_estimee": "4 min"
+          }
+        ]
+      },
+  
+      {
+        "numero": 3,
+        "nom": "OUVERTURE REGISTRE TTA",
+        "description": "Procédure d'ouverture du registre TTA",
+        "duree_estimee": "5 minutes",
+        "etapes": [
+          {
+            "numero": 3.1,
+            "titre": "Vérification conditions ouverture",
+            "instruction": "Vérifier toutes les conditions avant ouverture",
+            "conditions": [
+              {
+                "numero": 1,
+                "description": "Sécurité chaudière armée (B1FSEUS005)",
+                "etat_requis": "ARMÉE",
+                "verification": "Vérifier voyant FSE"
+              },
+              {
+                "numero": 2,
+                "description": "Pompe hydraulique sans défaut et disponible",
+                "etat_requis": "DISPONIBLE",
+                "verification": "Vérifier alarmes hydraulique"
+              },
+              {
+                "numero": 3,
+                "description": "Niveau d'huile régulation registre",
+                "etat_requis": "NON TRÈS BAS",
+                "verification": "Lecture niveau"
+              },
+              {
+                "numero": 4,
+                "description": "Température d'huile régulation registre",
+                "etat_requis": "NON TRÈS HAUTE",
+                "verification": "Lecture température"
+              },
+              {
+                "numero": 5,
+                "description": "Température armoire locale registre",
+                "etat_requis": "NON HAUTE",
+                "verification": "Lecture température"
+              },
+              {
+                "numero": 6,
+                "description": "Conditions de déclenchement",
+                "etat_requis": "AUCUNE",
+                "verification": "Vérifier alarmes actives"
+              }
+            ],
+            "duree_estimee": "2 min"
+          },
+          {
+            "numero": 3.2,
+            "titre": "Choix mode d'exécution",
+            "instruction": "Sélectionner le mode d'ouverture du registre",
+            "options": [
+              {
+                "mode": "Automatique",
+                "description": "Via automate KCA",
+                "action": "Activer mode AUTO KCA"
+              },
+              {
+                "mode": "Semi-automatique",
+                "description": "Via groupe",
+                "action": "Activer mode GROUPE"
+              },
+              {
+                "mode": "Manuel",
+                "description": "Selon instructions précises",
+                "action": "Suivre procédure manuelle spécifique"
+              }
+            ],
+            "duree_estimee": "1 min"
+          },
+          {
+            "numero": 3.3,
+            "titre": "Exécution ouverture",
+            "instruction": "Procéder à l'ouverture du registre selon mode choisi",
+            "verification": "Registre ouvert et stable",
+            "duree_estimee": "2 min"
+          }
+        ]
+      },
+  
+      {
+        "numero": 4,
+        "nom": "DISponibilité CONTOURNEMENT (BYPASS)",
+        "description": "Vérification et mise en service du contournement",
+        "duree_estimee": "8 minutes",
+        "etapes": [
+          {
+            "numero": 4.1,
+            "titre": "Vérification conditions contournement",
+            "instruction": "Vérifier les 9 conditions de disponibilité",
+            "conditions": [
+              {
+                "numero": 1,
+                "description": "Chaudière armée (FSE vérifié)",
+                "etat_requis": "ARMÉE"
+              },
+              {
+                "numero": 2,
+                "description": "Registre de chaudière",
+                "etat_requis": "NON FERMÉ"
+              },
+              {
+                "numero": 3,
+                "description": "Défaut unité hydraulique",
+                "etat_requis": "ABSENT"
+              },
+              {
+                "numero": 4,
+                "description": "Armoire contournement",
+                "etat_requis": "EN SERVICE (ON)"
+              },
+              {
+                "numero": 5,
+                "description": "Pression eau désurchauffe (Pcex)",
+                "etat_requis": "> 7 bars",
+                "valeur_mesuree": "___ bars"
+              },
+              {
+                "numero": 6,
+                "description": "Demi-condenseur réfrigéré",
+                "etat_requis": "AU MOINS UN (vannes ouvertes)"
+              },
+              {
+                "numero": 7,
+                "description": "Vide condenseur",
+                "etat_requis": "< 300 mbar",
+                "valeur_mesuree": "___ mbar"
+              },
+              {
+                "numero": 8,
+                "description": "Température vapeur surchauffée (B1ACOTE001)",
+                "etat_requis": "> 300°C",
+                "valeur_mesuree": "___ °C"
+              },
+              {
+                "numero": 9,
+                "description": "Conditions déclenchement",
+                "details": "Pression avant PCV001 non P-très-haute (<16 bars)",
+                "etat_requis": "AUCUNE"
+              }
+            ],
+            "duree_estimee": "3 min"
+          },
+          {
+            "numero": 4.2,
+            "titre": "Ouverture vapeur",
+            "instruction": "Procéder à l'ouverture de la vapeur",
+            "seuils": {
+              "hp": {
+                "valeur": "39 bars",
+                "action": "Ouvrir contournement HP"
+              },
+              "bp": {
+                "valeur": "7 bars",
+                "action": "Ouvrir contournement BP"
+              }
+            },
+            "duree_estimee": "2 min"
+          },
+          {
+            "numero": 4.3,
+            "titre": "Gestion désurchauffe",
+            "instruction": "Vérifier fonctionnement désurchauffe",
+            "remarque": "1ère vanne s'ouvre dès l'ouverture du bypass",
+            "condition_deuxieme_vanne": "Pression aval PCV001 > 6.8 bars",
+            "verification": "Vannes désurchauffe ouvertes",
+            "duree_estimee": "1 min"
+          }
+        ]
+      },
+  
+      {
+        "numero": 5,
+        "nom": "NOTES TECHNIQUES COMPLÉMENTAIRES",
+        "description": "Vérifications techniques spécifiques",
+        "duree_estimee": "5 minutes",
+        "etapes": [
+          {
+            "numero": 5.1,
+            "titre": "Système SVA et CET",
+            "verifications": [
+              {
+                "parametre": "Ouverture CET",
+                "conditions": "Pression SVA = 7 bars, Température = 250°C",
+                "valeur_mesuree_pression": "___ bars",
+                "valeur_mesuree_temperature": "___ °C"
+              },
+              {
+                "parametre": "Déclenchement CET",
+                "seuil": "Pression = 11 bars, Température = 325°C",
+                "consigne": "Surveiller dépassement"
+              },
+              {
+                "parametre": "Démarrage CET",
+                "valeurs": "180°C et 1.2 bars",
+                "valeur_mesuree": "___ °C, ___ bars"
+              }
+            ],
+            "duree_estimee": "2 min"
+          },
+          {
+            "numero": 5.2,
+            "titre": "Groupe CVI - Vide",
+            "verifications": [
+              {
+                "etape": "Mise en marche éjecteur démarrage",
+                "condition": "1 bar",
+                "valeur_mesuree": "___ bars"
+              },
+              {
+                "etape": "Mise en service éjecteur entretien",
+                "condition": "250 mbar",
+                "valeur_mesuree": "___ mbar"
+              },
+              {
+                "etape": "Arrêt éjecteur démarrage",
+                "condition": "150 mbar",
+                "valeur_mesuree": "___ mbar"
+              }
+            ],
+            "duree_estimee": "3 min"
+          }
+        ]
+      },
+  
+      {
+        "numero": 6,
+        "nom": "COUPLAGE CHAUDIÈRES",
+        "description": "Procédure finale de couplage",
+        "duree_estimee": "7 minutes",
+        "etapes": [
+          {
+            "numero": 6.1,
+            "titre": "Couplage circuit HP (UV001/UV002)",
+            "instruction": "Procéder au couplage HP",
+            "cas": [
+              {
+                "type": "Si maître",
+                "action": "Ouverture de registre",
+                "condition": "Automatique"
+              },
+              {
+                "type": "Si esclave",
+                "conditions": [
+                  {
+                    "parametre": "Température",
+                    "seuil": "≥ 450°C",
+                    "capteurs": "B2VVPTSH001 ou B1VVPTSH001",
+                    "valeur_mesuree": "___ °C"
+                  },
+                  {
+                    "parametre": "Delta P",
+                    "seuil": "≤ 2 bars",
+                    "valeur_mesuree": "___ bars"
+                  }
+                ]
+              }
+            ],
+            "duree_estimee": "3 min"
+          },
+          {
+            "numero": 6.2,
+            "titre": "Couplage circuit BP (UV001/UV002)",
+            "instruction": "Procéder au couplage BP",
+            "cas": [
+              {
+                "type": "Si maître",
+                "action": "Ouverture de registre",
+                "condition": "Automatique"
+              },
+              {
+                "type": "Si esclave",
+                "conditions": [
+                  {
+                    "parametre": "Température",
+                    "seuil": "≥ 175°C",
+                    "capteurs": "B2VVPTSH002 ou B1VVPTSH002",
+                    "valeur_mesuree": "___ °C"
+                  },
+                  {
+                    "parametre": "Delta P",
+                    "seuil": "≤ 0.5 bar",
+                    "valeur_mesuree": "___ bars"
+                  }
+                ]
+              }
+            ],
+            "duree_estimee": "3 min"
+          },
+          {
+            "numero": 6.3,
+            "titre": "Validation finale",
+            "instruction": "Obtenir validation pour disposition chaudière",
+            "action": "Contacter le chimiste pour confirmation",
+            "validation_requise": "Confirmation du chimiste",
+            "statut": "En attente",
+            "duree_estimee": "1 min"
+          }
+        ]
+      }
+    ],
+  
+    "securite": {
+      "points_critiques": [
+        {
+          "phase": 2,
+          "etape": 2.2,
+          "alerte": "Défaut condition FSE = Déclenchement immédiat",
+          "action": "Vérifier toutes les conditions avant suite"
+        },
+        {
+          "phase": 4,
+          "etape": 4.1,
+          "alerte": "Conditions contournement non remplies = Risque surchauffe",
+          "action": "Ne pas ouvrir contournement"
+        },
+        {
+          "phase": 6,
+          "etape": 6.1,
+          "alerte": "Température HP insuffisante = Choc thermique",
+          "action": "Attendre 450°C"
+        }
+      ],
+      "valeurs_urgences": {
+        "pression_max_hp": "40 bars",
+        "temperature_max_hp": "450°C",
+        "vide_min": "300 mbar"
+      }
+    },
+  
+    "logs_operation": {
+      "session_id": null,
+      "operateur": null,
+      "date_debut": null,
+      "date_fin": null,
+      "etapes_completees": [],
+      "anomalies": [],
+      "temps_total": null
+    }
+  }

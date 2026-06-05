@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Modern abstract technology background",
+      "imageUrl": "https://picsum.photos/seed/instantpage-hero/1200/800",
+      "imageHint": "abstract technology"
+    },
+    {
+      "id": "feature-1",
+      "description": "Clean code on a screen",
+      "imageUrl": "https://picsum.photos/seed/code-view/600/400",
+      "imageHint": "software development"
+    },
+    {
+      "id": "feature-2",
+      "description": "Modern interface design components",
+      "imageUrl": "https://picsum.photos/seed/ui-design/600/400",
+      "imageHint": "ui design"
+    },
+    {
+      "id": "feature-3",
+      "description": "Cloud server connectivity",
+      "imageUrl": "https://picsum.photos/seed/cloud-server/600/400",
+      "imageHint": "cloud computing"
+    }
+  ]
+}

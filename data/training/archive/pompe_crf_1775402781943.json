@@ -1,0 +1,37 @@
+[
+  {
+    "question": "Donne en détail la procédure de démarrage de la pompe CRF",
+    "response": "Procédure de démarrage de la pompe CRF\n\nLe démarrage du système de réfrigération principale est piloté depuis la salle de contrôle en liaison avec le système de filtration CFI.\n\n1. Conditions préalables et armement :\n- Niveau du bassin d'aspiration > -5,00 m (relais B3 CRF LSL 101)\n- Unité hydraulique 001 GO opérationnelle\n- Vanne d'aspiration manuelle ouverte (fin de course ZSH 101)\n- Vanne clapet de refoulement (UV 101/201) initialement fermée\n\n2. Séquence de démarrage et liaison CFI :\n- Démarrage automatique d'une séquence de lavage de la grille rotative CFI\n- Mise sous tension du moteur 6 minutes après le début du lavage\n- Perte de charge à travers la grille rotative < 200 mm CE\n\n3. Mise en service hydraulique (ouverture progressive) :\n- Palier 1 : Ouverture rapide 0 à 30% en 54 secondes\n- Palier 2 : Maintien à 30% pendant 150 secondes\n- Palier 3 : Ouverture finale 30 à 100% en 126 secondes\n\n4. Sécurités en marche :\n- Pression différentielle correcte\n- Températures de paliers < 90°C",
+    "quality": 5
+  },
+  {
+    "question": "Quelles sont les conditions préalables au démarrage de la pompe CRF ?",
+    "response": "Les conditions préalables au démarrage de la pompe CRF sont :\n- Niveau du bassin d'aspiration supérieur à -5,00 m (relais B3 CRF LSL 101)\n- Unité hydraulique 001 GO opérationnelle\n- Vanne d'aspiration manuelle ouverte (fin de course ZSH 101)\n- Vanne clapet de refoulement (UV 101/201) initialement fermée",
+    "quality": 5
+  },
+  {
+    "question": "Quelle est la séquence de démarrage et la liaison avec CFI pour la pompe CRF ?",
+    "response": "La séquence de démarrage et la liaison CFI pour la pompe CRF comprend :\n- L'ordre de démarrage lance automatiquement une séquence de lavage de la grille rotative CFI\n- Le moteur n'est mis sous tension que 6 minutes après le début du lavage\n- La perte de charge à travers la grille rotative doit être inférieure à 200 mm CE",
+    "quality": 5
+  },
+  {
+    "question": "Comment s'effectue l'ouverture progressive de la vanne de refoulement de la pompe CRF ?",
+    "response": "L'ouverture progressive de la vanne de refoulement de la pompe CRF s'effectue en 3 paliers :\n- Palier 1 : Ouverture rapide de 0 à 30% en 54 secondes\n- Palier 2 : Maintien en position de transition à 30% pendant 150 secondes pour stabiliser le remplissage\n- Palier 3 : Ouverture finale de 30 à 100% en 126 secondes",
+    "quality": 5
+  },
+  {
+    "question": "Quelles sont les sécurités à vérifier pendant le fonctionnement de la pompe CRF ?",
+    "response": "Les sécurités à vérifier pendant le fonctionnement de la pompe CRF sont :\n- La pression différentielle doit être correcte\n- Les températures des paliers doivent rester inférieures à 90°C",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le temps total d'ouverture de la vanne de refoulement de la pompe CRF ?",
+    "response": "Le temps total d'ouverture de la vanne de refoulement de la pompe CRF est de 330 secondes (5 minutes et 30 secondes), calculé comme suit :\n- Palier 1 : 54 secondes\n- Palier 2 : 150 secondes\n- Palier 3 : 126 secondes\nTotal : 54 + 150 + 126 = 330 secondes",
+    "quality": 5
+  },
+  {
+    "question": "À quoi sert le maintien à 30% pendant 150 secondes lors du démarrage de la pompe CRF ?",
+    "response": "Le maintien à 30% pendant 150 secondes lors du démarrage de la pompe CRF sert à stabiliser le remplissage de la tuyauterie BONNA et éviter les coups de bélier.",
+    "quality": 5
+  }
+]

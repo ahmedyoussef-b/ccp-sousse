@@ -1,0 +1,9 @@
+[
+  {
+    "id": "v1-base",
+    "path": "ollama/phi3:mini",
+    "accuracy": 0.72,
+    "status": "production",
+    "deployedAt": 1774251665328
+  }
+]

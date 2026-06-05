@@ -1,0 +1,6 @@
+{"id":"role_1777213376851_6umn","timestamp":"2026-04-26T14:22:56.851Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1777213376840_9rskk0","version":"1.0.0"}}
+{"id":"role_1777240130040_vwjs","timestamp":"2026-04-26T21:48:50.040Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1777240130039_j03c9z","version":"1.0.0"}}
+{"id":"role_1777240130593_zgzj","timestamp":"2026-04-26T21:48:50.593Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"decrit le socle et le support turbine"},"traceId":"trace_1777240130592_g2s6n3"}
+{"id":"role_1777240216895_40ds","timestamp":"2026-04-26T21:50:16.895Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1777240216894_n4v0ej","version":"1.0.0"}}
+{"id":"role_1777240217560_8gki","timestamp":"2026-04-26T21:50:17.560Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"socle et support  turbine"},"traceId":"trace_1777240217559_afe9il"}
+{"id":"role_1777240244269_kmr6","timestamp":"2026-04-26T21:50:44.269Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"qui est ahmed abbes"},"traceId":"trace_1777240244268_02n44a"}

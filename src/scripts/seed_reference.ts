@@ -1,0 +1,235 @@
+import { getSQLiteCore } from '../ai/core/sqlite/manager';
+
+async function seed() {
+  const sqlite = getSQLiteCore();
+  const data = {
+    "A0": {
+      "libelle": "A0",
+      "descendants": [
+        { "nom": "LJP", "libelle": "POSTE BLOC A" }
+      ]
+    },
+    "B0": {
+      "libelle": "B0",
+      "descendants": [
+        { "nom": "CFI", "libelle": "FILTRATION EAU DE REFRIGERATION" },
+        { "nom": "CRF", "libelle": "CIRCUIT EAU DE REFRIGERATION" },
+        { "nom": "DVC", "libelle": "CLIMATISATION DES BATIMENTS" },
+        { "nom": "GIS", "libelle": "GIS : Distribution 125Vcc" },
+        { "nom": "KBS", "libelle": "REGROUPEMENT ANALOGIQUE CMN SITE" },
+        { "nom": "KCZ", "libelle": "AUTOMATES LOGIQUES CMN DE BLOC" },
+        { "nom": "KIT", "libelle": "CALCULATEUR DE SUPERVISION TCI" },
+        { "nom": "KRG", "libelle": "REGULATION DE CHARGE DU BLOC" },
+        { "nom": "KSA", "libelle": "TRAITEMENTS DES ALARMES DU BLOC" },
+        { "nom": "KSC", "libelle": "ORDRE VAL PUPITRE" },
+        { "nom": "LBA", "libelle": "PROD ET DISTR 125V CC BLOC" },
+        { "nom": "LBB", "libelle": "PROD ET DISTR 125V CC BLOC" },
+        { "nom": "LCA", "libelle": "PROD ET DISTR 48V CC BLOC" },
+        { "nom": "LCB", "libelle": "PROD ET DISTR 48V CC BLOC" },
+        { "nom": "LGA", "libelle": "DISTRIBUTION MT NORMALE BLOC" },
+        { "nom": "LJP", "libelle": "POSTE EXTERIEUR" },
+        { "nom": "LKA", "libelle": "DISTRIBUTION BT NORMALE BLOC" },
+        { "nom": "LKB", "libelle": "DISTRIBUTION BT NORMALE BLOC" },
+        { "nom": "LKN", "libelle": "DISTRIBUTION ECLAIRAGE NORMAL" },
+        { "nom": "LLA", "libelle": "DISTRIBUTION BT SECOURS BLOC" },
+        { "nom": "LLB", "libelle": "DISTRIBUTION BT SECOURS BLOC" },
+        { "nom": "LLN", "libelle": "DISTRIBUTION ECLAIRAGE SECOURS" },
+        { "nom": "LLP", "libelle": "PRODUCTION BT SECOURS BLOC" },
+        { "nom": "LNA", "libelle": "PROD ET DISTR 220V SECOURU" },
+        { "nom": "LSI", "libelle": "DISTRIBUTION ECLAIRAGE SECURITE" },
+        { "nom": "TEST_MODBUS", "libelle": "Essais CSS-F Modbus" },
+        { "nom": "SAP", "libelle": "PROD ET DISTR AIR DE TRAVAIL" },
+        { "nom": "SAR", "libelle": "PROD ET DISTR AIR DE REGUL" },
+        { "nom": "SER", "libelle": "STOCKAGE ET DISTR EAU DEM" },
+        { "nom": "SIR", "libelle": "CONDITIONNEMENT CHIMIQUE" },
+        { "nom": "SIT", "libelle": "CTRL CHIM ET ECHANT CMN SITE" },
+        { "nom": "SKD", "libelle": "STOCKAGE ET TRANSFERT DU FIOUL" },
+        { "nom": "TKG", "libelle": "TRAITEMENTS COMBUSTIBLES GAZEUX" },
+        { "nom": "TPF", "libelle": "ALIMENTATION EN FIOUL DU BLOC" },
+        { "nom": "TPG", "libelle": "ALIMENTATION EN GAZ DU BLOC" }
+      ]
+    },
+    "B1": {
+      "libelle": "B1",
+      "descendants": [
+        { "nom": "ACO", "libelle": "RECUP DES PURGES ET CONDENSATS" },
+        { "nom": "CRF", "libelle": "UO POUR TRANSFERT CONTROCAD" },
+        { "nom": "ELE", "libelle": "Mesures électriques CMS7003" },
+        { "nom": "FBP", "libelle": "PRECHAUFFAGE EAU CONDENSEE CR 1" },
+        { "nom": "FLB", "libelle": "CIRCUITS BASSE PRESSION CR 1" },
+        { "nom": "FRG", "libelle": "CONTROL ANALOGIQUE CR 1" },
+        { "nom": "FSE", "libelle": "SYSTEME SECURITE GENERALE CR 1" },
+        { "nom": "FSR", "libelle": "CIRCUITS HAUTE PRESSION CR 1" },
+        { "nom": "GBP", "libelle": "CONTOURNEMENT BP CR 1" },
+        { "nom": "GHP", "libelle": "CONTOURNEMENT HP CR 1" },
+        { "nom": "GIS", "libelle": "Poste blindé" },
+        { "nom": "KBS", "libelle": "REGROUPEMENT ANALOGIQUE CR 1" },
+        { "nom": "KCZ", "libelle": "AUTOMATES LOGIQUES CR 1" },
+        { "nom": "KOS", "libelle": "UO POUR TRANSFERT CONTROCAD" },
+        { "nom": "KRG", "libelle": "Regulation charge de bloc TG1" },
+        { "nom": "LGA", "libelle": "DISTRIBUTION MT NORMALE TG 1" },
+        { "nom": "LJP", "libelle": "POSTE EXTERIEUR TRAVEE TG 1" },
+        { "nom": "LKA", "libelle": "DISTRIBUTION BT NORMALE TG 1" },
+        { "nom": "LLA", "libelle": "DISTRIBUTION BT SECOURS TG 1" },
+        { "nom": "SIT", "libelle": "CTRL CHIM ET ECHANT CR 1" },
+        { "nom": "TCA", "libelle": "ASPIRATION D'AIR TG 1" },
+        { "nom": "TEV", "libelle": "EVACUATION ENERGIE ALTR TG 1" },
+        { "nom": "TEX", "libelle": "EXCITATION ALTERNATEUR TG 1" },
+        { "nom": "TGR", "libelle": "GRAISSAGE ALTERNATEUR ET TG 1" },
+        { "nom": "TGU", "libelle": "AUXILIAIRES TG 1" },
+        { "nom": "TNT", "libelle": "NETTOYAGE / LAVAGE TG 1" },
+        { "nom": "TPA", "libelle": "PROT ALTERNATEUR TG 1" },
+        { "nom": "TPF", "libelle": "ALIMENTATION EN FIOUL TG 1" },
+        { "nom": "TPG", "libelle": "ALIMENTATION EN GAZ TG 1" },
+        { "nom": "TPT", "libelle": "DETECT ET PROT INCENDIE TG 1" },
+        { "nom": "TRA", "libelle": "REFRI ALTERNATEUR TG 1" },
+        { "nom": "TRE", "libelle": "CTRL LOGIQUE ET ANALOGIQUE TG 1" },
+        { "nom": "TRI", "libelle": "REFRI DES AUXILIAIRES TG 1" },
+        { "nom": "TRT", "libelle": "UO POUR TRANSFERT CONTROCAD" },
+        { "nom": "TTA", "libelle": "GAZ D'ECHAPPEMENT TG 1" },
+        { "nom": "TVC", "libelle": "CLIM COMPART CONTROLE-CDE TG 1" },
+        { "nom": "TVM", "libelle": "VENTIL COMPARTIMENTS TG 1" },
+        { "nom": "WP", "libelle": "VAPEUR PRINCIPALE CR 1" }
+      ]
+    },
+    "B2": {
+      "libelle": "B2",
+      "descendants": [
+        { "nom": "ACO", "libelle": "RECUP DES PURGES ET CONDENSATS" },
+        { "nom": "CET", "libelle": "ETANCHEITE TV" },
+        { "nom": "CRF", "libelle": "UO POUR TRANSFERT CONTROCAD" },
+        { "nom": "ELE", "libelle": "Mesures électriques CMS7003" },
+        { "nom": "FBP", "libelle": "PRECHAUFFAGE EAU CONDENSEE CR 2" },
+        { "nom": "FLB", "libelle": "CIRCUITS BASSE PRESSION CR 2" },
+        { "nom": "FRG", "libelle": "CONTROL ANALOGIQUE CR 2" },
+        { "nom": "FSE", "libelle": "SYSTEME SECURITE GENERALE CR 2" },
+        { "nom": "FSR", "libelle": "CIRCUITS HAUTE PRESSION CR 2" },
+        { "nom": "GBP", "libelle": "CONTOURNEMENT BP CR 2" },
+        { "nom": "GHP", "libelle": "CONTOURNEMENT HP CR 2" },
+        { "nom": "GIS", "libelle": "Poste blindé" },
+        { "nom": "KBS", "libelle": "REGROUPEMENT ANALOGIQUE CR 2" },
+        { "nom": "KCZ", "libelle": "AUTOMATES LOGIQUES CR 2" },
+        { "nom": "KOS", "libelle": "UO POUR TRANSFERT CONTROCAD" },
+        { "nom": "KRG", "libelle": "Regulation charge de bloc TG2" },
+        { "nom": "LGA", "libelle": "DISTRIBUTION MT NORMALE TG 2" },
+        { "nom": "LJP", "libelle": "POSTE EXTERIEUR TRAVEE TG 2" },
+        { "nom": "LKA", "libelle": "DISTRIBUTION BT NORMALE TG 2" },
+        { "nom": "LLA", "libelle": "DISTRIBUTION BT SECOURS TG 2" },
+        { "nom": "SIT", "libelle": "CTRL CHIM ET ECHANT CR 2" },
+        { "nom": "TCA", "libelle": "ASPIRATION D'AIR TG 2" },
+        { "nom": "TEV", "libelle": "EVACUATION ENERGIE ALTR TG 2" },
+        { "nom": "TEX", "libelle": "EXCITATION ALTERNATEUR TG 2" },
+        { "nom": "TGR", "libelle": "GRAISSAGE ALTERNATEUR ET TG 2" },
+        { "nom": "TGU", "libelle": "AUXILIAIRES TG 2" },
+        { "nom": "TNT", "libelle": "NETTOYAGE / LAVAGE TG 2" },
+        { "nom": "TPA", "libelle": "PROT ALTERNATEUR TG 2" },
+        { "nom": "TPF", "libelle": "ALIMENTATION EN FIOUL TG 2" },
+        { "nom": "TPG", "libelle": "ALIMENTATION EN GAZ TG 2" },
+        { "nom": "TPT", "libelle": "DETECT ET PROT INCENDIE TG 2" },
+        { "nom": "TRA", "libelle": "REFRI ALTERNATEUR TG 2" },
+        { "nom": "TRE", "libelle": "CTRL LOGIQUE ET ANALOGIQUE TG 2" },
+        { "nom": "TRI", "libelle": "REFRI DES AUXILIAIRES TG 2" },
+        { "nom": "TRT", "libelle": "REPRISE DES EGOUTTURES TG 2" },
+        { "nom": "TTA", "libelle": "GAZ D'ECHAPPEMENT TG 2" },
+        { "nom": "TVC", "libelle": "CLIM COMPART CONTROLE-CDE TG 2" },
+        { "nom": "TVM", "libelle": "VENTIL COMPARTIMENTS TG 2" },
+        { "nom": "WP", "libelle": "VAPEUR PRINCIPALE CR 2" }
+      ]
+    },
+    "B3": {
+      "libelle": "B3",
+      "descendants": [
+        { "nom": "ACO", "libelle": "RECUP DES PURGES ET CONDENSATS" },
+        { "nom": "ADG", "libelle": "BACHE ALIMENTAIRE ET DEGAZAGE" },
+        { "nom": "APB", "libelle": "EAU ALIMENTAIRE BASSE PRESSION" },
+        { "nom": "APH", "libelle": "EAU ALIMENTAIRE HAUTE PRESSION" },
+        { "nom": "ARG", "libelle": "CONTROL ANALOGIQUE POSTE D'EAU" },
+        { "nom": "CAP", "libelle": "APPOINT ET REJET CONDENSEUR" },
+        { "nom": "CAR", "libelle": "ARROSAGE BOITES ECHAPPEMENT TV" },
+        { "nom": "CET", "libelle": "ETANCHEITE TV" },
+        { "nom": "CEX", "libelle": "CONDENSATION ET EXTRACTION" },
+        { "nom": "CFI", "libelle": "FILTRATION EAU DE REFRIGERATION" },
+        { "nom": "CJK", "libelle": "CELLULE TV" },
+        { "nom": "CRF", "libelle": "CIRCUIT EAU DE REFRIGERATION" },
+        { "nom": "CTA", "libelle": "NETTOYAGE CONTINU DU CONDENSEUR" },
+        { "nom": "CVI", "libelle": "VIDE DU CONDENSEUR" },
+        { "nom": "3_ACT", "libelle": "ACTIONNEURS" },
+        { "nom": "3_001", "libelle": "REG DE PRESSION DETENTE VAPEUR" },
+        { "nom": "3_002", "libelle": "REG DE PRESSION DEVERSE VAPEUR" },
+        { "nom": "3_003", "libelle": "REG DE TEMP DESURCHAUFFE EAU" },
+        { "nom": "0_MEA", "libelle": "MESURES" },
+        { "nom": "0_001", "libelle": "TEMPERATURES" },
+        { "nom": "0_003", "libelle": "VITESSE - STI300" },
+        { "nom": "2_CLC", "libelle": "REGULATION TURBINE" },
+        { "nom": "2_1XX", "libelle": "FONCTION MANU" },
+        { "nom": "2_11X", "libelle": "AJUSTEMENTS" },
+        { "nom": "2_111", "libelle": "DECLENCHEMENT 2 SUR 3" },
+        { "nom": "2_112", "libelle": "MISE EN SERVICE REGULATION" },
+        { "nom": "2_113", "libelle": "ORDRE DE MARCHE" },
+        { "nom": "2_12X", "libelle": "CTRL VITESSE" },
+        { "nom": "2_120", "libelle": "VERROUILLAGE REF VITESSE" },
+        { "nom": "2_13X", "libelle": "CTRL CHARGE" },
+        { "nom": "2_133", "libelle": "CONSIGNE CHARGE HP" },
+        { "nom": "2_135", "libelle": "CONSIGNE CHARGE BP" },
+        { "nom": "2_15X", "libelle": "LIMITATION" },
+        { "nom": "2_151", "libelle": "MIN HP" },
+        { "nom": "2_16X", "libelle": "REFERENCE D'OUVERTURE" },
+        { "nom": "2_17X", "libelle": "BOUCLES DE POSITION" },
+        { "nom": "2_2XX", "libelle": "FONCTION AUTO" },
+        { "nom": "2_22X", "libelle": "CTRL VITESSE" },
+        { "nom": "2_221", "libelle": "ZONE DE VITESSE CRITIQUE" },
+        { "nom": "2_222", "libelle": "ETAT THERMIQUE" },
+        { "nom": "2_23X", "libelle": "CTRL CHARGE" },
+        { "nom": "2_231", "libelle": "REGULATION DE PUISSANCE (AUTO)" },
+        { "nom": "2_4XX", "libelle": "TEST VANNES" },
+        { "nom": "2_3XX", "libelle": "CALCULATEUR DE CONTRAINTE" },
+        { "nom": "4_PRO", "libelle": "PROTECTION" },
+        { "nom": "4_101", "libelle": "DECLENCHEMENT DEFAUT REGUL" },
+        { "nom": "5_MON", "libelle": "CONTROLE" },
+        { "nom": "0_2XX", "libelle": "PROTECTION VOIE 2" },
+        { "nom": "0_3XX", "libelle": "PROTECTION VOIE 3" },
+        { "nom": "0_1XX", "libelle": "PROTECTION VOIE 1" },
+        { "nom": "1_101", "libelle": "OLC" },
+        { "nom": "4_1XX", "libelle": "PROTECTION VOIE 1" },
+        { "nom": "4_2XX", "libelle": "PROTECTION VOIE 2" },
+        { "nom": "4_3XX", "libelle": "PROTECTION VOIE 3" },
+        { "nom": "4_5XX", "libelle": "ARMEMENT PROTEC" },
+        { "nom": "5_1XX", "libelle": "PROTECTION VOIE 1" },
+        { "nom": "5_2XX", "libelle": "PROTECTION VOIE 2" },
+        { "nom": "5_3XX", "libelle": "PROTECTION VOIE 3" }
+      ]
+    }
+  };
+
+  console.log('🌱 Début du seeding de la bibliothèque de référence...');
+  await sqlite.initialize();
+
+  for (const [zoneId, zoneData] of Object.entries(data)) {
+    console.log(`- Traitement Zone: ${zoneId}`);
+    sqlite.reference.saveZone({
+      id: zoneId,
+      name: zoneData.libelle,
+      description: `Zone ${zoneId}`,
+      metadata: { source: 'docs/structure_architecturelle_répertoires.md' }
+    });
+
+    for (const descendant of zoneData.descendants) {
+      const circuitId = `${zoneId}-${descendant.nom}`;
+      console.log(`  - Circuit: ${circuitId} (${descendant.libelle})`);
+      sqlite.reference.saveCircuit({
+        id: circuitId,
+        zoneId: zoneId,
+        name: descendant.libelle,
+        description: descendant.libelle,
+        metadata: { originalNom: descendant.nom }
+      });
+    }
+  }
+
+  console.log('✅ Seeding terminé avec succès !');
+}
+
+seed().catch(err => {
+  console.error('❌ Erreur lors du seeding:', err);
+  process.exit(1);
+});

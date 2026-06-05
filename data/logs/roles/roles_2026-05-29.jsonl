@@ -1,0 +1,8 @@
+{"id":"role_1780083592850_6r5p","timestamp":"2026-05-29T19:39:52.850Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1780083592849_qhg62d","version":"1.0.0"}}
+{"id":"role_1780083600186_ol1i","timestamp":"2026-05-29T19:40:00.186Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"bonsoir"},"traceId":"trace_1780083600185_qly6a6"}
+{"id":"role_1780083805755_tcqw","timestamp":"2026-05-29T19:43:25.755Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1780083805754_1ffdf8","version":"1.0.0"}}
+{"id":"role_1780083809661_kntm","timestamp":"2026-05-29T19:43:29.661Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"bonsoir"},"traceId":"trace_1780083809660_i5gmbw"}
+{"id":"role_1780084033811_o50f","timestamp":"2026-05-29T19:47:13.811Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1780084033810_srhmoo","version":"1.0.0"}}
+{"id":"role_1780084053333_bw9z","timestamp":"2026-05-29T19:47:33.333Z","role":"APP","action":"SYSTEM_START","status":"COMPLETED","details":{"sessionId":"session_1780084053333_9adamy","version":"1.0.0"}}
+{"id":"role_1780084084648_5f5l","timestamp":"2026-05-29T19:48:04.648Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"decrit le systeme KCA"},"traceId":"trace_1780084084647_xbxuy2"}
+{"id":"role_1780084175619_x8rl","timestamp":"2026-05-29T19:49:35.619Z","role":"APP","action":"RECEIVE_REQUEST","status":"START","details":{"method":"POST","path":"/api/chat","query":"donne image KCA"},"traceId":"trace_1780084175618_lo68hd"}

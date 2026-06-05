@@ -1,0 +1,45 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "logs\\.9cb420077ff01e36f5b333ddec7d4c718d35c496-audit.json",
+    "files": [
+        {
+            "date": 1779571855821,
+            "name": "logs\\toolformer-2026-05-23.log",
+            "hash": "f3473da2b429c8db2992b999c05d3b5e4195db5247a77482c32171803d7c0890"
+        },
+        {
+            "date": 1779577357899,
+            "name": "logs\\toolformer-2026-05-24.log",
+            "hash": "887f90a1cb211648bdb5e82fba0f0dbd72baa62b30fd001f06234e62651908cc"
+        },
+        {
+            "date": 1779812972165,
+            "name": "logs\\toolformer-2026-05-26.log",
+            "hash": "64544a9e7dc153e5ef7909c92711d4b91b740ab23ff8717d1cc47348ab95c3cd"
+        },
+        {
+            "date": 1780083595967,
+            "name": "logs\\toolformer-2026-05-29.log",
+            "hash": "7b69d0f1870e7c459982656fd0667ee186fa7b1b36f1fbaf0b327a6f83ba38c2"
+        },
+        {
+            "date": 1780169780617,
+            "name": "logs\\toolformer-2026-05-30.log",
+            "hash": "984f3a7710d7f9895b2a6ba39555a5e821a8c1936a0c41d9940277edd1faf768"
+        },
+        {
+            "date": 1780610288667,
+            "name": "logs\\toolformer-2026-06-04.log",
+            "hash": "6ebf0798dd998ba1aa5d07c159fc346ebd6d85d165cf3f69a51092532666e200"
+        },
+        {
+            "date": 1780614094244,
+            "name": "logs\\toolformer-2026-06-05.log",
+            "hash": "7c7ee6e6a1caf5ec542591915e84704b246440aec8c74741cb335460cf76a287"
+        }
+    ],
+    "hashType": "sha256"
+}

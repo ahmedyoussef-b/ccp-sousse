@@ -1,0 +1,6 @@
+{"id":"chroma_1778484937221_nyk8","timestamp":"2026-05-11T07:35:37.221Z","operation":"DELETE_DOCUMENTS","relation":"APP_TO_CHROMADB","collection":"VISION","documentsCount":1,"duration":0,"success":true,"details":{}}
+{"id":"chroma_1778484938414_5yg9","timestamp":"2026-05-11T07:35:38.414Z","operation":"DELETE_DOCUMENTS","relation":"CHROMADB_RESPONSE","collection":"VISION","documentsCount":1,"duration":1193,"success":true,"details":{}}
+{"id":"chroma_1778484959980_p4di","timestamp":"2026-05-11T07:35:59.980Z","operation":"DELETE_DOCUMENTS","relation":"APP_TO_CHROMADB","collection":"VISION","documentsCount":1,"duration":0,"success":true,"details":{}}
+{"id":"chroma_1778484960119_fkkb","timestamp":"2026-05-11T07:36:00.119Z","operation":"DELETE_DOCUMENTS","relation":"CHROMADB_RESPONSE","collection":"VISION","documentsCount":1,"duration":139,"success":true,"details":{}}
+{"id":"chroma_1778485974673_hqv5","timestamp":"2026-05-11T07:52:54.673Z","operation":"UPDATE_DOCUMENTS","relation":"APP_TO_CHROMADB","collection":"VISION","documentsCount":1,"duration":0,"success":true,"details":{}}
+{"id":"chroma_1778485974903_nfaa","timestamp":"2026-05-11T07:52:54.903Z","operation":"UPDATE_DOCUMENTS","relation":"CHROMADB_RESPONSE","collection":"VISION","documentsCount":1,"duration":230,"success":true,"details":{}}

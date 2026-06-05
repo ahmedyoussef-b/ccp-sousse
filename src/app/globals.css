@@ -1,0 +1,133 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand Palette: Primary #3A6ED0, Background #F7F8FB, Accent #7DD2E1 */
+    --background: 225 33% 98%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 219 63% 52%; /* #3A6ED0 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 189 59% 69%; /* #7DD2E1 */
+    --secondary-foreground: 219 63% 10%;
+    --muted: 225 33% 94%;
+    --muted-foreground: 225 10% 40%;
+    --accent: 189 59% 69%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 225 33% 90%;
+    --input: 225 33% 90%;
+    --ring: 219 63% 52%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* ChatGPT Dark style: BG #212121, Sidebar #171717, Input #2f2f2f */
+    --background: 0 0% 13%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 18%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 219 63% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 189 59% 69%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 219 63% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+}
+
+@layer utilities {
+  .document-page {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .stat-card {
+    @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  .metadata-edit input:focus,
+  .metadata-edit select:focus {
+    @apply ring-2 ring-blue-500 outline-none;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .loading-bar {
+    animation: loadingBar 1.4s ease-in-out infinite;
+  }
+
+  @keyframes loadingBar {
+    0% {
+      transform: translateX(-100%);
+    }
+    50% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+.chat-container {
+  @apply bg-[#212121] text-white;
+}
+
+.sidebar-bg {
+  @apply bg-[#171717];
+}
+
+.input-container {
+  @apply bg-[#2f2f2f] rounded-3xl border border-white/10;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

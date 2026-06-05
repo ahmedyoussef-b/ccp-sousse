@@ -1,0 +1,52 @@
+[
+  {
+    "question": "Quels systèmes sont refroidis par l'eau de réfrigération auxiliaire (CRF) ?",
+    "response": "Le système d'eau de réfrigération auxiliaire (CRF) assure le refroidissement des auxiliaires critiques de la centrale :\n\n1. Refroidissement des échangeurs de chaleur (NORIA) :\n- Système TRI : réfrigération des auxiliaires des turbines à gaz\n- Système SRI : réfrigération en eau déminéralisée pour les auxiliaires de la turbine à vapeur et du cycle combiné\n\n2. Désurchauffe des purges :\n- Purges des chaudières (ballon d'éclatement)\n- Purges des tuyauteries HP et BP\n- Purges de vapeur vers l'atmosphère\n\n3. Autres rôles :\n- Épuisement de la station de pompage\n- Appoint d'eau de mer pour nettoyage",
+    "quality": 5
+  },
+  {
+    "question": "Qu'est-ce que le système TRI et quel est son rôle dans le refroidissement ?",
+    "response": "Le système TRI (NORIA TRI) est le système de réfrigération des auxiliaires des turbines à gaz. Il est alimenté par l'eau du circuit auxiliaire CRF à travers les échangeurs de chaleur (NORIA).",
+    "quality": 5
+  },
+  {
+    "question": "Qu'est-ce que le système SRI et quels composants refroidit-il ?",
+    "response": "Le système SRI (NORIA SRI) est le système de réfrigération en eau déminéralisée pour les auxiliaires de la turbine à vapeur et du cycle combiné. À travers le système SRI, le circuit CRF permet de refroidir :\n- Les paliers des pompes alimentaires (APH)\n- Les pompes de circulation (FSR/FLB)\n- Le système de graissage de la turbine (GGR)",
+    "quality": 5
+  },
+  {
+    "question": "Comment l'eau de réfrigération auxiliaire est-elle utilisée pour la désurchauffe des purges ?",
+    "response": "Le circuit auxiliaire CRF fournit l'eau nécessaire à la désurchauffe (abaissement de la température par injection d'eau) de plusieurs flux de vapeur et de condensats :\n- Purges des chaudières issues du ballon d'éclatement\n- Purges des tuyauteries de vapeur HP et BP (particulièrement lors des phases de démarrage)\n- Purges de vapeur vers l'atmosphère",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les autres rôles de service du système d'eau de réfrigération auxiliaire ?",
+    "response": "Les autres rôles de service du système d'eau de réfrigération auxiliaire (CRF) sont :\n- L'épuisement de la station de pompage via les pompes d'exhaure (104 PO/204 PO) pour évacuer les fuites de presse-étoupe et les infiltrations\n- L'appoint d'eau de mer pour le nettoyage ou d'autres fonctions de service au sein de la station de pompage",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le rôle principal du système d'eau de réfrigération auxiliaire (CRF) ?",
+    "response": "Le rôle principal du système d'eau de réfrigération auxiliaire (CRF) est d'assurer le refroidissement des auxiliaires critiques de la centrale et de gérer les apports thermiques liés aux purges.",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les deux systèmes de réfrigération en circuit fermé alimentés par le circuit CRF ?",
+    "response": "Les deux systèmes de réfrigération en circuit fermé alimentés par le circuit CRF sont :\n- Le système TRI (NORIA TRI) : réfrigération des auxiliaires des turbines à gaz\n- Le système SRI (NORIA SRI) : réfrigération en eau déminéralisée pour les auxiliaires de la turbine à vapeur et du cycle combiné",
+    "quality": 5
+  },
+  {
+    "question": "À quoi sert la désurchauffe des purges dans le circuit CRF ?",
+    "response": "La désurchauffe des purges dans le circuit CRF sert à abaisser la température des flux de vapeur et de condensats par injection d'eau avant leur évacuation ou recyclage. Cela concerne les purges des chaudières, des tuyauteries HP/BP et les purges vers l'atmosphère.",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le rôle des pompes d'exhaure 104 PO/204 PO dans le système CRF ?",
+    "response": "Les pompes d'exhaure 104 PO/204 PO sont chargées d'évacuer les fuites de presse-étoupe et les infiltrations vers les égouts. Elles assurent la fonction d'épuisement de la station de pompage.",
+    "quality": 5
+  },
+  {
+    "question": "Quels composants sont refroidis indirectement via le système SRI ?",
+    "response": "Via le système SRI, le circuit CRF permet indirectement de refroidir :\n- Les paliers des pompes alimentaires (APH)\n- Les pompes de circulation (FSR/FLB)\n- Le système de graissage de la turbine (GGR)",
+    "quality": 5
+  }
+]
