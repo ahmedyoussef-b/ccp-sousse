@@ -6,7 +6,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
 import { smartRouter } from '@/ai/router/smart-router';
-import { chromaDBManager } from '@/ai/vector/chromadb-manager';
+import { vectorDB } from '@/ai/vector';
 import { getCurrentDimension } from '@/ai/vector/embeddings';
 import { hybridVisionSearch } from '@/ai/innovations/05-hybrid-vision-search';
 import { intelligentPartMatching } from '@/ai/innovations/09-intelligent-part-matching';
@@ -708,7 +708,7 @@ class VisionService implements VisionServiceInterface {
       await hybridVisionSearch.removeFromIndex(imageId);
       
       try {
-        await chromaDBManager.deleteDocuments('VISION', [`vision_${imageId}`]);
+        await vectorDB.deleteDocuments('VISION', [`vision_${imageId}`]);
         console.log(`🗑️ Image ${imageId} supprimée de ChromaDB`);
       } catch (chromaError) {
         console.error(`Erreur suppression ChromaDB:`, chromaError);
@@ -1590,8 +1590,8 @@ class VisionService implements VisionServiceInterface {
     
     // 1. Tenter ChromaDB d'abord (recherche vectorielle performante)
     try {
-      const { chromaDBManager } = await import('@/ai/vector/chromadb-manager');
-      const chromaResults = await chromaDBManager.searchSimilar('VISION', features, limit, threshold);
+      const { vectorDB } = await import('@/ai/vector');
+      const chromaResults = await vectorDB.searchSimilar('VISION', features, limit, threshold);
       
       if (chromaResults && chromaResults.length > 0) {
         const mappedResults: Array<VisionData & { similarity: number }> = [];

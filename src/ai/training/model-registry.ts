@@ -4,7 +4,8 @@
  * @lastUpdated 2026-04-02
  */
 
-import { promises as fs } from 'fs';
+import { ModelVersion, AIConfig } from '@/types/ai';
+import { storage } from '../../lib/storage';
 import path from 'path';
 
 // ============================================================================
@@ -12,8 +13,8 @@ import path from 'path';
 // ============================================================================
 
 const LOG_PREFIX = '[MODEL-REGISTRY]';
-const REGISTRY_PATH = path.join(process.cwd(), 'data/models/registry.json');
-const MODELS_DIR = path.join(process.cwd(), 'data/models');
+const REGISTRY_PATH = 'data/models/registry.json';
+const MODELS_DIR = 'data/models';
 
 function logInfo(message: string, data?: any): void {
     console.log(`${LOG_PREFIX} 📍 ${message}`);
@@ -70,8 +71,7 @@ export class ModelRegistry {
      */
     private async init(): Promise<void> {
         try {
-            await this.loadRegistry();
-            this.initialized = true;
+            await this.ensureInitialized();
             logSuccess('Registre initialisé', { modelsCount: this.registry.length });
         } catch (error) {
             logError('Erreur initialisation registre', error);
@@ -84,20 +84,19 @@ export class ModelRegistry {
      * Charge le registre depuis le disque
      */
     private async loadRegistry(): Promise<void> {
-        try {
-            const data = await fs.readFile(REGISTRY_PATH, 'utf-8');
-            this.registry = JSON.parse(data);
-        } catch (error) {
-            await this.createDefaultRegistry();
-        }
+        await this.ensureInitialized();
     }
     
     /**
      * Sauvegarde le registre sur disque
      */
     private async saveRegistry(): Promise<void> {
-        await fs.mkdir(path.dirname(REGISTRY_PATH), { recursive: true });
-        await fs.writeFile(REGISTRY_PATH, JSON.stringify(this.registry, null, 2));
+        try {
+            await storage.put(REGISTRY_PATH, JSON.stringify(this.registry, null, 2));
+            logInfo('Registre sauvegardé');
+        } catch (error) {
+            logError('Erreur sauvegarde registre', error);
+        }
     }
     
     /**
@@ -341,7 +340,7 @@ export class ModelRegistry {
                     // Supprimer les fichiers du modèle
                     try {
                         const modelPath = path.join(MODELS_DIR, model.id);
-                        await fs.rm(modelPath, { recursive: true, force: true });
+                        await storage.delete(modelPath);
                     } catch (e) {
                         // Ignorer les erreurs de suppression
                     }

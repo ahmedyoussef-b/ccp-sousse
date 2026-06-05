@@ -4,6 +4,7 @@ import { ChromaCollections, CollectionName } from './chromadb-schema';
 import { logger } from '../../lib/logger';
 import { getEmbeddingFunction, validateEmbeddingDimension, getCurrentDimension, isDimensionDetected, detectEmbeddingDimension } from './embeddings';
 import { chromaDBAudit } from '../../lib/logger/chromadb-audit';
+import { IVectorDB, VectorDocument, VectorSearchResult } from './IVectorDB';
 
 // ============================================
 // CONFIGURATION MÉMOIRE BASSE
@@ -80,7 +81,7 @@ function logError(message: string, error?: any, data?: Record<string, any>): voi
 // CHROMADB MANAGER
 // ============================================
 
-export class ChromaDBManager {
+export class ChromaDBManager implements IVectorDB {
     private static instance: ChromaDBManager;
     private client: ChromaClient;
     private embeddingFunction: IEmbeddingFunction;
@@ -344,7 +345,7 @@ export class ChromaDBManager {
 
     async addDocuments(
         collectionName: CollectionName, 
-        documents: Array<{ id: string; content: string; metadata: Record<string, any>; embedding?: number[] }>,
+        documents: VectorDocument[],
         traceId?: string
     ): Promise<void> {
         return this.processBatchAction(collectionName, documents, 'add', traceId);
@@ -352,7 +353,7 @@ export class ChromaDBManager {
 
     async upsertDocuments(
         collectionName: CollectionName, 
-        documents: Array<{ id: string; content: string; metadata: Record<string, any>; embedding?: number[] }>,
+        documents: VectorDocument[],
         traceId?: string
     ): Promise<void> {
         return this.processBatchAction(collectionName, documents, 'upsert', traceId);
@@ -401,7 +402,7 @@ export class ChromaDBManager {
 
     private async processBatchAction(
         collectionName: CollectionName, 
-        documents: Array<{ id: string; content: string; metadata: Record<string, any>; embedding?: number[] }>, 
+        documents: VectorDocument[], 
         action: 'add' | 'upsert',
         traceId?: string
     ): Promise<void> {
@@ -514,7 +515,7 @@ async searchSimilar(
     nResults: number = 10,
     threshold: number = 0.7,
     traceId?: string
-): Promise<Array<{ id: string; score: number; metadata: Record<string, any>; document?: string }>> {
+): Promise<VectorSearchResult[]> {
     if (this.isCircuitOpen()) {
         logWarn('Circuit ouvert, recherche vectorielle ignorée');
         return [];
@@ -534,7 +535,7 @@ async searchSimilar(
         
         if (!results?.ids?.[0]?.length) return [];
         
-        const formattedResults: Array<{ id: string; score: number; metadata: Record<string, any>; document?: string }> = [];
+        const formattedResults: VectorSearchResult[] = [];
         for (let i = 0; i < results.ids[0].length; i++) {
             const distance = results.distances?.[0]?.[i] || 0;
             const similarity = Math.max(0, 1 - distance);

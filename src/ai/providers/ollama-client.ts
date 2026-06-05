@@ -7,6 +7,8 @@
 import { aiLogger } from '../../lib/logger/ai-logger';
 import { healthMonitor } from '../resilience/health-monitor';
 import { callGroq } from './groq-provider';
+import { isCloudMode } from '../../lib/config/env-mode';
+import Together from 'together-ai';
 
 // ============================================================================
 // CONFIGURATION
@@ -335,23 +337,23 @@ export async function callOllama(
         logError('CALL', `Échec avec ${currentModel} après ${formatDuration(elapsedTime)}`, error);
       }
       
-      // Si c'était le dernier modèle, on tente Groq avant d'abandonner
-      if (i === modelCascade.length - 1) {
-        logWarning('CALL', `Tous les modèles Ollama ont échoué. Tentative de secours avec Groq (Ultra-rapide)...`);
+      // Si c'était le dernier modèle (ou si on est en Cloud), on tente Groq avant d'abandonner
+      if (i === modelCascade.length - 1 || isCloudMode()) {
+        logWarning('CALL', `Basculement sur Groq (Ultra-rapide)...`);
         try {
           const groqResponse = await callGroq(prompt, { 
             temperature, 
             maxTokens,
-            timeout: 15000 // Timeout court pour Groq car il est très rapide
+            timeout: 15000 
           });
           
           const elapsedTime = Date.now() - startTime;
-          logSuccess('CALL', `✅ Secours Groq réussi en ${formatDuration(elapsedTime)}`);
+          logSuccess('CALL', `✅ Groq réussi en ${formatDuration(elapsedTime)}`);
           
           return groqResponse;
         } catch (groqError: any) {
-          logError('CALL', `Échec du secours Groq également`, groqError);
-          throw new Error(`Tous les modèles ont échoué. Dernière erreur Ollama: ${lastError?.message}. Erreur Groq: ${groqError.message}`);
+          logError('CALL', `Échec du recours Groq`, groqError);
+          throw new Error(`Erreur complète: Ollama=${lastError?.message}, Groq=${groqError.message}`);
         }
       }
       // Sinon, on continue avec le modèle suivant
@@ -677,12 +679,31 @@ export async function getModelInfo(model: string): Promise<any | null> {
 }
 
 /**
- * Génère des embeddings avec Ollama
+ * Génère des embeddings avec Ollama (ou Together.ai en cloud)
  */
 export async function generateEmbeddings(text: string, model: string = 'nomic-embed-text'): Promise<number[]> {
   const startTime = Date.now();
   
-  logInfo('EMBED', `🔢 Génération d'embedding avec ${model}`);
+  if (isCloudMode()) {
+    logInfo('EMBED', `🔢 Génération d'embedding Cloud (Together.ai)`);
+    try {
+      const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
+      const response = await together.embeddings.create({
+          model: 'thenlper/gte-large',
+          input: text
+      });
+      const embedding = response.data[0].embedding;
+      logSuccess('EMBED', `Embedding Together généré en ${Date.now() - startTime}ms`);
+      // truncate/pad to match 768 dimensions if required, though gte-large is 1024
+      // We will pad or slice to match expected vector size in the VectorDB later
+      return embedding;
+    } catch (e: any) {
+      logError('EMBED', 'Erreur Together.ai', e);
+      throw e;
+    }
+  }
+
+  logInfo('EMBED', `🔢 Génération d'embedding local avec ${model}`);
   logMetric('EMBED', 'Texte longueur', `${text.length} caractères`);
   
   try {
