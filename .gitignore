@@ -23,7 +23,7 @@ data/models/uploads/
 # next.js
 /.next/
 /out/
-
+README.md
 # production
 /build
 
