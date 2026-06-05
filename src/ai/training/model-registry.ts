@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @fileOverview ModelRegistry - Gestion des versions de modèles et déploiement
  * @version 2.0.0
  * @lastUpdated 2026-04-02
@@ -299,6 +299,28 @@ export class ModelRegistry {
     }
     
     /**
+     * Supprime définitivement un modèle de l'historique
+     */
+    async deleteModel(id: string): Promise<boolean> {
+        await this.ensureInitialized();
+        
+        const index = this.registry.findIndex(m => m.id === id);
+        if (index === -1) return false;
+        
+        if (this.registry[index].status === 'production') {
+            logError('Impossible de supprimer le modèle en production');
+            return false;
+        }
+        
+        this.registry.splice(index, 1);
+        await this.saveRegistry();
+        
+        logInfo('Modèle supprimé de l\'historique', { id });
+        
+        return true;
+    }
+    
+    /**
      * Nettoie les modèles archivés trop anciens
      */
     async cleanupArchivedModels(maxAgeDays: number = 30): Promise<number> {
@@ -403,4 +425,8 @@ export async function getCurrentActiveModel(): Promise<ModelVersion> {
 
 export async function listAllModels(): Promise<ModelVersion[]> {
     return modelRegistry.listAllModels();
+}
+
+export async function deleteModel(id: string): Promise<boolean> {
+    return modelRegistry.deleteModel(id);
 }
