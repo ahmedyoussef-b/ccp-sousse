@@ -1,16 +1,34 @@
 # .vercelignore
-# Fichiers et dossiers à exclure de l'upload Vercel CLI (limite 100MB par fichier)
+# Fichiers et dossiers à exclure de l'upload Vercel CLI
 
-# Dépendances (ignoré par défaut, mais au cas où)
+# Dépendances
 node_modules/
 
-# Cache et build Next.js (doit être regénéré sur Vercel)
+# Cache et build Next.js (regénéré sur Vercel)
 .next/
 out/
 build/
+.dist/
 
-# Données locales lourdes (Images, DB SQLite, Vecteurs Chroma)
-data/
+# Données locales lourdes à la RACINE uniquement
+# (Images, DB SQLite, Vecteurs Chroma, modèles ML)
+/data/
+/data_backup/
+/chroma/
+/chroma_data/
+/chroma_db/
+/scratch/
+/logs/
+/tmp/
+/banque_images_ia/
+
+# Dossiers de développement locaux uniquement
+.antigravitycli/
+.claude/
+.idx/
+.vscode/
+.idea/
+/536984d6-cecc-4440-99a8-a05f3b8026a0/
 
 # Fichiers de log et de debug
 *.log
@@ -19,11 +37,16 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Autres fichiers inutiles en production
+# Fichiers sensibles et inutiles en production
 .git/
-.vscode/
-.idea/
 .DS_Store
 .env.local
 .env.development
 .env.*.local
+/data/*.db
+/data/*.db-wal
+/data/*.db-shm
+*.gguf
+*.pt
+*.onnx
+*.safetensors
