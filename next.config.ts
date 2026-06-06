@@ -91,12 +91,13 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '200mb',
     },
     outputFileTracingExcludes: {
-      '/api/vision/fs-tree': [
+      '*': [
         '**/node_modules/@tensorflow/**',
         '**/node_modules/@xenova/**',
         '**/node_modules/onnxruntime-node/**',
         '**/node_modules/tesseract.js/**',
         '**/node_modules/pdf-parse/**',
+        'data/**',
       ],
     },
   },
