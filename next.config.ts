@@ -28,6 +28,19 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'picsum.photos', port: '', pathname: '/**' },
     ],
   },
+  
+  // ✅ DÉPLACÉ ICI - hors de experimental
+  outputFileTracingExcludes: {
+    '*': [
+      '**/node_modules/@tensorflow/**',
+      '**/node_modules/@xenova/**',
+      '**/node_modules/onnxruntime-node/**',
+      '**/node_modules/tesseract.js/**',
+      '**/node_modules/pdf-parse/**',
+      'data/**',
+    ],
+  },
+  
   webpack: (config, { isServer }) => {
     // Ignorer les modules problématiques
     config.resolve.alias = {
@@ -35,8 +48,6 @@ const nextConfig: NextConfig = {
       'cohere-ai': false,
       'chokidar': false,
       'fsevents': false,
-      // Redirige 'sharp' vers notre shim no-op pendant le build
-      // Cela évite ERR_DLOPEN_FAILED quand Node.js tente de charger le binaire natif
       'sharp': require.resolve('./src/lib/utils/sharp-shim.js'),
     };
     
@@ -71,7 +82,6 @@ const nextConfig: NextConfig = {
     }
 
     if (isServer) {
-      // Force sharp to be external on server - never bundle it
       const originalExternals = config.externals;
       config.externals = [
         ...(Array.isArray(originalExternals) ? originalExternals : [originalExternals]),
@@ -86,19 +96,11 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  
+  // ✅ experimental simplifié
   experimental: {
     serverActions: {
       bodySizeLimit: '200mb',
-    },
-    outputFileTracingExcludes: {
-      '*': [
-        '**/node_modules/@tensorflow/**',
-        '**/node_modules/@xenova/**',
-        '**/node_modules/onnxruntime-node/**',
-        '**/node_modules/tesseract.js/**',
-        '**/node_modules/pdf-parse/**',
-        'data/**',
-      ],
     },
   },
 };
