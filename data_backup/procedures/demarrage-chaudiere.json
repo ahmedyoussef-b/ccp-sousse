@@ -1,0 +1,51 @@
+{
+  "procedure": {
+    "id": "boiler-start",
+    "title": "Démarrage Chaudière Industrielle",
+    "totalSteps": 5
+  },
+  "steps": [
+    {
+      "number": 1,
+      "title": "Vérification des niveaux",
+      "instruction": "Vérifier que le niveau d'eau dans le réservoir d'appoint est entre 50% et 70%.",
+      "expectedValue": "50-70%",
+      "verificationMethod": "Lecture jauge visuelle côté gauche",
+      "safetyWarning": "Port de lunettes de protection obligatoire.",
+      "timeEstimate": "5 min"
+    },
+    {
+      "number": 2,
+      "title": "Ouverture vanne gaz",
+      "instruction": "Ouvrir lentement la vanne manuelle HV701 d'arrivée de gaz.",
+      "expectedValue": "Vanne alignée avec la tuyauterie",
+      "verificationMethod": "Position physique du levier jaune",
+      "safetyWarning": "En cas d'odeur de gaz, évacuer immédiatement.",
+      "timeEstimate": "2 min"
+    },
+    {
+      "number": 3,
+      "title": "Mise sous tension",
+      "instruction": "Enclencher le disjoncteur principal Q1 sur le tableau électrique.",
+      "expectedValue": "Voyant 'Tension' allumé",
+      "verificationMethod": "Indicateur lumineux vert en façade",
+      "timeEstimate": "1 min"
+    },
+    {
+      "number": 4,
+      "title": "Préchauffage",
+      "instruction": "Lancer le cycle de préchauffage automatique via l'écran tactile.",
+      "expectedValue": "Température > 40°C",
+      "verificationMethod": "Affichage numérique T1",
+      "timeEstimate": "15 min"
+    },
+    {
+      "number": 5,
+      "title": "Mise en service",
+      "instruction": "Une fois le préchauffage fini, appuyer sur 'START' pour l'allumage du brûleur.",
+      "expectedValue": "Flamme détectée (voyant bleu)",
+      "verificationMethod": "Regard de flamme ou voyant de contrôle",
+      "timeEstimate": "5 min"
+    }
+  ]
+}

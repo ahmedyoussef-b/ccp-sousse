@@ -1,0 +1,52 @@
+[
+  {
+    "question": "Comment fonctionne la reprise en secours des pompes CRF auxiliaires (102 PO/202 PO) ?",
+    "response": "La reprise en secours des pompes de réfrigération (CRF) auxiliaires est un automatisme conçu pour assurer la continuité du refroidissement en cas de défaillance de la pompe en service. Son fonctionnement repose sur :\n\n1. Configuration initiale :\n- Une pompe sélectionnée 'en service' (assure 100% du débit)\n- L'autre pompe placée 'en secours'\n- La vanne motorisée au refoulement de la pompe de secours maintenue ouverte\n\n2. Autorisation :\n- Activation par l'opérateur via le commutateur HSU 012\n- Sans autorisation, pas de démarrage automatique\n\n3. Déclenchement :\n- Tout arrêt de la pompe en service (trip ou défaut) déclenche le démarrage automatique de la pompe de secours",
+    "quality": 5
+  },
+  {
+    "question": "Quelle est la configuration initiale requise pour la reprise en secours des pompes CRF auxiliaires ?",
+    "response": "La configuration initiale requise pour la reprise en secours des pompes CRF auxiliaires est :\n- L'une des deux pompes (102 PO ou 202 PO) est sélectionnée comme 'en service' et assure 100% du débit nécessaire\n- La seconde pompe est placée 'en secours'\n- La vanne motorisée au refoulement de la pompe en secours est maintenue en position ouverte pour permettre un démarrage et une mise en débit immédiats",
+    "quality": 5
+  },
+  {
+    "question": "Pourquoi la vanne de refoulement de la pompe CRF auxiliaire en secours est-elle maintenue ouverte ?",
+    "response": "La vanne motorisée au refoulement de la pompe CRF auxiliaire en secours est maintenue en position ouverte pour permettre un démarrage et une mise en débit immédiats en cas de besoin. Cette configuration assure une transition rapide et sans délai lors du basculement automatique.",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le rôle du commutateur HSU 012 dans la reprise en secours des pompes CRF auxiliaires ?",
+    "response": "Le commutateur HSU 012 est l'autorisation manuelle de la reprise en secours. L'opérateur doit activer cette autorisation via le commutateur/sélecteur dédié au niveau du groupe fonctionnel. Sans cette autorisation manuelle, le démarrage automatique de la pompe de réserve ne se produira pas en cas de défaut de la pompe en service.",
+    "quality": 5
+  },
+  {
+    "question": "Quel événement déclenche le démarrage automatique de la pompe CRF auxiliaire de secours ?",
+    "response": "Lorsque l'autorisation HSU 012 est active, tout arrêt de la pompe en service provoqué par un déclenchement (trip) ou un défaut à un niveau hiérarchique inférieur (protection moteur, défaut électrique, etc.) entraîne le démarrage automatique instantané de la pompe en secours.",
+    "quality": 5
+  },
+  {
+    "question": "Quels systèmes sont protégés par la reprise en secours des pompes CRF auxiliaires ?",
+    "response": "Le basculement automatique des pompes CRF auxiliaires permet de maintenir la réfrigération des auxiliaires critiques, notamment les systèmes SRI (réfrigération en eau déminéralisée), TRI, et autres équipements nécessitant un refroidissement continu sans intervention humaine immédiate.",
+    "quality": 5
+  },
+  {
+    "question": "Que se passe-t-il si l'opérateur n'active pas l'autorisation HSU 012 pour les pompes CRF auxiliaires ?",
+    "response": "Si l'opérateur n'active pas l'autorisation HSU 012, le démarrage automatique de la pompe de réserve ne se produira pas en cas de défaut de la pompe en service. La fonction de reprise en secours n'est pas permanente ; elle doit être validée manuellement par l'opérateur pour être opérationnelle.",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le principe général de la reprise en secours des pompes CRF auxiliaires ?",
+    "response": "Le principe général de la reprise en secours des pompes CRF auxiliaires repose sur :\n- Le maintien de la vanne de refoulement ouverte sur la pompe de réserve\n- L'activation d'un verrou logique (HSU 012) par l'opérateur\n- Le lien logique qui déclenche le démarrage automatique de la pompe de secours lors de l'arrêt de la pompe en service\nCe mécanisme assure la continuité de la réfrigération sans intervention humaine immédiate.",
+    "quality": 5
+  },
+  {
+    "question": "Quelle est la différence de configuration des vannes entre la pompe CRF auxiliaire en service et celle en secours ?",
+    "response": "La différence de configuration des vannes est :\n- Pour la pompe en service : sa vanne motorisée au refoulement est en position normale de fonctionnement\n- Pour la pompe en secours : sa vanne motorisée au refoulement est maintenue en position ouverte pour permettre un démarrage et une mise en débit immédiats\nCette configuration permet un basculement rapide sans délai d'ouverture de vanne.",
+    "quality": 5
+  },
+  {
+    "question": "Quels types de défauts peuvent déclencher la reprise en secours des pompes CRF auxiliaires ?",
+    "response": "Les types de défauts pouvant déclencher la reprise en secours des pompes CRF auxiliaires sont :\n- Un déclenchement (trip) de la pompe en service\n- Un défaut à un niveau hiérarchique inférieur\n- Une protection moteur activée\n- Un défaut électrique\nTout arrêt de la pompe en service entraîne le démarrage automatique instantané de la pompe de secours, sous réserve que l'autorisation HSU 012 soit active.",
+    "quality": 5
+  }
+]

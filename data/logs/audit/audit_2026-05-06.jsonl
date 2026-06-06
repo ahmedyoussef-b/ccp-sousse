@@ -1,5 +1,0 @@
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"help","answerLength":525,"modelUsed":"phi:2.7b"},"success":true,"duration":23937,"id":"audit_1778109762406_84ww8g","timestamp":"2026-05-06T23:22:42.406Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"Lister les commandes","answerLength":2073,"modelUsed":"phi:2.7b"},"success":true,"duration":17362,"id":"audit_1778109820551_esglnm","timestamp":"2026-05-06T23:23:40.551Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"Active le diagnostic IA","answerLength":74,"modelUsed":"phi:2.7b"},"success":true,"duration":22909,"id":"audit_1778110044610_8zbu6t","timestamp":"2026-05-06T23:27:24.610Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"Mode assemblage panoramique","answerLength":2465,"modelUsed":"phi:2.7b"},"success":true,"duration":20701,"id":"audit_1778110090951_nez7bl","timestamp":"2026-05-06T23:28:10.951Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"bonjour","answerLength":40,"modelUsed":"phi:2.7b"},"success":true,"duration":6430,"id":"audit_1778110294893_hizfaf","timestamp":"2026-05-06T23:31:34.893Z"}

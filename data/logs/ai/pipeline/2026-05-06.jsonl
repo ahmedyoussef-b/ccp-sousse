@@ -1,4 +1,0 @@
-{"timestamp":"2026-05-06T23:23:33.954Z","sessionId":"api-ad2f6284","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama:latest","tokensGenerated":10,"vitesse":"8.0 tok/s","durationMs":10090,"evalDuration":"1.2s"}}
-{"timestamp":"2026-05-06T23:27:17.681Z","sessionId":"api-0aca8cb6","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama:latest","tokensGenerated":27,"vitesse":"4.8 tok/s","durationMs":12976,"evalDuration":"5.6s"}}
-{"timestamp":"2026-05-06T23:27:24.606Z","sessionId":"api-0aca8cb6","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama","tokensGenerated":24,"vitesse":"10.0 tok/s","durationMs":3427,"evalDuration":"2.4s"}}
-{"timestamp":"2026-05-06T23:27:56.287Z","sessionId":"api-8f12eea8","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama:latest","tokensGenerated":10,"vitesse":"11.7 tok/s","durationMs":4260,"evalDuration":"852.761ms"}}

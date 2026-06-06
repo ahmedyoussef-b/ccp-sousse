@@ -1,0 +1,929 @@
+[
+  {
+    "id": "alert_1776985172963_zb2216",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image de  pupitre_TV.jpg...\"",
+    "rating": 1,
+    "question": "donne l'image de  pupitre_TV.jpg",
+    "timestamp": "2026-04-23T22:59:32.963Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776985015830_34jrla",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image de  pupitre_CR2.jpg...\"",
+    "rating": 1,
+    "question": "donne l'image de  pupitre_CR2.jpg",
+    "timestamp": "2026-04-23T22:56:55.830Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776984800031_qjigk4",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image de  pupitre_CR2.jpg...\"",
+    "rating": 1,
+    "question": "donne l'image de  pupitre_CR2.jpg",
+    "timestamp": "2026-04-23T22:53:20.031Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776981670076_5z2wkf",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE_ET_SUPPORTS_TURBINE_TG...\"",
+    "rating": 1,
+    "question": "decrit SOCLE_ET_SUPPORTS_TURBINE_TG",
+    "timestamp": "2026-04-23T22:01:10.076Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776981477760_6bom4d",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE_ET_SUPPORTS_TURBINE_TG...\"",
+    "rating": 1,
+    "question": "decrit SOCLE_ET_SUPPORTS_TURBINE_TG",
+    "timestamp": "2026-04-23T21:57:57.760Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776981005007_r4r9xa",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE TURBINE",
+    "timestamp": "2026-04-23T21:50:05.007Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776977619528_1idyry",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image qui affiche le transfo de soutirage...\"",
+    "rating": 1,
+    "question": "donne l'image qui affiche le transfo de soutirage",
+    "timestamp": "2026-04-23T20:53:39.528Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776977120242_v6325r",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image qui affiche le transfo de soutirage...\"",
+    "rating": 1,
+    "question": "donne l'image qui affiche le transfo de soutirage",
+    "timestamp": "2026-04-23T20:45:20.242Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776976352299_8q7dc1",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image qui affiche le transfo de soutirage...\"",
+    "rating": 1,
+    "question": "donne l'image qui affiche le transfo de soutirage",
+    "timestamp": "2026-04-23T20:32:32.299Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776725368846_ijjljd",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne image VUE_GENERALE_DU_BLOC.jpg...\"",
+    "rating": 1,
+    "question": "donne image VUE_GENERALE_DU_BLOC.jpg",
+    "timestamp": "2026-04-20T22:49:28.846Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776640369089_595llm",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"c'est quoi TCV057...\"",
+    "rating": 1,
+    "question": "c'est quoi TCV057",
+    "timestamp": "2026-04-19T23:12:49.089Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776640344701_j47iph",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"c'est quoi TCV057...\"",
+    "rating": 1,
+    "question": "c'est quoi TCV057",
+    "timestamp": "2026-04-19T23:12:24.701Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776640342442_01giqk",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image TCV057...\"",
+    "rating": 1,
+    "question": "affiche l'image TCV057",
+    "timestamp": "2026-04-19T23:12:22.442Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776638527255_r3jww5",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T22:42:07.255Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776633748298_fpi4hk",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T21:22:28.298Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776633405228_0mv949",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T21:16:45.228Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776632889529_wasi3h",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T21:08:09.529Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776632579579_oikd2w",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T21:02:59.579Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776632502928_47yomo",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T21:01:42.928Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776631939720_h1bl7e",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T20:52:19.720Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776631867895_cpirxm",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"affiche l'image qui \"Décrit le circuit eau vapeur ...\"",
+    "rating": 1,
+    "question": "affiche l'image qui \"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T20:51:07.895Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776631491299_u12olj",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"Décrit le circuit eau vapeur de la turbine à vape...\"",
+    "rating": 1,
+    "question": "\"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T20:44:51.299Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776630492499_e0yfdr",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"Décrit le circuit eau vapeur de la turbine à vape...\"",
+    "rating": 1,
+    "question": "\"Décrit le circuit eau vapeur de la turbine à vapeur\"",
+    "timestamp": "2026-04-19T20:28:12.499Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776551677182_fpadk0",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"Affiche l'image VUE_GENERALE_DU_BLOC.jpg\"....\"",
+    "rating": 1,
+    "question": "\"Affiche l'image VUE_GENERALE_DU_BLOC.jpg\".",
+    "timestamp": "2026-04-18T22:34:37.182Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776551609167_agipz1",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"Affiche l'image VUE_GENERALE_DU_BLOC.jpg\"....\"",
+    "rating": 1,
+    "question": "\"Affiche l'image VUE_GENERALE_DU_BLOC.jpg\".",
+    "timestamp": "2026-04-18T22:33:29.167Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776551608997_nf5wcr",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"presente moi l'image dans VUE_GENERALE_DU_BLOC.jpg...\"",
+    "rating": 1,
+    "question": "presente moi l'image dans VUE_GENERALE_DU_BLOC.jpg",
+    "timestamp": "2026-04-18T22:33:28.997Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776551290092_k6lece",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"VUE_GENERALE_DU_BLOC.jpg...\"",
+    "rating": 1,
+    "question": "VUE_GENERALE_DU_BLOC.jpg",
+    "timestamp": "2026-04-18T22:28:10.092Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776550952230_blgj1c",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit le circuit eau-vapeur...\"",
+    "rating": 1,
+    "question": "decrit le circuit eau-vapeur",
+    "timestamp": "2026-04-18T22:22:32.230Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776550945307_p6s0vx",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"presente l'image...\"",
+    "rating": 1,
+    "question": "presente l'image",
+    "timestamp": "2026-04-18T22:22:25.307Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776550945303_spz14y",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"presente l'image socle et les supports de turbine...\"",
+    "rating": 1,
+    "question": "presente l'image socle et les supports de turbine",
+    "timestamp": "2026-04-18T22:22:25.303Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776550075102_5sa0vy",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"image circuit eau vapeur...\"",
+    "rating": 1,
+    "question": "image circuit eau vapeur",
+    "timestamp": "2026-04-18T22:07:55.102Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776530364675_qbcm8r",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"Dans le document du système d'air d'atomisation ,...\"",
+    "rating": 1,
+    "question": "\"Dans le document du système d'air d'atomisation ,donne paramètres de la vanne VPR_68 ?\"",
+    "timestamp": "2026-04-18T16:39:24.675Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776526539763_wvopil",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"vannes_et_regulation VPR_68...\"",
+    "rating": 1,
+    "question": "vannes_et_regulation VPR_68",
+    "timestamp": "2026-04-18T15:35:39.764Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776526538234_dz400y",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne les parametres de la vannes_et_regulation VP...\"",
+    "rating": 1,
+    "question": "donne les parametres de la vannes_et_regulation VPR_68",
+    "timestamp": "2026-04-18T15:35:38.234Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776500305310_moxrpx",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"competances de Karim_Mansouri...\"",
+    "rating": 1,
+    "question": "competances de Karim_Mansouri",
+    "timestamp": "2026-04-18T08:18:25.310Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776498267619_mdk4m3",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"CV de \"Karim Mansouri...\"",
+    "rating": 1,
+    "question": "CV de \"Karim Mansouri",
+    "timestamp": "2026-04-18T07:44:27.619Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776495390984_i8qmzp",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne profile  ahmed abbes...\"",
+    "rating": 1,
+    "question": "donne profile  ahmed abbes",
+    "timestamp": "2026-04-18T06:56:30.984Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776468810499_bsk3lq",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"AIR_ATOMISATION...\"",
+    "rating": 1,
+    "question": "AIR_ATOMISATION",
+    "timestamp": "2026-04-17T23:33:30.499Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776467748840_75l8z8",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"AIR_ATOMISATION...\"",
+    "rating": 1,
+    "question": "AIR_ATOMISATION",
+    "timestamp": "2026-04-17T23:15:48.840Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776467107162_cqrd48",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SOCLE ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "SOCLE ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T23:05:07.162Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776466134783_s6420c",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SOCLE ET SUPPORTS DE LA TURBIN...\"",
+    "rating": 1,
+    "question": "SOCLE ET SUPPORTS DE LA TURBIN",
+    "timestamp": "2026-04-17T22:48:54.783Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776465745610_p7r9dv",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SOCLE ET SUPPORTS DE LA TURBIN...\"",
+    "rating": 1,
+    "question": "SOCLE ET SUPPORTS DE LA TURBIN",
+    "timestamp": "2026-04-17T22:42:25.610Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776464116431_s26t9d",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T22:15:16.431Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776464093166_v20047",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T22:14:53.166Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776462837182_5myoq3",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Le Socle Turbine...\"",
+    "rating": 1,
+    "question": "Le Socle Turbine",
+    "timestamp": "2026-04-17T21:53:57.182Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776449945381_ov2mjy",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T18:19:05.381Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776448640760_21a3wl",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T17:57:20.760Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776448338506_iq48xn",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T17:52:18.507Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776439069782_u0miy8",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE _ET_SUPPORTS_TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE _ET_SUPPORTS_TURBINE",
+    "timestamp": "2026-04-17T15:17:49.782Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776438715452_2thrrj",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"decrit SOCLE  ET SUPPORTS TURBINE...\"",
+    "rating": 1,
+    "question": "decrit SOCLE  ET SUPPORTS TURBINE",
+    "timestamp": "2026-04-17T15:11:55.452Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776438550332_k87uo7",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SOCLE_ET_SUPPORTS_TURBINE...\"",
+    "rating": 1,
+    "question": "SOCLE_ET_SUPPORTS_TURBINE",
+    "timestamp": "2026-04-17T15:09:10.332Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776437899683_765ool",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SOCLE_ET_SUPPORTS_TURBINE...\"",
+    "rating": 1,
+    "question": "SOCLE_ET_SUPPORTS_TURBINE",
+    "timestamp": "2026-04-17T14:58:19.683Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776437271543_p8ylw8",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne l'image de TCV057...\"",
+    "rating": 1,
+    "question": "donne l'image de TCV057",
+    "timestamp": "2026-04-17T14:47:51.543Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776434337276_69x889",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne des generalitées sur VENTILATION_ET_CHAUFFAG...\"",
+    "rating": 1,
+    "question": "donne des generalitées sur VENTILATION_ET_CHAUFFAGE_TG",
+    "timestamp": "2026-04-17T13:58:57.276Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776429849822_2rt9h5",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne des informations sur VENTILATION_ET_CHAUFFAG...\"",
+    "rating": 1,
+    "question": "donne des informations sur VENTILATION_ET_CHAUFFAGE_TG",
+    "timestamp": "2026-04-17T12:44:09.822Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776429721410_r4b055",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne des informations sur VENTILATION_ET_CHAUFFAG...\"",
+    "rating": 1,
+    "question": "donne des informations sur VENTILATION_ET_CHAUFFAGE_TG",
+    "timestamp": "2026-04-17T12:42:01.410Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776429025846_3uro5g",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le role de  l'accouplement...\"",
+    "rating": 1,
+    "question": "donne le role de  l'accouplement",
+    "timestamp": "2026-04-17T12:30:25.846Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776428786516_uj1hjk",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le role de  l'accouplement...\"",
+    "rating": 1,
+    "question": "donne le role de  l'accouplement",
+    "timestamp": "2026-04-17T12:26:26.516Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776428428190_aw8b54",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le role de  l'accouplement...\"",
+    "rating": 1,
+    "question": "donne le role de  l'accouplement",
+    "timestamp": "2026-04-17T12:20:28.190Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776425446486_ctyfce",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne queleques info sur l'ACCOUPLEMENTS...\"",
+    "rating": 1,
+    "question": "donne queleques info sur l'ACCOUPLEMENTS",
+    "timestamp": "2026-04-17T11:30:46.486Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776379772055_dkkw60",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"donne CARACTERISTIQUES_TURBINE_A_GAZ\"...\"",
+    "rating": 1,
+    "question": "\"donne CARACTERISTIQUES_TURBINE_A_GAZ\"",
+    "timestamp": "2026-04-16T22:49:32.055Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776376678034_y9a7rj",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"\"donne CARACTERISTIQUES_TURBINE_A_GAZ\"...\"",
+    "rating": 1,
+    "question": "\"donne CARACTERISTIQUES_TURBINE_A_GAZ\"",
+    "timestamp": "2026-04-16T21:57:58.034Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776375583165_pi3idz",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne CARACTERISTIQUES_TURBINE_A_GAZ...\"",
+    "rating": 1,
+    "question": "donne CARACTERISTIQUES_TURBINE_A_GAZ",
+    "timestamp": "2026-04-16T21:39:43.165Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776360211755_w6skdf",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le propo des systemes auxiliaires turbine a ...\"",
+    "rating": 1,
+    "question": "donne le propo des systemes auxiliaires turbine a gaz",
+    "timestamp": "2026-04-16T17:23:31.755Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776358697738_eb5ff2",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SYSTEMES AUXILIAIRES DE LA TG generalités...\"",
+    "rating": 1,
+    "question": "SYSTEMES AUXILIAIRES DE LA TG generalités",
+    "timestamp": "2026-04-16T16:58:17.738Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776357733279_5l4inx",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"SYSTEMES AUXILIAIRES DE LA TG generalités...\"",
+    "rating": 1,
+    "question": "SYSTEMES AUXILIAIRES DE LA TG generalités",
+    "timestamp": "2026-04-16T16:42:13.279Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776251395967_66boa7",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"[VISION] Recherche similarité - Image 1bd00166-919...\"",
+    "rating": 1,
+    "question": "[VISION] Recherche similarité - Image 1bd00166-9195-44cb-91a3-4109cb169fd5",
+    "timestamp": "2026-04-15T11:09:55.967Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776194216505_3v9h0c",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"huile de lubrification...\"",
+    "rating": 1,
+    "question": "huile de lubrification",
+    "timestamp": "2026-04-14T19:16:56.505Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776193990071_f4ewif",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Qu'est-ce que l'air d'atomisation ?...\"",
+    "rating": 1,
+    "question": "Qu'est-ce que l'air d'atomisation ?",
+    "timestamp": "2026-04-14T19:13:10.071Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776164926845_07m5u5",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Comment fonctionne le système de lubrification de ...\"",
+    "rating": 1,
+    "question": "Comment fonctionne le système de lubrification de la turbine ?",
+    "timestamp": "2026-04-14T11:08:46.845Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776147877254_2ig5xk",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Comment fonctionne le système de lubrification de ...\"",
+    "rating": 1,
+    "question": "Comment fonctionne le système de lubrification de la TG?",
+    "timestamp": "2026-04-14T06:24:37.254Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776147749136_1dtxvn",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Comment fonctionne le système de lubrification de ...\"",
+    "rating": 1,
+    "question": "Comment fonctionne le système de lubrification de la turbine ?",
+    "timestamp": "2026-04-14T06:22:29.136Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776104786912_2nbg3g",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"bonjour...\"",
+    "rating": 1,
+    "question": "bonjour",
+    "timestamp": "2026-04-13T18:26:26.912Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776104726822_s00tky",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"bonjour...\"",
+    "rating": 1,
+    "question": "bonjour",
+    "timestamp": "2026-04-13T18:25:26.822Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776104634061_hfvfja",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"bonjour...\"",
+    "rating": 1,
+    "question": "bonjour",
+    "timestamp": "2026-04-13T18:23:54.061Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776098428735_fo2kr0",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"bonjour...\"",
+    "rating": 1,
+    "question": "bonjour",
+    "timestamp": "2026-04-13T16:40:28.735Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776025802339_8z33c6",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le profile de Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne le profile de Ahmed Abbes",
+    "timestamp": "2026-04-12T20:30:02.339Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776025784983_xbwsi9",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le profile de Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne le profile de Ahmed Abbes",
+    "timestamp": "2026-04-12T20:29:44.983Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1776025551403_dsp181",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"bonjour...\"",
+    "rating": 1,
+    "question": "bonjour",
+    "timestamp": "2026-04-12T20:25:51.403Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775947240422_xj4mtb",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"recherche le profile dans RH...\"",
+    "rating": 1,
+    "question": "recherche le profile dans RH",
+    "timestamp": "2026-04-11T22:40:40.422Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775947148903_y9juz2",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"liste les competances de ahmed abbes...\"",
+    "rating": 1,
+    "question": "liste les competances de ahmed abbes",
+    "timestamp": "2026-04-11T22:39:08.903Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775947111486_448v25",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le CV de ahmed abbes...\"",
+    "rating": 1,
+    "question": "donne le CV de ahmed abbes",
+    "timestamp": "2026-04-11T22:38:31.486Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775947052681_ffislr",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le CV de ahmed abbes...\"",
+    "rating": 1,
+    "question": "donne le CV de ahmed abbes",
+    "timestamp": "2026-04-11T22:37:32.681Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775946906186_y1x3zd",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le CV de ahmed abbes...\"",
+    "rating": 1,
+    "question": "donne le CV de ahmed abbes",
+    "timestamp": "2026-04-11T22:35:06.186Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775946741166_gsf10q",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"liste les competances de ahmed abbes...\"",
+    "rating": 1,
+    "question": "liste les competances de ahmed abbes",
+    "timestamp": "2026-04-11T22:32:21.166Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775946594235_rctr96",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le CV de ahmed abbes...\"",
+    "rating": 1,
+    "question": "donne le CV de ahmed abbes",
+    "timestamp": "2026-04-11T22:29:54.235Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775946572048_75oup5",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"qui et Ahmed Abbes ?...\"",
+    "rating": 1,
+    "question": "qui et Ahmed Abbes ?",
+    "timestamp": "2026-04-11T22:29:32.048Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775946539984_se6e1t",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"qui et Ahmed Abbes ?...\"",
+    "rating": 1,
+    "question": "qui et Ahmed Abbes ?",
+    "timestamp": "2026-04-11T22:28:59.984Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775945377778_1vvpzy",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"ahmed abbes...\"",
+    "rating": 1,
+    "question": "ahmed abbes",
+    "timestamp": "2026-04-11T22:09:37.778Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775945260533_v3boho",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne PROFESSIONAL PROFILE - Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne PROFESSIONAL PROFILE - Ahmed Abbes",
+    "timestamp": "2026-04-11T22:07:40.533Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775945018364_hdty8e",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne PROFESSIONAL PROFILE - Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne PROFESSIONAL PROFILE - Ahmed Abbes",
+    "timestamp": "2026-04-11T22:03:38.364Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775944674621_rgddex",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne PROFESSIONAL PROFILE - Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne PROFESSIONAL PROFILE - Ahmed Abbes",
+    "timestamp": "2026-04-11T21:57:54.621Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775943942601_660x9l",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne PROFESSIONAL PROFILE - Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne PROFESSIONAL PROFILE - Ahmed Abbes",
+    "timestamp": "2026-04-11T21:45:42.601Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775938038078_3qitgf",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne les COMPÉTENCES TECHNIQUES de Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne les COMPÉTENCES TECHNIQUES de Ahmed Abbes",
+    "timestamp": "2026-04-11T20:07:18.078Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775932716497_my2ao6",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le profile de Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "donne le profile de Ahmed Abbes",
+    "timestamp": "2026-04-11T18:38:36.497Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775932567882_jmxad1",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le profile de Ahmed ABBEs...\"",
+    "rating": 1,
+    "question": "donne le profile de Ahmed ABBEs",
+    "timestamp": "2026-04-11T18:36:07.882Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775931349958_qzxzze",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"trouve le profile de Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "trouve le profile de Ahmed Abbes",
+    "timestamp": "2026-04-11T18:15:49.958Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775931251738_qyjp58",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"trouve le profile de Ahmed Abbes...\"",
+    "rating": 1,
+    "question": "trouve le profile de Ahmed Abbes",
+    "timestamp": "2026-04-11T18:14:11.738Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775689219139_cghnkw",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le profile de AHMED ABBES...\"",
+    "rating": 1,
+    "question": "donne le profile de AHMED ABBES",
+    "timestamp": "2026-04-08T23:00:19.139Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775656325636_0ou4xv",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"donne le profile d'ahmed abbes...\"",
+    "rating": 1,
+    "question": "donne le profile d'ahmed abbes",
+    "timestamp": "2026-04-08T13:52:05.636Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775467513687_m072e1",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"quelle est la pression de TG...\"",
+    "rating": 1,
+    "question": "quelle est la pression de TG",
+    "timestamp": "2026-04-06T09:25:13.687Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775398613606_8hlc1y",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Quelle est la pression maximale d'admission pour T...\"",
+    "rating": 1,
+    "question": "Quelle est la pression maximale d'admission pour TG1 ?",
+    "timestamp": "2026-04-05T14:16:53.606Z",
+    "acknowledged": false
+  },
+  {
+    "id": "alert_1775390939162_uqc0mq",
+    "type": "critical",
+    "message": "⚠️ CRITIQUE: Note 1★ pour \"Question de test pour alerte...\"",
+    "rating": 1,
+    "question": "Question de test pour alerte",
+    "timestamp": "2026-04-05T12:08:59.162Z",
+    "acknowledged": false
+  }
+]

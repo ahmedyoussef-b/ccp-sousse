@@ -1,2 +1,0 @@
-{"timestamp":"2026-05-17T15:10:01.750Z","sessionId":"api-65ee4b3a","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama:latest","tokensGenerated":10,"vitesse":"10.4 tok/s","durationMs":4988,"evalDuration":"965.5078ms"}}
-{"timestamp":"2026-05-17T15:10:27.127Z","sessionId":"api-65ee4b3a","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama","tokensGenerated":49,"vitesse":"8.9 tok/s","durationMs":7291,"evalDuration":"5.5s"}}

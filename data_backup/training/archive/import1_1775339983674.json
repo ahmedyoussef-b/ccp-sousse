@@ -1,0 +1,57 @@
+[
+  {
+    "question": "Quelle est la charge recommandée de la Turbine à Gaz (TG) lors de la préparation de la chaudière ?",
+    "response": "Lors de la préparation de la chaudière, la TG doit être en service avec une charge de 70 à 80 MW de préférence.",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les niveaux de démarrage requis pour les ballons HP et BP ?",
+    "response": "Pour le ballon HP, le niveau est de -475 mm + 150 mm (niveau de gonflement à -475 mm). Pour le ballon BP, il est de -580 mm + 100 mm (niveau de gonflement à -580 mm).",
+    "quality": 5
+  },
+  {
+    "question": "À quel moment considère-t-on que la chaudière est armée ?",
+    "response": "On dit que la chaudière est armée lorsque le registre est ouvert.",
+    "quality": 5
+  },
+  {
+    "question": "Énumérez les conditions de pompage nécessaires pour la sécurité générale de la chaudière (FSE).",
+    "response": "La sécurité FSE exige qu'au moins une pompe APH, une pompe APB et une pompe CEX soient en service, ainsi qu'une pompe FSR et une pompe FLB avec un Delta P correct.",
+    "quality": 5
+  },
+  {
+    "question": "Que se passe-t-il si le registre ne se ferme pas 40 secondes après un déclenchement de la sécurité générale ?",
+    "response": "Si après 40 secondes le fin de course de registre ne confirme pas la fermeture, la Turbine à Gaz (TG) déclenche automatiquement.",
+    "quality": 5
+  },
+  {
+    "question": "Quelles sont les conditions de température et de niveau d'huile pour l'ouverture du registre (système TTA) ?",
+    "response": "Le niveau d'huile de régulation ne doit pas être 'N-très bas' et sa température ne doit pas être 'N-très haute'.",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les seuils de vide et de température pour que le bypass devienne disponible ?",
+    "response": "Le bypass devient disponible lorsque le vide au condenseur est inférieur à 300 mbar et que la température de vapeur surchauffée (B1ACOTE001) est supérieure à 300°C.",
+    "quality": 5
+  },
+  {
+    "question": "À quelle pression les vannes de contournement s'ouvrent-elles automatiquement pour les circuits HP et BP ?",
+    "response": "Elles s'ouvrent à 39 bars pour le circuit HP et à 7 bars pour le circuit BP.",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les paramètres de fonctionnement du groupe CVI pour la mise sous vide ?",
+    "response": "L'éjecteur de démarrage se met en marche à 1 bar, l'éjecteur d'entretien à 250 mbar, et l'éjecteur de démarrage s'arrête une fois atteint 150 mbar.",
+    "quality": 5
+  },
+  {
+    "question": "Quelles sont les conditions de couplage de la vanne d'isolement HP UV001/UV002 en mode esclave ?",
+    "response": "Le couplage nécessite une température supérieure ou égale à 450 °C au niveau des capteurs VVPTSH001 et un Delta P inférieur ou égal à 2 bars.",
+    "quality": 5
+  },
+  {
+    "question": "Quelle condition finale est nécessaire pour valider la disposition de la chaudière après le couplage ?",
+    "response": "La fin de la disposition de la chaudière doit être validée par la confirmation du chimiste.",
+    "quality": 5
+  }
+]

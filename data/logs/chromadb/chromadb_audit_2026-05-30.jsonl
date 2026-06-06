@@ -1,2 +1,0 @@
-{"id":"chroma_1780171723482_x63l","timestamp":"2026-05-30T20:08:43.482Z","operation":"UPDATE_DOCUMENTS","relation":"APP_TO_CHROMADB","collection":"PANORAMA_SESSIONS","documentsCount":1,"duration":0,"success":true,"details":{}}
-{"id":"chroma_1780171727519_yewa","timestamp":"2026-05-30T20:08:47.519Z","operation":"UPDATE_DOCUMENTS","relation":"CHROMADB_RESPONSE","collection":"PANORAMA_SESSIONS","documentsCount":1,"duration":4038,"success":true,"details":{}}

@@ -1,0 +1,29 @@
+# .vercelignore
+# Fichiers et dossiers à exclure de l'upload Vercel CLI (limite 100MB par fichier)
+
+# Dépendances (ignoré par défaut, mais au cas où)
+node_modules/
+
+# Cache et build Next.js (doit être regénéré sur Vercel)
+.next/
+out/
+build/
+
+# Données locales lourdes (Images, DB SQLite, Vecteurs Chroma)
+data/
+
+# Fichiers de log et de debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Autres fichiers inutiles en production
+.git/
+.vscode/
+.idea/
+.DS_Store
+.env.local
+.env.development
+.env.*.local

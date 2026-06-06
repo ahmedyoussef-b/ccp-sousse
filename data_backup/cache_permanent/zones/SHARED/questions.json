@@ -1,0 +1,72 @@
+[
+  {
+    "question": "bonjour",
+    "hash": "2cb4b1431b84ec15",
+    "timestamp": "2026-04-10T20:06:42.935Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "salut",
+    "hash": "ec9c3a34e791bda2",
+    "timestamp": "2026-04-10T20:10:01.634Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "bonsoir",
+    "hash": "ba10d93b0145b965",
+    "timestamp": "2026-04-12T20:24:36.317Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "donne les caracterstique du palier TG",
+    "hash": "86bb753b5efad920",
+    "timestamp": "2026-04-13T23:31:00.781Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "donne des infos sur huile de lubrification Tg",
+    "hash": "25304a990297be12",
+    "timestamp": "2026-04-14T15:34:14.302Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "liste les alarmes TG",
+    "hash": "03a6ada3841ce0c6",
+    "timestamp": "2026-04-14T15:35:17.287Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "donne les causes de l'alarme L30TXA",
+    "hash": "a028122bd10956f4",
+    "timestamp": "2026-04-14T15:36:53.352Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "L30SPA - \"COMBUSTION TROUBLE\"",
+    "hash": "e81515f800096995",
+    "timestamp": "2026-04-14T19:30:34.762Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "c'est quoi l'air d'atomisation",
+    "hash": "655720dac82e4609",
+    "timestamp": "2026-04-21T14:32:37.225Z",
+    "rating": 5,
+    "usageCount": 1
+  },
+  {
+    "question": "decrit SOCLE_ET_SUPPORTS_TURBINE_TG",
+    "hash": "782acbe74abe86b5",
+    "timestamp": "2026-04-23T22:30:40.982Z",
+    "rating": 5,
+    "usageCount": 1
+  }
+]

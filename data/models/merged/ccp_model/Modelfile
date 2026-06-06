@@ -1,7 +1,0 @@
-FROM ./adapter_model.safetensors
-PARAMETER temperature 0.7
-PARAMETER top_p 0.9
-
-TEMPLATE """{{ .Prompt }}"""
-
-SYSTEM """Tu es un expert en centrales à cycle combiné (CCP)."""

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1777478935400",
+    "question": "Quel est le rôle fondamental du système SAP (Air de Service) et de quelle architecture dispose-t-il ?",
+    "response": "Le système **SAP (Système Air de Service)** a pour rôle fondamental de fournir de l'air comprimé propre et sec pour l'ensemble des équipements pneumatiques et de régulation de la centrale.\n\n**Son architecture s'articule autour des composants suivants :**\n- **Compresseurs :** Trois compresseurs d'air (généralement 2 en service et 1 en secours) qui aspirent l'air ambiant et le compriment à environ 8-10 bars.\n- **Traitement de l'air :** L'air passe par des sécheurs frigorifiques et des filtres déshuileurs pour garantir l'absence d'humidité et d'impuretés.\n- **Stockage :** Des ballons tampons stockent l'air comprimé pour absorber les pics de consommation.\n- **Réseau de distribution :** Un réseau maillé avec diverses vannes de régulation.\n\n*Toutes les interconnexions de ce système sont répertoriées sous le circuit technique **SYST**.*",
+    "quality": 5,
+    "tags": [
+      "SYST"
+    ],
+    "source": "manual",
+    "createdAt": "2026-05-20T17:35:00.000Z"
+  }
+]

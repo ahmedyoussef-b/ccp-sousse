@@ -1,4 +1,0 @@
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"bonsoir","answerLength":917,"modelUsed":"phi:2.7b"},"success":true,"duration":28649,"id":"audit_1780083628772_upa2sn","timestamp":"2026-05-29T19:40:28.772Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"bonsoir","answerLength":0,"modelUsed":"phi:2.7b"},"success":true,"duration":7050,"id":"audit_1780083816574_xovdgx","timestamp":"2026-05-29T19:43:36.574Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"decrit le systeme KCA","answerLength":1872,"modelUsed":"phi:2.7b"},"success":true,"duration":15986,"id":"audit_1780084100556_fijehw","timestamp":"2026-05-29T19:48:20.556Z"}
-{"action":"CHAT_QUERY","userId":"anonymous","details":{"question":"donne image KCA","answerLength":1394,"modelUsed":"phi:2.7b"},"success":true,"duration":12882,"id":"audit_1780084188434_8ecbzq","timestamp":"2026-05-29T19:49:48.434Z"}

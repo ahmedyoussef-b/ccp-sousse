@@ -1,0 +1,26 @@
+{
+  "key": "fr_FR-siwis-medium",
+  "name": "siwis",
+  "language": {
+    "code": "fr_FR",
+    "family": "Romance",
+    "region": "France",
+    "name_native": "Français",
+    "name_english": "French",
+    "country_english": "France"
+  },
+  "quality": "medium",
+  "num_speakers": 1,
+  "speaker_id_map": {},
+  "files": {
+    "fr_FR-siwis-medium.onnx": {
+      "size_bytes": 63338980,
+      "md5_digest": ""
+    },
+    "fr_FR-siwis-medium.onnx.json": {
+      "size_bytes": 5060,
+      "md5_digest": ""
+    }
+  },
+  "aliases": []
+}

@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-06-04T23:09:33.997Z",
+  "stats": {
+    "totalExamples": 0,
+    "validExamples": 0,
+    "rejectedExamples": 0,
+    "avgQuality": 0,
+    "fileSizeKB": 0,
+    "sourcesCount": 0,
+    "preparationTime": 3888
+  },
+  "sources": {
+    "main": 0,
+    "imports": 0,
+    "totalFiles": 1
+  },
+  "rejectedList": [],
+  "outputFile": "C:\\ahmed\\ccp\\data\\training\\dataset.jsonl",
+  "version": "1.0.0"
+}

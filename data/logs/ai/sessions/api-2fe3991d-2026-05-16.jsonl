@@ -1,1 +1,0 @@
-{"timestamp":"2026-05-16T13:35:23.988Z","sessionId":"api-2fe3991d","section":8,"module":"LLM","name":"Inference Success","data":{"model":"tinyllama:latest","tokensGenerated":10,"vitesse":"2.7 tok/s","durationMs":16100,"evalDuration":"3.7s"}}

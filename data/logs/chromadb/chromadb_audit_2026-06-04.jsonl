@@ -1,4 +1,0 @@
-{"id":"chroma_1780615856868_8k58","timestamp":"2026-06-04T23:30:56.868Z","operation":"UPDATE_DOCUMENTS","relation":"APP_TO_CHROMADB","collection":"B1_HRSG_TG1","documentsCount":1,"duration":0,"success":true,"details":{}}
-{"id":"chroma_1780615902974_h18i","timestamp":"2026-06-04T23:31:42.974Z","operation":"UPDATE_DOCUMENTS","relation":"CHROMADB_RESPONSE","collection":"B1_HRSG_TG1","documentsCount":1,"duration":46108,"success":true,"details":{}}
-{"id":"chroma_1780615902980_9p0m","timestamp":"2026-06-04T23:31:42.980Z","operation":"UPDATE_DOCUMENTS","relation":"APP_TO_CHROMADB","collection":"B3_TV_PE","documentsCount":1,"duration":0,"success":true,"details":{}}
-{"id":"chroma_1780615963862_vo9o","timestamp":"2026-06-04T23:32:43.862Z","operation":"UPDATE_DOCUMENTS","relation":"CHROMADB_RESPONSE","collection":"B3_TV_PE","documentsCount":1,"duration":60883,"success":true,"details":{}}

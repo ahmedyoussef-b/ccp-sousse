@@ -1,0 +1,52 @@
+[
+  {
+    "question": "Quelles sont les causes de déclenchement (trip) d'une pompe de réfrigération principale CRF 101/201 PO ?",
+    "response": "Le déclenchement d'une pompe CRF est provoqué par plusieurs conditions de sécurité critiques :\n\n1. Défauts électriques et de servitude :\n- Défaut électrique du moteur (101 MO ou 201 MO)\n- Perte de tension 6,6 kV ou 125 VCC\n- Perte de pression d'huile de commande des vannes clapets\n\n2. Protections thermiques :\n- Température très haute des paliers (> 90°C)\n- Température très haute des enroulements du moteur\n\n3. Conditions de niveau et débit :\n- Niveau bassin très bas (< -5,50 m)\n- Vanne d'aspiration non ouverte\n\n4. Interaction avec CFI :\n- Colmatage des grilles rotatives (ΔP > 500 mm CE)\n\n5. Actions de sécurité :\n- Arrêt d'urgence local (HSX 101)\n- Commande d'arrêt depuis salle de contrôle (HSN 101)",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les défauts électriques et de servitude qui provoquent le trip d'une pompe CRF ?",
+    "response": "Les défauts électriques et de servitude provoquant le trip d'une pompe CRF sont :\n- Défaut électrique majeur sur les moteurs 101 MO ou 201 MO\n- Perte de la tension de puissance 6,6 kV\n- Défaillance des sources internes 125 VCC (tableaux BT)\n- Perte de pression d'huile de commande des vannes clapets (UV 101/201)\n- Défaut du groupe hydraulique 001 GO (manque de puissance ou niveau d'huile très bas)",
+    "quality": 5
+  },
+  {
+    "question": "Quelles sont les protections thermiques qui déclenchent l'arrêt d'une pompe CRF ?",
+    "response": "Les protections thermiques qui déclenchent l'arrêt d'une pompe CRF sont :\n- Surchauffe des paliers de la pompe ou du moteur (TSHH 101, 103, 104) avec seuil de déclenchement généralement à > 90°C\n- Surchauffe détectée sur les trois enroulements du moteur (TSHH 105, 106, 107)",
+    "quality": 5
+  },
+  {
+    "question": "À quel niveau d'eau le bassin d'aspiration déclenche-t-il l'arrêt de la pompe CRF ?",
+    "response": "La pompe CRF se déclenche par protection contre la cavitation et le fonctionnement à sec lorsque le niveau du bassin d'aspiration descend sous la cote de -5,50 m (signal LSLL 101).",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le seuil de déclenchement pour le colmatage des grilles rotatives CFI ?",
+    "response": "Le seuil de déclenchement pour le colmatage des grilles rotatives CFI est atteint lorsque la pression différentielle est supérieure à 500 mm CE (signal B0 CFI LDSAHH 192), indiquant une obstruction par des débris.",
+    "quality": 5
+  },
+  {
+    "question": "Quelles sont les actions de sécurité manuelles pouvant déclencher l'arrêt d'une pompe CRF ?",
+    "response": "Les actions de sécurité manuelles pouvant déclencher l'arrêt d'une pompe CRF sont :\n- L'actionnement du bouton poussoir d'arrêt d'urgence local (HSX 101) situé à proximité de la pompe\n- La réception d'un ordre d'arrêt manuel depuis la salle de contrôle (HSN 101)",
+    "quality": 5
+  },
+  {
+    "question": "Que se passe-t-il automatiquement lors du déclenchement d'une pompe CRF ?",
+    "response": "Lors du déclenchement d'une pompe CRF, sa vanne clapet au refoulement se ferme automatiquement selon une séquence :\n- Fermeture d'abord à vitesse rapide jusqu'à 10% d'ouverture\n- Puis à vitesse lente pour éviter les coups de bélier dans la tuyauterie BONNA",
+    "quality": 5
+  },
+  {
+    "question": "Quel est le rôle de la vanne d'aspiration manuelle HV 101 dans la sécurité de la pompe CRF ?",
+    "response": "La vanne d'aspiration manuelle HV 101 joue un rôle critique dans la sécurité de la pompe CRF : sa fermeture ou la perte de sa pleine ouverture provoque le déclenchement automatique du sous-groupe pour protéger la pompe.",
+    "quality": 5
+  },
+  {
+    "question": "Comment le système détecte-t-il une perte de pression d'huile de commande sur les vannes clapets ?",
+    "response": "Le système détecte une perte de pression d'huile de commande sur les vannes clapets (UV 101/201) via le groupe hydraulique 001 GO. Un défaut du groupe hydraulique (manque de puissance ou niveau d'huile très bas) entraîne une perte de pression, ce qui déclenche automatiquement l'arrêt des pompes de circulation.",
+    "quality": 5
+  },
+  {
+    "question": "Quels sont les capteurs de température surveillés pour la protection thermique de la pompe CRF ?",
+    "response": "Les capteurs de température surveillés pour la protection thermique de la pompe CRF sont :\n- TSHH 101, 103, 104 : température des paliers de la pompe et du moteur\n- TSHH 105, 106, 107 : température des trois enroulements du moteur\nLe déclenchement se produit généralement au-delà de 90°C pour les paliers.",
+    "quality": 5
+  }
+]
