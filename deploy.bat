@@ -1,28 +1,39 @@
 @echo off
 echo ==================================================
-echo   DEPLOIEMENT VERS PRODUCTION (GITHUB + VERCEL)
+echo   DEPLOIEMENT VERS PRODUCTION (GITHUB)
 echo ==================================================
 echo.
+echo Note: Vercel se deploie automatiquement depuis GitHub.
+echo.
 
-set /p message="Entrez le message du commit (ou appuyez sur Entree pour 'Mise a jour production') : "
+set /p message="Message du commit (Entree = 'Mise a jour production') : "
 if "%message%"=="" set message=Mise a jour production
 
 echo.
-echo [1/4] Ajout des fichiers modifies...
+echo [1/3] Ajout des fichiers modifies...
 git add .
 
-echo [2/4] Creation du commit...
+echo [2/3] Creation du commit...
 git commit -m "%message%"
 
-echo [3/4] Envoi vers GitHub...
-git push -u origin main
-
-echo [4/4] Deploiement sur Vercel...
-echo (Note: Si votre projet Vercel est connecte a votre depot GitHub, cette etape est optionnelle)
-call npx vercel --prod
+echo [3/3] Synchronisation et envoi vers GitHub...
+git pull origin main --rebase
+if %errorlevel% neq 0 (
+    echo ERREUR: Conflit lors du rebase. Resolvez les conflits puis relancez.
+    pause
+    exit /b 1
+)
+git push origin main
+if %errorlevel% neq 0 (
+    echo ERREUR: Le push GitHub a echoue.
+    pause
+    exit /b 1
+)
 
 echo.
 echo ==================================================
-echo   TERMINE !
+echo   PUSH GITHUB OK !
+echo   Vercel va deployer automatiquement dans ~2min.
+echo   Suivi: https://vercel.com/dashboard
 echo ==================================================
 pause

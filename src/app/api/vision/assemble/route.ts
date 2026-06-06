@@ -2,7 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';
 import visionService from '@/lib/services/visionService';
-import sharp from 'sharp';
 import crypto from 'crypto';
 
 export const dynamic = 'force-dynamic';
@@ -83,13 +82,23 @@ export async function POST(request: NextRequest) {
       imageMetadatas.push(metadata);
     }
     
+    // Charger sharp dynamiquement (évite ERR_DLOPEN_FAILED au build)
+    let sharpLib: any;
+    try {
+      const mod = await import('sharp');
+      sharpLib = mod.default || mod;
+    } catch (sharpErr) {
+      console.warn('⚠️ Sharp non disponible:', sharpErr);
+      return NextResponse.json({ error: 'Sharp non disponible sur ce système' }, { status: 503 });
+    }
+
     // Calculer les dimensions optimales pour chaque cellule
     // On prend la plus grande largeur et hauteur parmi toutes les images
     let maxWidth = 0;
     let maxHeight = 0;
     
     for (const buffer of imageBuffers) {
-      const metadata = await sharp(buffer).metadata();
+      const metadata = await sharpLib(buffer).metadata();
       maxWidth = Math.max(maxWidth, metadata.width || 0);
       maxHeight = Math.max(maxHeight, metadata.height || 0);
     }
@@ -105,7 +114,7 @@ export async function POST(request: NextRequest) {
     console.log(`📏 Dimensions: ${canvasWidth}x${canvasHeight} (cellules ${cellWidth}x${cellHeight})`);
     
     // Créer le canvas vide
-    let canvas = sharp({
+    let canvas = sharpLib({
       create: {
         width: canvasWidth,
         height: canvasHeight,

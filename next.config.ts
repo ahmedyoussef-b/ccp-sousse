@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     'chromadb',
     '@tensorflow/tfjs-node',
+    '@tensorflow/tfjs',
+    '@tensorflow-models/mobilenet',
+    '@xenova/transformers',
+    'better-sqlite3',
+    'tesseract.js',
+    'pdf-parse',
     '@mapbox/node-pre-gyp',
     'cohere-ai',
     'chokidar',
@@ -29,6 +35,9 @@ const nextConfig: NextConfig = {
       'cohere-ai': false,
       'chokidar': false,
       'fsevents': false,
+      // Redirige 'sharp' vers notre shim no-op pendant le build
+      // Cela évite ERR_DLOPEN_FAILED quand Node.js tente de charger le binaire natif
+      'sharp': require.resolve('./src/lib/utils/sharp-shim.js'),
     };
     
     if (!isServer) {
@@ -51,6 +60,7 @@ const nextConfig: NextConfig = {
         child_process: false,
         fsevents: false,
         chokidar: false,
+        sharp: false,
       };
       
       config.externals = {
@@ -59,12 +69,35 @@ const nextConfig: NextConfig = {
         '@mapbox/node-pre-gyp': 'commonjs @mapbox/node-pre-gyp',
       };
     }
-    
+
+    if (isServer) {
+      // Force sharp to be external on server - never bundle it
+      const originalExternals = config.externals;
+      config.externals = [
+        ...(Array.isArray(originalExternals) ? originalExternals : [originalExternals]),
+        ({ request }: { request?: string }, callback: Function) => {
+          if (request === 'sharp' || request?.startsWith('@img/')) {
+            return callback(null, `commonjs ${request}`);
+          }
+          callback();
+        },
+      ];
+    }
+
     return config;
   },
   experimental: {
     serverActions: {
       bodySizeLimit: '200mb',
+    },
+    outputFileTracingExcludes: {
+      '/api/vision/fs-tree': [
+        '**/node_modules/@tensorflow/**',
+        '**/node_modules/@xenova/**',
+        '**/node_modules/onnxruntime-node/**',
+        '**/node_modules/tesseract.js/**',
+        '**/node_modules/pdf-parse/**',
+      ],
     },
   },
 };

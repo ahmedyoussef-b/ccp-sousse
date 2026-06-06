@@ -3,7 +3,7 @@ import { OrganePosition, VoyantState, MesureCadran } from '../types/industrial.t
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
-import sharp from 'sharp';
+// Import de sharp supprimé (chargement dynamique à l'intérieur de la méthode)
 
 /**
  * Moteur d'analyse d'images industrielles haute-fidélité.
@@ -110,6 +110,9 @@ export class ImageAnalyzer {
    */
   private async analyzeImageColors(imagePath: string): Promise<{red: number, green: number, blue: number}> {
     try {
+      const sharpModule = await import('sharp');
+      const sharp = sharpModule.default || sharpModule;
+      
       const { data } = await sharp(imagePath)
         .resize(10, 10, { fit: 'fill' })
         .raw()

@@ -89,37 +89,39 @@ async function prepareForVision(buffer: Buffer): Promise<PreparedVisionResult> {
     }
     
     // Fallback: use sharp with better error handling
-    const sharp = await import('sharp');
-    
-    // Then try to get raw data
     try {
-      // Forcer une taille et un format déterministe pour MobileNet
-      const { data, info } = await sharp.default(buffer)
-        .resize(224, 224, { 
-          fit: 'cover',
-          position: 'center',
-          kernel: 'lanczos3' // Noyau de redimensionnement de haute qualité et stable
-        })
-        .removeAlpha()
-        .toColorspace('srgb')
-        .raw()
-        .toBuffer({ resolveWithObject: true });
-      
-      return { 
-        data: Buffer.from(data), 
-        info: { 
-          width: 224,
-          height: 224, 
-          channels: 3 
-        } 
-      };
-    } catch (rawError) {
-      console.error('❌ Sharp raw conversion failed:', rawError);
-      return { 
-        data: buffer, 
-        info: { width: 800, height: 600, channels: 3 } 
-      };
+      const sharp = await import('sharp');
+      try {
+        // Forcer une taille et un format déterministe pour MobileNet
+        const { data, info } = await sharp.default(buffer)
+          .resize(224, 224, { 
+            fit: 'cover',
+            position: 'center',
+            kernel: 'lanczos3'
+          })
+          .removeAlpha()
+          .toColorspace('srgb')
+          .raw()
+          .toBuffer({ resolveWithObject: true });
+        
+        return { 
+          data: Buffer.from(data), 
+          info: { 
+            width: 224,
+            height: 224, 
+            channels: 3 
+          } 
+        };
+      } catch (rawError) {
+        console.error('❌ Sharp raw conversion failed:', rawError);
+      }
+    } catch (sharpImportError) {
+      console.warn('⚠️ Sharp non disponible (ERR_DLOPEN_FAILED probable), utilisation du buffer brut:', sharpImportError);
     }
+    return { 
+      data: buffer, 
+      info: { width: 800, height: 600, channels: 3 } 
+    };
   } catch (error) {
     console.error('❌ Erreur complète dans prepareForVision:', error);
     return { 
@@ -137,8 +139,9 @@ async function prepareForVision(buffer: Buffer): Promise<PreparedVisionResult> {
  */
 async function standardizeImage(buffer: Buffer): Promise<Buffer> {
   try {
-    const sharp = await import('sharp');
-    return await sharp.default(buffer)
+    const sharpModule = await import('sharp').catch(() => null);
+    if (!sharpModule) return buffer;
+    return await sharpModule.default(buffer)
       .jpeg({ quality: 90, chromaSubsampling: '4:4:4' })
       .toColorspace('srgb')
       .toBuffer();
@@ -1484,9 +1487,14 @@ class VisionService implements VisionServiceInterface {
       if (prepared.data.length > 5000 && prepared.data[0] === 0xFF && prepared.data[1] === 0xD8) {
         // C'est un JPEG
         console.log('🔄 Décodage JPEG interne pour MobileNet...');
-        const sharp = await import('sharp');
-        const raw = await sharp.default(prepared.data).raw().toBuffer();
-        uint8Array = new Uint8Array(raw);
+        try {
+          const sharp = await import('sharp');
+          const raw = await sharp.default(prepared.data).raw().toBuffer();
+          uint8Array = new Uint8Array(raw);
+        } catch (sharpErr) {
+          console.warn('⚠️ Sharp indisponible pour JPEG decode, utilisation du buffer brut:', sharpErr);
+          uint8Array = new Uint8Array(prepared.data);
+        }
       } else {
         uint8Array = new Uint8Array(prepared.data);
       }
@@ -1689,4 +1697,9 @@ class VisionService implements VisionServiceInterface {
 
 }
 
-export default new VisionService();
+// Lazy singleton via globalThis — évite l'instanciation au chargement du module (build Next.js)
+const globalForVisionService = globalThis as unknown as { _visionService: VisionService | undefined };
+if (!globalForVisionService._visionService) {
+  globalForVisionService._visionService = new VisionService();
+}
+export default globalForVisionService._visionService;

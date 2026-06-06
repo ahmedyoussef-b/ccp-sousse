@@ -21,8 +21,19 @@ const config = {
   }
 };
 
-const analyzer = new ImageAnalyzer();
-const refDB = new ReferenceDatabase(config);
+// Lazy singletons — NOT instantiated at module load time (avoids build crash)
+let _analyzer: ImageAnalyzer | null = null;
+let _refDB: ReferenceDatabase | null = null;
+
+function getAnalyzer(): ImageAnalyzer {
+  if (!_analyzer) _analyzer = new ImageAnalyzer();
+  return _analyzer;
+}
+
+function getRefDB(): ReferenceDatabase {
+  if (!_refDB) _refDB = new ReferenceDatabase(config);
+  return _refDB;
+}
 
 // ─── Utilitaires ──────────────────────────────────────────────────────────────
 
@@ -59,17 +70,18 @@ function getLatestImage(): string | null {
 type InnovationExecutor = (query: string, context?: string | null) => Promise<string>;
 
 async function getAnalysis(specificImage?: string | null) {
+  const analyzer = getAnalyzer();
+  const refDB = getRefDB();
   await analyzer.initialize();
   await refDB.initialize();
   const img = specificImage || getLatestImage();
   if (!img) return null;
   
-  // Si c'est un base64, on peut soit le sauvegarder soit l'analyser directement si l'analyzer le supporte
-  // Ici on va supposer que getLatestImage() est le fallback
   const analysis = await analyzer.analyzeImage(img);
   const similarity = await refDB.compareWithReference(analysis);
   return { img, analysis, similarity };
 }
+
 
 const EXECUTORS: Partial<Record<number, InnovationExecutor>> = {
 
@@ -222,6 +234,7 @@ const EXECUTORS: Partial<Record<number, InnovationExecutor>> = {
     const data = await getAnalysis();
     if (!data) return '⚠️ Aucune image disponible.';
     const { analysis } = data;
+    const refDB = getRefDB();
     const refs = refDB.getAllReferences();
     const refOrganes = new Set<string>();
     for (const r of refs) r.organes.forEach((o: any) => refOrganes.add(o.nom));

@@ -15,10 +15,16 @@
  * @version 1.1.0 - Avec préparations d'images
  */
 
+import sharp from '@/lib/utils/sharp-shim';
 import { getSQLiteCore } from '../core/sqlite/manager';
 import { PatchSearchResult, VisionData, SpatialHierarchy } from '../core/sqlite/types';
 import { RegisterGlobalParams, MatchDetailParams, PartLocationResult } from './types';
-import sharp from 'sharp';
+
+// Helper for dynamic sharp import
+async function getSharp() {
+  const mod = await import('sharp');
+  return mod.default || mod;
+}
 
 // ============================================================================
 // CONFIGURATION
@@ -135,7 +141,8 @@ export class IntelligentPartMatching {
     }> = [];
     
     // Utiliser sharp pour obtenir les dimensions réelles
-    const metadata = await sharp(imageBuffer).metadata();
+    const sharpLib = await getSharp();
+    const metadata = await sharpLib(imageBuffer).metadata();
     const imgWidth = metadata.width || 800;
     const imgHeight = metadata.height || 600;
     const patchWidth = Math.floor(imgWidth / cols);
@@ -153,7 +160,7 @@ export class IntelligentPartMatching {
         
         if (x + patchWidth <= imgWidth && y + patchHeight <= imgHeight) {
           // Extraire le patch avec sharp
-          const patchBuffer = await sharp(imageBuffer)
+          const patchBuffer = await sharpLib(imageBuffer)
             .extract({ left: x, top: y, width: patchWidth, height: patchHeight })
             .toBuffer();
           
@@ -297,7 +304,8 @@ export class IntelligentPartMatching {
 
   private async detectRedZones(imageBuffer: Buffer): Promise<Array<{ x: number; y: number; width: number; height: number }>> {
     try {
-      const { data } = await sharp(imageBuffer).resize(200, 150).raw().toBuffer({ resolveWithObject: true });
+      const sharpLib = await getSharp();
+      const { data } = await sharpLib(imageBuffer).resize(200, 150).raw().toBuffer({ resolveWithObject: true });
       const zones: Array<{ x: number; y: number; width: number; height: number }> = [];
       
       // Analyse simplifiée : détection de clusters de pixels rouges
@@ -466,7 +474,8 @@ export class IntelligentPartMatching {
       if (scale === 1) {
         pyramid.push(imageBuffer);
       } else {
-        const resized = await sharp(imageBuffer)
+        const sharpLib = await getSharp();
+        const resized = await sharpLib(imageBuffer)
           .resize(Math.floor(800 * scale), Math.floor(600 * scale))
           .toBuffer();
         pyramid.push(resized);

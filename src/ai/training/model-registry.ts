@@ -4,7 +4,6 @@
  * @lastUpdated 2026-04-02
  */
 
-import { ModelVersion, AIConfig } from '@/types/ai';
 import { storage } from '../../lib/storage';
 import path from 'path';
 
@@ -70,8 +69,10 @@ export class ModelRegistry {
      * Initialise le registre
      */
     private async init(): Promise<void> {
+        if (this.initialized) return;
         try {
-            await this.ensureInitialized();
+            await this.loadRegistry();
+            this.initialized = true;
             logSuccess('Registre initialisé', { modelsCount: this.registry.length });
         } catch (error) {
             logError('Erreur initialisation registre', error);
@@ -84,7 +85,16 @@ export class ModelRegistry {
      * Charge le registre depuis le disque
      */
     private async loadRegistry(): Promise<void> {
-        await this.ensureInitialized();
+        try {
+            const data = await storage.get(REGISTRY_PATH);
+            if (data) {
+                this.registry = JSON.parse(data.toString());
+            } else {
+                throw new Error("Aucun registre trouvé");
+            }
+        } catch (error) {
+            throw error;
+        }
     }
     
     /**
@@ -405,8 +415,16 @@ export class ModelRegistry {
     }
 }
 
-// Instance singleton
-export const modelRegistry = new ModelRegistry();
+// Instance singleton (Corrigé pour éviter l'initialisation multiple même en build production)
+const globalForModelRegistry = globalThis as unknown as {
+    modelRegistry: ModelRegistry | undefined;
+};
+
+if (!globalForModelRegistry.modelRegistry) {
+    globalForModelRegistry.modelRegistry = new ModelRegistry();
+}
+
+export const modelRegistry = globalForModelRegistry.modelRegistry;
 
 // Exports pour compatibilité
 export async function registerAndDeployModel(

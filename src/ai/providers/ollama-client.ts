@@ -8,7 +8,6 @@ import { aiLogger } from '../../lib/logger/ai-logger';
 import { healthMonitor } from '../resilience/health-monitor';
 import { callGroq } from './groq-provider';
 import { isCloudMode } from '../../lib/config/env-mode';
-import Together from 'together-ai';
 
 // ============================================================================
 // CONFIGURATION
@@ -685,22 +684,8 @@ export async function generateEmbeddings(text: string, model: string = 'nomic-em
   const startTime = Date.now();
   
   if (isCloudMode()) {
-    logInfo('EMBED', `🔢 Génération d'embedding Cloud (Together.ai)`);
-    try {
-      const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
-      const response = await together.embeddings.create({
-          model: 'thenlper/gte-large',
-          input: text
-      });
-      const embedding = response.data[0].embedding;
-      logSuccess('EMBED', `Embedding Together généré en ${Date.now() - startTime}ms`);
-      // truncate/pad to match 768 dimensions if required, though gte-large is 1024
-      // We will pad or slice to match expected vector size in the VectorDB later
-      return embedding;
-    } catch (e: any) {
-      logError('EMBED', 'Erreur Together.ai', e);
-      throw e;
-    }
+    logWarning('EMBED', `Mode Cloud actif, mais Together AI a été retiré (Option Groq). Fallback sur Ollama local pour les embeddings.`);
+    // Nous passons à la suite pour utiliser Ollama localement.
   }
 
   logInfo('EMBED', `🔢 Génération d'embedding local avec ${model}`);

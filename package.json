@@ -90,7 +90,6 @@
     "tailwindcss-animate": "^1.0.7",
     "tesseract.js": "^5.1.1",
     "tiktoken": "^1.0.22",
-    "together-ai": "^0.40.0",
     "uuid": "^13.0.0",
     "wav": "^1.0.2",
     "winston": "^3.19.0",

@@ -1,7 +1,6 @@
 // src/app/api/vision/assemble/detect-overlap/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import visionService from '@/lib/services/visionService';
-import sharp from 'sharp';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,9 +14,18 @@ async function calculateOverlap(buffer1: Buffer, buffer2: Buffer): Promise<numbe
     const width = 200;
     const height = 200;
     
+    let sharpLib: any;
+    try {
+      const mod = await import('sharp');
+      sharpLib = mod.default || mod;
+    } catch {
+      console.warn('⚠️ Sharp non disponible, retour valeur défaut');
+      return 20.0;
+    }
+
     const [img1, img2] = await Promise.all([
-      sharp(buffer1).resize(width, height, { fit: 'fill' }).greyscale().raw().toBuffer(),
-      sharp(buffer2).resize(width, height, { fit: 'fill' }).greyscale().raw().toBuffer()
+      sharpLib(buffer1).resize(width, height, { fit: 'fill' }).greyscale().raw().toBuffer(),
+      sharpLib(buffer2).resize(width, height, { fit: 'fill' }).greyscale().raw().toBuffer()
     ]);
 
     // On teste des décalages horizontaux de 0% à 50%

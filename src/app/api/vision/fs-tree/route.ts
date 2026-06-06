@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';
-import visionService from '@/lib/services/visionService';
+import { visionSyncService } from '@/lib/services/visionSyncService';
 import { visionTreeCache } from '@/lib/services/vision-cache';
 
 export const dynamic = 'force-dynamic';
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     await fs.mkdir(fullPath, { recursive: true });
     
     // ⚡ Sync rapide (un seul dossier, pas de scan disque complet)
-    await visionService.quickSyncFolder(fullPath);
+    await visionSyncService.quickSyncFolder(fullPath);
     
     // ♻️ Invalider le cache
     visionTreeCache.invalidate('tree:');
@@ -194,7 +194,7 @@ export async function DELETE(request: NextRequest) {
     await fs.rm(fullPath, { recursive: true, force: true });
     
     // ⚡ Sync rapide (suppression dans la DB uniquement)
-    await visionService.quickSyncFolder(fullPath);
+    await visionSyncService.quickSyncFolder(fullPath);
     
     // ♻️ Invalider le cache
     visionTreeCache.invalidate('tree:');
@@ -224,11 +224,11 @@ export async function PATCH(request: NextRequest) {
     // 🔍 1. CAS IMAGE (UUID)
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (uuidRegex.test(oldPath)) {
-      const success = await visionService.updateImageMetadata(oldPath, { filename: newName });
+      const success = await visionSyncService.updateImageMetadata(oldPath, { filename: newName });
       if (!success) return NextResponse.json({ error: 'Image non trouvée' }, { status: 404 });
       
-      // 🔥 Renommer aussi le fichier physique si nécessaire (géré par visionService.updateImageMetadata ?)
-      // En fait visionService.updateImageMetadata met à jour la DB. 
+      // 🔥 Renommer aussi le fichier physique si nécessaire (géré par visionSyncService.updateImageMetadata ?)
+      // En fait visionSyncService.updateImageMetadata met à jour la DB. 
       // Le filesystem n'a pas forcément besoin de changer de nom si on utilise les IDs.
       
       // ⚡ Pour les images, updateImageMetadata met à jour la DB directement - pas besoin de scan
@@ -253,7 +253,7 @@ export async function PATCH(request: NextRequest) {
     await fs.rename(fullOldPath, fullNewPath);
     
     // ⚡ Sync rapide du nouveau chemin
-    await visionService.quickSyncFolder(fullNewPath);
+    await visionSyncService.quickSyncFolder(fullNewPath);
     visionTreeCache.invalidate('tree:');
     
     return NextResponse.json({ 

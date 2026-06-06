@@ -13,6 +13,7 @@ import { getLearningStats as getRAGLearningStats } from '@/ai/rag/rag-learning-l
 import { getAgenticLoopStats } from '@/ai/orchestration/agentic-loop';
 import { analyticsLogger } from './utils/logger';
 import { SQLiteCore } from '@/ai/core/sqlite';
+import { getCurrentActiveModel } from '@/ai/training/model-registry';
 
 // ============================================================================
 // INTERFACES
@@ -143,7 +144,6 @@ export async function getLearningStats(): Promise<AnalyticsStats> {
     // Récupération du dernier entraînement
     let lastTrainingTimestamp = Date.now() - 86400000; // 24h par défaut
     try {
-      const { getCurrentActiveModel } = await import('@/ai/training/model-registry');
       const currentModel = await getCurrentActiveModel();
       if (currentModel && currentModel.deployedAt) {
         lastTrainingTimestamp = currentModel.deployedAt;
