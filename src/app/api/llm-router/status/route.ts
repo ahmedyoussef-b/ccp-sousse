@@ -15,7 +15,24 @@ export async function GET() {
     return NextResponse.json(cachedHealth);
   }
   
-  const health = await getLLMHealthStatus();
+  // 👇 AJOUTE CE TRY/CATCH
+  let health = {};
+  try {
+    health = await getLLMHealthStatus();
+  } catch (error) {
+    console.error('[LLM Router] Erreur getLLMHealthStatus:', error);
+    
+    // Fallback pour Vercel - retourne un statut "dégradé" mais pas d'erreur 500
+    health = {
+      groq: { available: !!process.env.GROQ_API_KEY, error: null },
+      gemini: { available: !!process.env.GEMINI_API_KEY, error: null },
+      cerebras: { available: !!process.env.CEREBRAS_API_KEY, error: null },
+      openrouter: { available: !!process.env.OPENROUTER_API_KEY, error: null },
+      fallback: true,
+      message: 'Mode dégradé - vérification des clés API uniquement'
+    };
+  }
+  
   const response = {
     providers: health,
     config: {
