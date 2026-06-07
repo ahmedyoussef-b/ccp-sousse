@@ -19,8 +19,20 @@ export function useWebSocket(url?: string) {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isUnmountingRef = useRef(false);
 
+  // ──────────────────────────────────────────────────────────────
+  // Guard: désactive le WebSocket/SSE sur Vercel (serverless) ou
+  // quand NEXT_PUBLIC_DISABLE_WEBSOCKET=true est défini.
+  // ──────────────────────────────────────────────────────────────
+  const isDisabled =
+    process.env.NEXT_PUBLIC_DISABLE_WEBSOCKET === 'true' ||
+    process.env.NEXT_PUBLIC_VERCEL === '1';
+
   const connect = () => {
     if (typeof window === 'undefined') return;
+    if (isDisabled) {
+      console.log('[SYNC] WebSocket désactivé (Vercel / NEXT_PUBLIC_DISABLE_WEBSOCKET=true)');
+      return;
+    }
     if (eventSourceRef.current?.readyState === EventSource.OPEN) return;
 
     const endpoint = url || '/api/ws';
