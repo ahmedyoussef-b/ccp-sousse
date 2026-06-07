@@ -3,6 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { getLogBasePath } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -43,7 +44,7 @@ class RoleLogger {
   private sessionId: string;
 
   private constructor() {
-    this.logPath = path.join(process.cwd(), 'data', 'logs', 'roles');
+    this.logPath = getLogBasePath('roles');
     this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     this.ensureDirectory();
     this.logSystemStart();

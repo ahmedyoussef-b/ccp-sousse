@@ -1,9 +1,9 @@
 // src/lib/logger/performance-logger.ts
-// src/lib/logger/performance-logger.ts
 // Logger spécialisé pour les métriques de performance et l'optimisation
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { getLogBasePath } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -90,8 +90,8 @@ class PerformanceLogger {
   private alertCallbacks: ((alert: PerformanceAlert) => void)[] = [];
 
   private constructor() {
-    this.metricsPath = path.join(process.cwd(), 'data', 'logs', 'performance', 'metrics.jsonl');
-    this.alertsPath = path.join(process.cwd(), 'data', 'logs', 'performance', 'alerts.jsonl');
+    this.metricsPath = path.join(getLogBasePath('performance'), 'metrics.jsonl');
+    this.alertsPath = path.join(getLogBasePath('performance'), 'alerts.jsonl');
     this.ensureDirectory();
     this.loadExistingMetrics();
   }

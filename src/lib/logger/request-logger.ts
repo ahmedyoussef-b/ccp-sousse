@@ -113,7 +113,8 @@ class RequestLogger {
     try {
       const fs = require('fs');
       const path = require('path');
-      const logDir = path.join(process.cwd(), 'data', 'logs', 'traces');
+      const { getLogBasePath } = require('../config/env-mode');
+      const logDir = getLogBasePath('traces');
       
       if (!fs.existsSync(logDir)) {
         fs.mkdirSync(logDir, { recursive: true });

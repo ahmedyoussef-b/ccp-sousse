@@ -4,8 +4,9 @@ import * as path from 'path';
 import { getSessionId } from './request-context';
 import { aiEventBus, ActionEvent, ActionStatus } from '../../ai/actions/event-bus';
 import { v4 as uuidv4 } from 'uuid';
+import { getLogBasePath } from '../config/env-mode';
 
-const BASE_LOG_DIR = path.join(process.cwd(), 'data', 'logs', 'ai');
+const BASE_LOG_DIR = getLogBasePath('ai');
 const SESSION_DIR = path.join(BASE_LOG_DIR, 'sessions');
 const PIPELINE_DIR = path.join(BASE_LOG_DIR, 'pipeline');
 const ERROR_DIR = path.join(BASE_LOG_DIR, 'errors');

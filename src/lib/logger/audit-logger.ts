@@ -1,9 +1,9 @@
 // src/lib/logger/audit-logger.ts
-// src/lib/logger/audit-logger.ts
 // Journal d'audit pour tracer toutes les actions importantes de l'application
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { getLogBasePath } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -66,7 +66,7 @@ class AuditLogger {
   private flushInterval: NodeJS.Timeout | null = null;
 
   private constructor() {
-    this.auditPath = path.join(process.cwd(), 'data', 'logs', 'audit');
+    this.auditPath = getLogBasePath('audit');
     this.ensureDirectory();
     this.startAutoFlush();
   }

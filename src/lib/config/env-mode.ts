@@ -21,3 +21,14 @@ export const getVectorDBMode = (): 'chromadb' | 'pgvector' => {
 export const getLLMMode = (): 'ollama' | 'cloud' => {
     return isCloudMode() ? 'cloud' : 'ollama';
 };
+
+/**
+ * Retourne le chemin de base pour les logs.
+ * Sur Vercel, seul /tmp est accessible en écriture.
+ * En local, on utilise data/logs (relatif à process.cwd()).
+ */
+export const getLogBasePath = (subdir: string = ''): string => {
+    const base = isCloudMode() ? '/tmp/logs' : `${process.cwd()}/data/logs`;
+    return subdir ? `${base}/${subdir}` : base;
+};
+
