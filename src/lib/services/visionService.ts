@@ -74,7 +74,7 @@ function computeBufferHash(buffer: Buffer): string {
  */
 async function prepareForVision(buffer: Buffer): Promise<PreparedVisionResult> {
   try {
-    // tf.node is only available when @tensorflow/tfjs-node is loaded at runtime
+    // tf.node is only available when @tensorflow/tfjs is loaded at runtime
     if (tf && (tf as any).node && (tf as any).node.decodeImage) {
       try {
         const tensor = (tf as any).node.decodeImage(buffer, 3);
@@ -254,10 +254,10 @@ class VisionService implements VisionServiceInterface {
         // Importations dynamiques pour la stabilité
         let tf_module;
         try {
-          console.log('📦 Tentative de chargement de @tensorflow/tfjs-node...');
-          tf_module = await import('@tensorflow/tfjs-node');
+          console.log('📦 Tentative de chargement de @tensorflow/tfjs...');
+          tf_module = await import('@tensorflow/tfjs');
         } catch (nodeErr) {
-          console.warn('⚠️ @tensorflow/tfjs-node non disponible (probable erreur binaire sur Windows). Repli sur @tensorflow/tfjs (CPU)...');
+          console.warn('⚠️ @tensorflow/tfjs non disponible (probable erreur binaire sur Windows). Repli sur @tensorflow/tfjs (CPU)...');
           tf_module = await import('@tensorflow/tfjs');
         }
         

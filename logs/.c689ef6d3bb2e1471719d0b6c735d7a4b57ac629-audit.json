@@ -14,6 +14,11 @@
             "date": 1780789065470,
             "name": "logs\\toolformer-2026-06-07.log",
             "hash": "0f9ce5df9e982c2fc344087fafeac886f12d2b8e3dc02dd46d83761bdf687b06"
+        },
+        {
+            "date": 1780926078728,
+            "name": "logs\\toolformer-2026-06-08.log",
+            "hash": "7399ad33f3ac434fbd4b28ebb2024b9382beeb37c8759044d6105127e6951688"
         }
     ],
     "hashType": "sha256"

@@ -44,7 +44,6 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@tensorflow-models/mobilenet": "^2.1.1",
     "@tensorflow/tfjs": "^4.22.0",
-    "@tensorflow/tfjs-node": "^4.22.0",
     "@types/pdf-parse": "^1.1.5",
     "@vercel/blob": "^2.4.0",
     "@vercel/postgres": "^0.10.0",
