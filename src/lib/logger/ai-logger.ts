@@ -4,7 +4,7 @@ import * as path from 'path';
 import { getSessionId } from './request-context';
 import { aiEventBus, ActionEvent, ActionStatus } from '../../ai/actions/event-bus';
 import { v4 as uuidv4 } from 'uuid';
-import { getLogBasePath } from '../config/env-mode';
+import { getLogBasePath, isCloudMode } from '../config/env-mode';
 
 const BASE_LOG_DIR = getLogBasePath('ai');
 const SESSION_DIR = path.join(BASE_LOG_DIR, 'sessions');
@@ -38,9 +38,20 @@ const COLORS = {
 
 class AiLogger {
   private initialized = false;
+  private enabled: boolean = true;
+
+  constructor() {
+    // Désactiver sur Vercel
+    if (isCloudMode() || process.env.VERCEL === '1') {
+      console.log('[AiLogger] Désactivé sur Vercel (mode read-only)');
+      this.enabled = false;
+    }
+  }
 
   private async ensureDirs() {
+    if (!this.enabled) return;
     if (this.initialized) return;
+    
     try {
       await fs.mkdir(SESSION_DIR, { recursive: true });
       await fs.mkdir(PIPELINE_DIR, { recursive: true });
@@ -48,6 +59,7 @@ class AiLogger {
       this.initialized = true;
     } catch (err) {
       console.error('Failed to initialize AI Logger directories', err);
+      this.enabled = false;
     }
   }
 
@@ -56,12 +68,13 @@ class AiLogger {
   }
 
   private async appendJsonl(filePath: string, data: any) {
-    await this.ensureDirs();
-    const line = JSON.stringify({
-      timestamp: new Date().toISOString(),
-      ...data
-    }) + '\n';
+    if (!this.enabled) return;
+    
     try {
+      const line = JSON.stringify({
+        timestamp: new Date().toISOString(),
+        ...data
+      }) + '\n';
       await fs.appendFile(filePath, line, 'utf8');
     } catch (err) {
       console.error(`Failed to write log to ${filePath}`, err);
@@ -76,6 +89,8 @@ class AiLogger {
    * @param data Données associées
    */
   async logStep(section: number, module: string, name: string, data: any = {}) {
+    if (!this.enabled) return;
+    
     const sessionId = getSessionId();
     const today = this.getToday();
     const timestamp = Date.now();
@@ -101,7 +116,7 @@ class AiLogger {
     const pipelinePath = path.join(PIPELINE_DIR, `${today}.jsonl`);
     await this.appendJsonl(pipelinePath, logEntry);
 
-    // 4. 🔥 Diffusion vers l'Event Bus pour la Console d'Activité
+    // 4. 🔥 Diffusion vers l'Event Bus pour la Console d'Activité (toujours actif)
     try {
       const event: ActionEvent = {
         id: uuidv4(),
@@ -138,6 +153,15 @@ class AiLogger {
    * Log une erreur dédiée
    */
   async logError(error: Error, context: any = {}) {
+    if (!this.enabled) {
+      // Afficher l'erreur dans la console quand même
+      console.error(`${COLORS.red}${COLORS.bright}❌ [AI-ERROR]${COLORS.reset}`, {
+        message: error.message,
+        ...context
+      });
+      return;
+    }
+    
     const sessionId = getSessionId();
     const today = this.getToday();
     const timestamp = Date.now();
@@ -186,4 +210,3 @@ class AiLogger {
 }
 
 export const aiLogger = new AiLogger();
-

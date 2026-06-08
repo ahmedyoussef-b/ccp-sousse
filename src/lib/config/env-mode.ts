@@ -1,3 +1,5 @@
+// src/lib/config/env-mode.ts
+
 export const isCloudMode = (): boolean => {
     // Si la variable est explicitement définie
     if (process.env.APP_MODE === 'cloud') return true;
@@ -28,7 +30,26 @@ export const getLLMMode = (): 'ollama' | 'cloud' => {
  * En local, on utilise data/logs (relatif à process.cwd()).
  */
 export const getLogBasePath = (subdir: string = ''): string => {
-    const base = isCloudMode() ? '/tmp/logs' : `${process.cwd()}/data/logs`;
+    const base = isCloudMode() ? '/tmp/ccp/logs' : `${process.cwd()}/data/logs`;
     return subdir ? `${base}/${subdir}` : base;
 };
 
+/**
+ * Détermine si on peut écrire des logs sur le disque.
+ * Sur Vercel, on désactive complètement l'écriture des logs
+ * car même /tmp peut poser problème avec les fonctions serverless.
+ * En local, on écrit normalement.
+ */
+export const canLog = (): boolean => {
+    // Sur Vercel, on désactive tous les logs fichiers
+    if (process.env.VERCEL === '1') return false;
+    // En local, on log normalement
+    return true;
+};
+
+/**
+ * Alias pour isCloudMode (compatibilité avec le code existant)
+ */
+export const isVercel = (): boolean => {
+    return process.env.VERCEL === '1';
+};

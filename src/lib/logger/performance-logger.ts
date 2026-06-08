@@ -3,7 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { getLogBasePath } from '../config/env-mode';
+import { getLogBasePath, isCloudMode } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -88,8 +88,18 @@ class PerformanceLogger {
   private alerts: PerformanceAlert[] = [];
   private maxMetrics: number = 10000;
   private alertCallbacks: ((alert: PerformanceAlert) => void)[] = [];
+  private enabled: boolean = true;
 
   private constructor() {
+    // Désactiver sur Vercel
+    if (isCloudMode() || process.env.VERCEL === '1') {
+      console.log('[PerformanceLogger] Désactivé sur Vercel (mode read-only)');
+      this.enabled = false;
+      this.metricsPath = '';
+      this.alertsPath = '';
+      return;
+    }
+    
     this.metricsPath = path.join(getLogBasePath('performance'), 'metrics.jsonl');
     this.alertsPath = path.join(getLogBasePath('performance'), 'alerts.jsonl');
     this.ensureDirectory();
@@ -104,6 +114,7 @@ class PerformanceLogger {
   }
 
   private ensureDirectory(): void {
+    if (!this.enabled) return;
     const dir = path.dirname(this.metricsPath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
@@ -111,6 +122,7 @@ class PerformanceLogger {
   }
 
   private loadExistingMetrics(): void {
+    if (!this.enabled) return;
     try {
       if (fs.existsSync(this.metricsPath)) {
         const content = fs.readFileSync(this.metricsPath, 'utf-8');
@@ -132,6 +144,7 @@ class PerformanceLogger {
   }
 
   private saveMetric(metric: PerformanceMetric): void {
+    if (!this.enabled) return;
     try {
       fs.appendFileSync(this.metricsPath, JSON.stringify(metric) + '\n');
     } catch (error) {
@@ -140,6 +153,7 @@ class PerformanceLogger {
   }
 
   private saveAlert(alert: PerformanceAlert): void {
+    if (!this.enabled) return;
     try {
       fs.appendFileSync(this.alertsPath, JSON.stringify(alert) + '\n');
     } catch (error) {
@@ -148,6 +162,8 @@ class PerformanceLogger {
   }
 
   private checkThreshold(metric: PerformanceMetric): PerformanceAlert | null {
+    if (!this.enabled) return null;
+    
     const threshold = THRESHOLDS[metric.type];
     if (!threshold) return null;
     
@@ -196,6 +212,8 @@ class PerformanceLogger {
   // ============================================
 
   record(metric: Omit<PerformanceMetric, 'id' | 'timestamp'>): PerformanceAlert | null {
+    if (!this.enabled) return null;
+    
     const id = `perf_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     const metricWithId: PerformanceMetric = {
       ...metric,
@@ -221,6 +239,7 @@ class PerformanceLogger {
   // ============================================
 
   recordChatTotal(duration: number, success: boolean, traceId?: string, details?: Record<string, any>): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'CHAT_TOTAL',
       duration,
@@ -231,6 +250,7 @@ class PerformanceLogger {
   }
 
   recordIntentAnalysis(duration: number, success: boolean, traceId?: string, intent?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'INTENT_ANALYSIS',
       duration,
@@ -241,6 +261,7 @@ class PerformanceLogger {
   }
 
   recordChromaDBSearch(duration: number, success: boolean, resultsCount: number, collection: string, traceId?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'CHROMADB_SEARCH',
       duration,
@@ -251,6 +272,7 @@ class PerformanceLogger {
   }
 
   recordContextBuilding(duration: number, success: boolean, contextLength: number, traceId?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'CONTEXT_BUILDING',
       duration,
@@ -261,6 +283,7 @@ class PerformanceLogger {
   }
 
   recordPromptGeneration(duration: number, success: boolean, promptLength: number, traceId?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'PROMPT_GENERATION',
       duration,
@@ -271,6 +294,7 @@ class PerformanceLogger {
   }
 
   recordOllamaCall(duration: number, success: boolean, model: string, responseLength: number, tokensPerSecond: number, traceId?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'OLLAMA_CALL',
       duration,
@@ -281,6 +305,7 @@ class PerformanceLogger {
   }
 
   recordResponseProcessing(duration: number, success: boolean, answerLength: number, traceId?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'RESPONSE_PROCESSING',
       duration,
@@ -291,6 +316,7 @@ class PerformanceLogger {
   }
 
   recordFeedbackSave(duration: number, success: boolean, rating: number, traceId?: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'FEEDBACK_SAVE',
       duration,
@@ -301,6 +327,7 @@ class PerformanceLogger {
   }
 
   recordDocumentIngestion(duration: number, success: boolean, filename: string, fileSize: number): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'DOCUMENT_INGESTION',
       duration,
@@ -310,6 +337,7 @@ class PerformanceLogger {
   }
 
   recordTrainingPrepare(duration: number, success: boolean, examplesCount: number): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'TRAINING_PREPARE',
       duration,
@@ -319,6 +347,7 @@ class PerformanceLogger {
   }
 
   recordModelImport(duration: number, success: boolean, modelName: string): PerformanceAlert | null {
+    if (!this.enabled) return null;
     return this.record({
       type: 'MODEL_IMPORT',
       duration,
@@ -332,6 +361,8 @@ class PerformanceLogger {
   // ============================================
 
   getStatistics(metricType?: MetricType, hours?: number): PerformanceStats[] {
+    if (!this.enabled) return [];
+    
     const cutoff = hours ? Date.now() - (hours * 60 * 60 * 1000) : 0;
     const filtered = this.metrics.filter(m => 
       (!metricType || m.type === metricType) &&
@@ -371,10 +402,12 @@ class PerformanceLogger {
   }
 
   getAlerts(limit: number = 50, _acknowledged?: boolean): PerformanceAlert[] {
+    if (!this.enabled) return [];
     return this.alerts.slice(0, limit);
   }
 
   getSlowestQueries(limit: number = 10): PerformanceMetric[] {
+    if (!this.enabled) return [];
     return this.metrics
       .filter(m => m.type === 'CHAT_TOTAL')
       .sort((a, b) => b.duration - a.duration)
@@ -382,10 +415,13 @@ class PerformanceLogger {
   }
 
   onAlert(callback: (alert: PerformanceAlert) => void): void {
+    if (!this.enabled) return;
     this.alertCallbacks.push(callback);
   }
 
   printSummary(): void {
+    if (!this.enabled) return;
+    
     const stats = this.getStatistics();
     const totalQueries = this.metrics.filter(m => m.type === 'CHAT_TOTAL').length;
     const avgResponse = stats.find(s => s.metricType === 'CHAT_TOTAL')?.avgDuration || 0;
@@ -421,6 +457,8 @@ class PerformanceLogger {
 
   // Export CSV
   exportToCSV(hours?: number): string {
+    if (!this.enabled) return '';
+    
     const cutoff = hours ? Date.now() - (hours * 60 * 60 * 1000) : 0;
     const filtered = this.metrics.filter(m => !cutoff || new Date(m.timestamp).getTime() > cutoff);
     
@@ -440,7 +478,9 @@ class PerformanceLogger {
 // Export de l'instance unique
 export const performanceLogger = PerformanceLogger.getInstance();
 
-// Auto-print summary every hour
-setInterval(() => {
-  performanceLogger.printSummary();
-}, 3600000);
+// Auto-print summary every hour (seulement si enabled)
+if (process.env.VERCEL !== '1') {
+  setInterval(() => {
+    performanceLogger.printSummary();
+  }, 3600000);
+}

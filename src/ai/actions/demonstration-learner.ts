@@ -36,7 +36,8 @@ class SimpleLogger {
   private logToFile = false;
 
   constructor() {
-    if (process.env.LOG_TO_FILE === 'true') {
+    const isCloud = process.env.APP_MODE === 'cloud' || process.env.VERCEL === '1';
+    if (process.env.LOG_TO_FILE === 'true' && !isCloud) {
       try {
         const fs = require('fs');
         const path = require('path');

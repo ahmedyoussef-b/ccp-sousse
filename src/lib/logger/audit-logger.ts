@@ -3,7 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { getLogBasePath } from '../config/env-mode';
+import { getLogBasePath, isCloudMode } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -64,8 +64,17 @@ class AuditLogger {
   private buffer: AuditEntry[] = [];
   private bufferSize: number = 100;
   private flushInterval: NodeJS.Timeout | null = null;
+  private enabled: boolean = true;
 
   private constructor() {
+    // Désactiver sur Vercel
+    if (isCloudMode() || process.env.VERCEL === '1') {
+      console.log('[AuditLogger] Désactivé sur Vercel (mode read-only)');
+      this.enabled = false;
+      this.auditPath = '';
+      return;
+    }
+    
     this.auditPath = getLogBasePath('audit');
     this.ensureDirectory();
     this.startAutoFlush();
@@ -79,12 +88,14 @@ class AuditLogger {
   }
 
   private ensureDirectory(): void {
+    if (!this.enabled) return;
     if (!fs.existsSync(this.auditPath)) {
       fs.mkdirSync(this.auditPath, { recursive: true });
     }
   }
 
   private startAutoFlush(): void {
+    if (!this.enabled) return;
     if (this.flushInterval) {
       clearInterval(this.flushInterval);
     }
@@ -96,11 +107,13 @@ class AuditLogger {
   }
 
   private getCurrentLogFile(): string {
+    if (!this.enabled) return '';
     const date = new Date().toISOString().split('T')[0];
     return path.join(this.auditPath, `audit_${date}.jsonl`);
   }
 
   private flush(): void {
+    if (!this.enabled) return;
     if (this.buffer.length === 0) return;
 
     const entries = [...this.buffer];
@@ -122,6 +135,7 @@ class AuditLogger {
   }
 
   private cleanupOldLogs(): void {
+    if (!this.enabled) return;
     try {
       const files = fs.readdirSync(this.auditPath);
       const now = Date.now();
@@ -144,6 +158,8 @@ class AuditLogger {
   // ============================================
 
   log(entry: Omit<AuditEntry, 'id' | 'timestamp'>): string {
+    if (!this.enabled) return '';
+
     const id = `audit_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     const fullEntry: AuditEntry = {
       ...entry,
@@ -173,29 +189,36 @@ class AuditLogger {
     success?: boolean;
     limit?: number;
   }): Promise<AuditEntry[]> {
-    const entries: AuditEntry[] = [];
-    const files = fs.readdirSync(this.auditPath).sort().reverse();
+    if (!this.enabled) return [];
 
-    for (const file of files) {
-      const filePath = path.join(this.auditPath, file);
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const lines = content.split('\n').filter(l => l.trim());
-      
-      for (const line of lines) {
-        const entry = JSON.parse(line) as AuditEntry;
+    const entries: AuditEntry[] = [];
+
+    try {
+      const files = fs.readdirSync(this.auditPath).sort().reverse();
+
+      for (const file of files) {
+        const filePath = path.join(this.auditPath, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const lines = content.split('\n').filter(l => l.trim());
         
-        if (options?.startDate && new Date(entry.timestamp) < options.startDate) continue;
-        if (options?.endDate && new Date(entry.timestamp) > options.endDate) continue;
-        if (options?.action && entry.action !== options.action) continue;
-        if (options?.userId && entry.userId !== options.userId) continue;
-        if (options?.success !== undefined && entry.success !== options.success) continue;
-        
-        entries.push(entry);
+        for (const line of lines) {
+          const entry = JSON.parse(line) as AuditEntry;
+          
+          if (options?.startDate && new Date(entry.timestamp) < options.startDate) continue;
+          if (options?.endDate && new Date(entry.timestamp) > options.endDate) continue;
+          if (options?.action && entry.action !== options.action) continue;
+          if (options?.userId && entry.userId !== options.userId) continue;
+          if (options?.success !== undefined && entry.success !== options.success) continue;
+          
+          entries.push(entry);
+          
+          if (options?.limit && entries.length >= options.limit) break;
+        }
         
         if (options?.limit && entries.length >= options.limit) break;
       }
-      
-      if (options?.limit && entries.length >= options.limit) break;
+    } catch (err) {
+      console.error('[AUDIT] Erreur lecture entrées fichiers:', err);
     }
 
     // Ajouter les entrées du buffer
@@ -214,6 +237,18 @@ class AuditLogger {
   }
 
   getStats(): AuditStats {
+    if (!this.enabled) {
+      return {
+        total: 0,
+        byAction: {} as Record<AuditAction, number>,
+        byUser: {},
+        successRate: 100,
+        last24h: 0,
+        averageDuration: 0,
+        errors: []
+      };
+    }
+
     const stats: AuditStats = {
       total: 0,
       byAction: {} as Record<AuditAction, number>,
@@ -224,47 +259,52 @@ class AuditLogger {
       errors: []
     };
 
-    const files = fs.readdirSync(this.auditPath);
     const now = Date.now();
     const last24h = now - 24 * 60 * 60 * 1000;
     let totalDuration = 0;
     let durationCount = 0;
 
-    for (const file of files) {
-      const filePath = path.join(this.auditPath, file);
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const lines = content.split('\n').filter(l => l.trim());
-      
-      for (const line of lines) {
-        const entry = JSON.parse(line) as AuditEntry;
-        stats.total++;
+    try {
+      const files = fs.readdirSync(this.auditPath);
+
+      for (const file of files) {
+        const filePath = path.join(this.auditPath, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const lines = content.split('\n').filter(l => l.trim());
         
-        // Par action
-        stats.byAction[entry.action] = (stats.byAction[entry.action] || 0) + 1;
-        
-        // Par utilisateur
-        stats.byUser[entry.userId] = (stats.byUser[entry.userId] || 0) + 1;
-        
-        // Dernières 24h
-        if (new Date(entry.timestamp).getTime() > last24h) {
-          stats.last24h++;
-        }
-        
-        // Durée moyenne
-        if (entry.duration) {
-          totalDuration += entry.duration;
-          durationCount++;
-        }
-        
-        // Erreurs
-        if (!entry.success && entry.errorMessage) {
-          stats.errors.push({
-            action: entry.action,
-            error: entry.errorMessage,
-            timestamp: entry.timestamp
-          });
+        for (const line of lines) {
+          const entry = JSON.parse(line) as AuditEntry;
+          stats.total++;
+          
+          // Par action
+          stats.byAction[entry.action] = (stats.byAction[entry.action] || 0) + 1;
+          
+          // Par utilisateur
+          stats.byUser[entry.userId] = (stats.byUser[entry.userId] || 0) + 1;
+          
+          // Dernières 24h
+          if (new Date(entry.timestamp).getTime() > last24h) {
+            stats.last24h++;
+          }
+          
+          // Durée moyenne
+          if (entry.duration) {
+            totalDuration += entry.duration;
+            durationCount++;
+          }
+          
+          // Erreurs
+          if (!entry.success && entry.errorMessage) {
+            stats.errors.push({
+              action: entry.action,
+              error: entry.errorMessage,
+              timestamp: entry.timestamp
+            });
+          }
         }
       }
+    } catch (err) {
+      console.error('[AUDIT] Erreur lecture stats fichiers:', err);
     }
 
     // Ajouter les entrées du buffer
@@ -290,6 +330,7 @@ class AuditLogger {
       ? (stats.total - stats.errors.length) / stats.total * 100 
       : 100;
     stats.averageDuration = durationCount > 0 ? totalDuration / durationCount : 0;
+    stats.errors = stats.errors.slice(-50); // Garder les 50 dernières erreurs
 
     return stats;
   }
@@ -299,6 +340,8 @@ class AuditLogger {
   // ============================================
 
   chatQuery(userId: string, question: string, answerLength: number, duration: number, success: boolean, error?: string): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'CHAT_QUERY',
       userId,
@@ -314,6 +357,8 @@ class AuditLogger {
   }
 
   feedbackSubmit(userId: string, messageId: string, rating: number, question: string): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'FEEDBACK_SUBMIT',
       userId,
@@ -327,6 +372,8 @@ class AuditLogger {
   }
 
   documentUpload(userId: string, filename: string, fileSize: number, success: boolean, error?: string): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'DOCUMENT_UPLOAD',
       userId,
@@ -340,6 +387,8 @@ class AuditLogger {
   }
 
   trainingExampleAdd(userId: string, question: string, answerLength: number): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'TRAINING_EXAMPLE_ADD',
       userId,
@@ -352,6 +401,8 @@ class AuditLogger {
   }
 
   trainingImport(userId: string, filename: string, examplesCount: number): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'TRAINING_IMPORT',
       userId,
@@ -364,6 +415,8 @@ class AuditLogger {
   }
 
   modelImport(userId: string, modelName: string, success: boolean, error?: string): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'MODEL_IMPORT',
       userId,
@@ -374,6 +427,8 @@ class AuditLogger {
   }
 
   modelSwitch(userId: string, oldModel: string, newModel: string): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'MODEL_SWITCH',
       userId,
@@ -383,6 +438,8 @@ class AuditLogger {
   }
 
   colabExport(userId: string, examplesCount: number): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'COLAB_EXPORT',
       userId,
@@ -392,6 +449,8 @@ class AuditLogger {
   }
 
   systemEvent(action: 'SYSTEM_START' | 'SYSTEM_STOP', details?: Record<string, any>): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action,
       userId: 'system',
@@ -401,6 +460,8 @@ class AuditLogger {
   }
 
   errorOccurred(error: string, context?: Record<string, any>): string {
+    if (!this.enabled) return '';
+    
     return this.log({
       action: 'ERROR_OCCURRED',
       userId: 'system',
@@ -412,6 +473,8 @@ class AuditLogger {
 
   // Nettoyage
   shutdown(): void {
+    if (!this.enabled) return;
+    
     if (this.flushInterval) {
       clearInterval(this.flushInterval);
       this.flushInterval = null;
@@ -423,12 +486,14 @@ class AuditLogger {
 // Export de l'instance unique
 export const auditLogger = AuditLogger.getInstance();
 
-// Gestion de l'arrêt propre
-process.on('beforeExit', () => {
-  auditLogger.shutdown();
-});
+// Gestion de l'arrêt propre (seulement si enabled)
+if (process.env.VERCEL !== '1') {
+  process.on('beforeExit', () => {
+    auditLogger.shutdown();
+  });
 
-process.on('SIGINT', () => {
-  auditLogger.shutdown();
-  process.exit();
-});
+  process.on('SIGINT', () => {
+    auditLogger.shutdown();
+    process.exit();
+  });
+}

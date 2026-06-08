@@ -22,11 +22,32 @@ interface StepTrace {
   error?: string;
 }
 
+interface TraceStatistics {
+  total: number;
+  success: number;
+  failed: number;
+  successRate: number;
+  avgTotalDuration: number;
+  minDuration: number;
+  maxDuration: number;
+  stepStatistics: Record<string, { count: number; avgDuration: number; totalDuration: number }>;
+  lastHour: number;
+}
+
 class RequestLogger {
   private static instance: RequestLogger;
   private currentTrace: RequestTrace | null = null;
   private traces: RequestTrace[] = [];
   private maxTraces = 1000;
+  private enabled: boolean = true;
+
+  private constructor() {
+    // Désactiver sur Vercel
+    if (process.env.VERCEL === '1') {
+      console.log('[RequestLogger] Désactivé sur Vercel (mode read-only)');
+      this.enabled = false;
+    }
+  }
 
   static getInstance(): RequestLogger {
     if (!RequestLogger.instance) {
@@ -35,7 +56,13 @@ class RequestLogger {
     return RequestLogger.instance;
   }
 
+  private isVercel(): boolean {
+    return process.env.VERCEL === '1';
+  }
+
   startTrace(question: string): string {
+    if (!this.enabled) return '';
+    
     const traceId = `trace_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     
     this.currentTrace = {
@@ -53,7 +80,7 @@ class RequestLogger {
   }
 
   startStep(stepName: string, details?: any): void {
-    if (!this.currentTrace) return;
+    if (!this.enabled || !this.currentTrace) return;
     
     this.currentTrace.steps.push({
       name: stepName,
@@ -68,7 +95,7 @@ class RequestLogger {
   }
 
   endStep(stepName: string, details?: any, error?: string): void {
-    if (!this.currentTrace) return;
+    if (!this.enabled || !this.currentTrace) return;
     
     const step = this.currentTrace.steps.find(s => s.name === stepName && s.status === 'running');
     if (step) {
@@ -84,7 +111,7 @@ class RequestLogger {
   }
 
   endTrace(answer?: string, error?: string): RequestTrace | null {
-    if (!this.currentTrace) return null;
+    if (!this.enabled || !this.currentTrace) return null;
     
     this.currentTrace.totalDuration = Date.now() - new Date(this.currentTrace.timestamp).getTime();
     this.currentTrace.success = !error;
@@ -100,7 +127,7 @@ class RequestLogger {
     const statusIcon = error ? '❌' : '✅';
     console.log(`[TRACE:${this.currentTrace.id}] ${statusIcon} FIN - Durée totale: ${this.currentTrace.totalDuration}ms`);
     
-    // Sauvegarder dans un fichier
+    // Sauvegarder dans un fichier (seulement si enabled)
     this.saveToFile(this.currentTrace);
     
     const trace = this.currentTrace;
@@ -110,10 +137,15 @@ class RequestLogger {
   }
 
   private saveToFile(trace: RequestTrace): void {
+    if (!this.enabled) return;
+    
     try {
+      // Import dynamique pour éviter les erreurs de module sur Vercel
+      const { isCloudMode, getLogBasePath } = require('../config/env-mode');
+      if (isCloudMode()) return;
+
       const fs = require('fs');
       const path = require('path');
-      const { getLogBasePath } = require('../config/env-mode');
       const logDir = getLogBasePath('traces');
       
       if (!fs.existsSync(logDir)) {
@@ -130,6 +162,8 @@ class RequestLogger {
   }
 
   getTraces(limit: number = 100, filter?: { minDuration?: number; successOnly?: boolean }): RequestTrace[] {
+    if (!this.enabled) return [];
+    
     let traces = [...this.traces];
     
     if (filter?.minDuration) {
@@ -143,6 +177,20 @@ class RequestLogger {
   }
 
   getStatistics(): TraceStatistics {
+    if (!this.enabled) {
+      return {
+        total: 0,
+        success: 0,
+        failed: 0,
+        successRate: 100,
+        avgTotalDuration: 0,
+        minDuration: 0,
+        maxDuration: 0,
+        stepStatistics: {},
+        lastHour: 0
+      };
+    }
+    
     const completed = this.traces.filter(t => t.success);
     const failed = this.traces.filter(t => !t.success);
     
@@ -175,18 +223,6 @@ class RequestLogger {
       lastHour: this.traces.filter(t => Date.now() - new Date(t.timestamp).getTime() < 3600000).length
     };
   }
-}
-
-interface TraceStatistics {
-  total: number;
-  success: number;
-  failed: number;
-  successRate: number;
-  avgTotalDuration: number;
-  minDuration: number;
-  maxDuration: number;
-  stepStatistics: Record<string, { count: number; avgDuration: number; totalDuration: number }>;
-  lastHour: number;
 }
 
 export const requestLogger = RequestLogger.getInstance();

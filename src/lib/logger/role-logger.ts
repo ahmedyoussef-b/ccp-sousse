@@ -3,7 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { getLogBasePath } from '../config/env-mode';
+import { getLogBasePath, isCloudMode } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -42,8 +42,18 @@ class RoleLogger {
   private logPath: string;
   private currentActionStart: number = 0;
   private sessionId: string;
+  private enabled: boolean = true;
 
   private constructor() {
+    // Désactiver sur Vercel
+    if (isCloudMode() || process.env.VERCEL === '1') {
+      console.log('[RoleLogger] Désactivé sur Vercel (mode read-only)');
+      this.enabled = false;
+      this.logPath = '';
+      this.sessionId = '';
+      return;
+    }
+    
     this.logPath = getLogBasePath('roles');
     this.sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     this.ensureDirectory();
@@ -58,17 +68,20 @@ class RoleLogger {
   }
 
   private ensureDirectory(): void {
+    if (!this.enabled) return;
     if (!fs.existsSync(this.logPath)) {
       fs.mkdirSync(this.logPath, { recursive: true });
     }
   }
 
   private getCurrentLogFile(): string {
+    if (!this.enabled) return '';
     const date = new Date().toISOString().split('T')[0];
     return path.join(this.logPath, `roles_${date}.jsonl`);
   }
 
   private writeLog(entry: RoleLogEntry): void {
+    if (!this.enabled) return;
     const logFile = this.getCurrentLogFile();
     try {
       fs.appendFileSync(logFile, JSON.stringify(entry) + '\n');
@@ -83,6 +96,7 @@ class RoleLogger {
   }
 
   private logSystemStart(): void {
+    if (!this.enabled) return;
     const entry: RoleLogEntry = {
       id: `role_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -99,6 +113,8 @@ class RoleLogger {
   }
 
   private printColoredLog(entry: RoleLogEntry): void {
+    if (!this.enabled) return;
+    
     const colors = {
       APP: '\x1b[36m',      // Cyan
       CHROMADB: '\x1b[35m', // Magenta
@@ -141,6 +157,8 @@ class RoleLogger {
   // ============================================
 
   start(role: RoleType, action: string, traceId?: string, details?: Record<string, any>): string {
+    if (!this.enabled) return '';
+    
     const entryId = `role_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     
     const entry: RoleLogEntry = {
@@ -162,6 +180,8 @@ class RoleLogger {
   }
 
   inProgress(role: RoleType, action: string, details?: Record<string, any>, traceId?: string): void {
+    if (!this.enabled) return;
+    
     const entry: RoleLogEntry = {
       id: `role_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -177,6 +197,8 @@ class RoleLogger {
   }
 
   complete(role: RoleType, action: string, details?: Record<string, any>, traceId?: string): void {
+    if (!this.enabled) return;
+    
     const duration = Date.now() - this.currentActionStart;
     
     const entry: RoleLogEntry = {
@@ -197,6 +219,8 @@ class RoleLogger {
   }
 
   error(role: RoleType, action: string, error: string, details?: Record<string, any>, traceId?: string): void {
+    if (!this.enabled) return;
+    
     const duration = this.currentActionStart > 0 ? Date.now() - this.currentActionStart : undefined;
     
     const entry: RoleLogEntry = {
@@ -218,6 +242,8 @@ class RoleLogger {
   }
 
   timeout(role: RoleType, action: string, timeoutMs: number, details?: Record<string, any>, traceId?: string): void {
+    if (!this.enabled) return;
+    
     const entry: RoleLogEntry = {
       id: `role_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -241,70 +267,86 @@ class RoleLogger {
 
   // APP
   appReceiveRequest(traceId: string, method: string, path: string, query?: string): void {
+    if (!this.enabled) return;
     this.start('APP', 'RECEIVE_REQUEST', traceId, { method, path, query: query?.substring(0, 100) });
   }
 
   appAnalyzeIntent(traceId: string, query: string, intent?: string): void {
+    if (!this.enabled) return;
     this.inProgress('APP', 'ANALYZE_INTENT', { query: query.substring(0, 100), intent }, traceId);
   }
 
   appBuildPrompt(traceId: string, contextLength: number, promptLength: number): void {
+    if (!this.enabled) return;
     this.inProgress('APP', 'BUILD_PROMPT', { contextLength, promptLength }, traceId);
   }
 
   appSendResponse(traceId: string, answerLength: number, totalDuration: number): void {
+    if (!this.enabled) return;
     this.complete('APP', 'SEND_RESPONSE', { answerLength, totalDuration }, traceId);
   }
 
   appError(traceId: string, error: string): void {
+    if (!this.enabled) return;
     this.error('APP', 'PROCESS_REQUEST', error, {}, traceId);
   }
 
   // CHROMADB
   chromadbSearch(traceId: string, collection: string, query: string, nResults: number): void {
+    if (!this.enabled) return;
     this.start('CHROMADB', 'SEARCH', traceId, { collection, query: query.substring(0, 100), nResults });
   }
 
   chromadbSearchComplete(traceId: string, resultsCount: number, duration: number): void {
+    if (!this.enabled) return;
     this.complete('CHROMADB', 'SEARCH', { resultsCount, duration }, traceId);
   }
 
   chromadbSearchError(traceId: string, error: string): void {
+    if (!this.enabled) return;
     this.error('CHROMADB', 'SEARCH', error, {}, traceId);
   }
 
   chromadbIndex(traceId: string, collection: string, documentCount: number): void {
+    if (!this.enabled) return;
     this.start('CHROMADB', 'INDEX', traceId, { collection, documentCount });
     this.complete('CHROMADB', 'INDEX', { collection, documentCount }, traceId);
   }
 
   chromadbCollection(traceId: string, action: 'CREATE' | 'GET' | 'DELETE', collection: string): void {
+    if (!this.enabled) return;
     this.start('CHROMADB', `COLLECTION_${action}`, traceId, { collection });
     this.complete('CHROMADB', `COLLECTION_${action}`, { collection }, traceId);
   }
 
   // OLLAMA
   ollamaCall(traceId: string, model: string, promptLength: number, temperature: number, maxTokens: number): void {
+    if (!this.enabled) return;
     this.start('OLLAMA', 'GENERATE', traceId, { model, promptLength, temperature, maxTokens });
   }
 
   ollamaCallInProgress(traceId: string, progress: number, tokensGenerated: number): void {
+    if (!this.enabled) return;
     this.inProgress('OLLAMA', 'GENERATE', { progress, tokensGenerated }, traceId);
   }
 
   ollamaCallComplete(traceId: string, responseLength: number, tokensPerSecond: number, duration: number): void {
+    if (!this.enabled) return;
     this.complete('OLLAMA', 'GENERATE', { responseLength, tokensPerSecond, duration }, traceId);
   }
 
   ollamaCallError(traceId: string, error: string): void {
+    if (!this.enabled) return;
     this.error('OLLAMA', 'GENERATE', error, {}, traceId);
   }
 
   ollamaCallTimeout(traceId: string, timeoutMs: number): void {
+    if (!this.enabled) return;
     this.timeout('OLLAMA', 'GENERATE', timeoutMs, {}, traceId);
   }
 
   ollamaEmbedding(traceId: string, textLength: number): void {
+    if (!this.enabled) return;
     this.start('OLLAMA', 'EMBEDDING', traceId, { textLength });
     this.complete('OLLAMA', 'EMBEDDING', { textLength }, traceId);
   }
@@ -314,6 +356,8 @@ class RoleLogger {
   // ============================================
 
   getPerformanceStats(): RolePerformance[] {
+    if (!this.enabled) return [];
+    
     const stats: Map<string, RolePerformance> = new Map();
     
     try {
@@ -371,6 +415,8 @@ class RoleLogger {
   }
 
   printSummary(): void {
+    if (!this.enabled) return;
+    
     const stats = this.getPerformanceStats();
     
     console.log('\n' + '═'.repeat(60));
@@ -392,6 +438,8 @@ class RoleLogger {
 
   // Nettoyage
   shutdown(): void {
+    if (!this.enabled) return;
+    
     const entry: RoleLogEntry = {
       id: `role_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -408,12 +456,14 @@ class RoleLogger {
 // Export de l'instance unique
 export const roleLogger = RoleLogger.getInstance();
 
-// Gestion de l'arrêt propre
-process.on('beforeExit', () => {
-  roleLogger.shutdown();
-});
+// Gestion de l'arrêt propre (seulement si enabled)
+if (process.env.VERCEL !== '1') {
+  process.on('beforeExit', () => {
+    roleLogger.shutdown();
+  });
 
-process.on('SIGINT', () => {
-  roleLogger.shutdown();
-  process.exit();
-});
+  process.on('SIGINT', () => {
+    roleLogger.shutdown();
+    process.exit();
+  });
+}

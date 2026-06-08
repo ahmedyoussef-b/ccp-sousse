@@ -3,6 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { getLogBasePath, isCloudMode } from '../config/env-mode';
 
 // ============================================
 // TYPES
@@ -62,9 +63,18 @@ class ChromaDBAudit {
   private auditPath: string;
   private entries: ChromaDBAuditEntry[] = [];
   private maxEntries: number = 10000;
+  private enabled: boolean = true;
 
   private constructor() {
-    this.auditPath = path.join(process.cwd(), 'data', 'logs', 'chromadb');
+    // Désactiver sur Vercel
+    if (isCloudMode() || process.env.VERCEL === '1') {
+      console.log('[ChromaDBAudit] Désactivé sur Vercel (mode read-only)');
+      this.enabled = false;
+      this.auditPath = '';
+      return;
+    }
+    
+    this.auditPath = getLogBasePath('chromadb');
     this.ensureDirectory();
     this.loadExisting();
   }
@@ -77,17 +87,20 @@ class ChromaDBAudit {
   }
 
   private ensureDirectory(): void {
+    if (!this.enabled) return;
     if (!fs.existsSync(this.auditPath)) {
       fs.mkdirSync(this.auditPath, { recursive: true });
     }
   }
 
   private getCurrentLogFile(): string {
+    if (!this.enabled) return '';
     const date = new Date().toISOString().split('T')[0];
     return path.join(this.auditPath, `chromadb_audit_${date}.jsonl`);
   }
 
   private loadExisting(): void {
+    if (!this.enabled) return;
     try {
       const logFile = this.getCurrentLogFile();
       if (fs.existsSync(logFile)) {
@@ -103,6 +116,8 @@ class ChromaDBAudit {
   }
 
   private save(entry: ChromaDBAuditEntry): void {
+    if (!this.enabled) return;
+    
     this.entries.unshift(entry);
     if (this.entries.length > this.maxEntries) this.entries.pop();
 
@@ -117,6 +132,8 @@ class ChromaDBAudit {
   }
 
   private printConsoleLog(entry: ChromaDBAuditEntry): void {
+    if (!this.enabled) return;
+    
     const statusIcon = entry.success ? '✅' : '❌';
     const durationStr = entry.duration < 1000 ? `${entry.duration}ms` : `${(entry.duration / 1000).toFixed(2)}s`;
     
@@ -154,6 +171,8 @@ class ChromaDBAudit {
       dimension?: number;
     }
   ): void {
+    if (!this.enabled) return;
+    
     this.save({
       id: `chroma_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -182,6 +201,8 @@ class ChromaDBAudit {
       error?: string;
     }
   ): void {
+    if (!this.enabled) return;
+    
     this.save({
       id: `chroma_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -208,6 +229,8 @@ class ChromaDBAudit {
       error?: string;
     }
   ): void {
+    if (!this.enabled) return;
+    
     this.save({
       id: `chroma_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       timestamp: new Date().toISOString(),
@@ -228,6 +251,19 @@ class ChromaDBAudit {
   // ============================================
 
   getStats(hours?: number): ChromaDBStats {
+    if (!this.enabled) {
+      return {
+        totalOperations: 0,
+        byOperation: {} as Record<ChromaDBOperation, number>,
+        successRate: 100,
+        avgDuration: 0,
+        p95Duration: 0,
+        lastHour: 0,
+        embeddingCalls: 0,
+        avgEmbeddingDuration: 0
+      };
+    }
+    
     const cutoff = hours ? Date.now() - (hours * 60 * 60 * 1000) : 0;
     const filtered = this.entries.filter(e => new Date(e.timestamp).getTime() > cutoff);
     
@@ -271,6 +307,7 @@ class ChromaDBAudit {
   }
 
   getSlowOperations(minDurationMs: number = 1000, limit: number = 20): ChromaDBAuditEntry[] {
+    if (!this.enabled) return [];
     return this.entries
       .filter(e => e.duration >= minDurationMs)
       .sort((a, b) => b.duration - a.duration)
@@ -278,18 +315,22 @@ class ChromaDBAudit {
   }
 
   getErrors(limit: number = 50): ChromaDBAuditEntry[] {
+    if (!this.enabled) return [];
     return this.entries
       .filter(e => !e.success)
       .slice(0, limit);
   }
 
   getOperationsByCollection(collection: string, limit: number = 100): ChromaDBAuditEntry[] {
+    if (!this.enabled) return [];
     return this.entries
       .filter(e => e.collection === collection)
       .slice(0, limit);
   }
 
   printSummary(): void {
+    if (!this.enabled) return;
+    
     const stats = this.getStats(24);
     
     console.log('\n' + '═'.repeat(60));
@@ -329,7 +370,9 @@ class ChromaDBAudit {
 
 export const chromaDBAudit = ChromaDBAudit.getInstance();
 
-// Auto-print summary every hour
-setInterval(() => {
-  chromaDBAudit.printSummary();
-}, 3600000);
+// Auto-print summary every hour (seulement si enabled)
+if (process.env.VERCEL !== '1') {
+  setInterval(() => {
+    chromaDBAudit.printSummary();
+  }, 3600000);
+}
