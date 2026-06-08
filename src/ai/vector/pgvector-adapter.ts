@@ -1,9 +1,30 @@
+// src/ai/vector/pgvector-adapter.ts
 import { sql } from '@vercel/postgres';
 import { CollectionName } from './chromadb-schema';
 import { IVectorDB, VectorDocument, VectorSearchResult } from './IVectorDB';
 
+// Vérifier si PGVector doit être désactivé
+const isPGVectorDisabled = (): boolean => {
+  // Désactiver sur Vercel par défaut (fallback SQLite)
+  if (process.env.VERCEL === '1') return true;
+  if (process.env.DISABLE_PGVECTOR === 'true') return true;
+  if (process.env.NEXT_PUBLIC_DISABLE_PGVECTOR === 'true') return true;
+  return false;
+};
+
 export class PGVectorAdapter implements IVectorDB {
+    private enabled: boolean;
+
+    constructor() {
+        this.enabled = !isPGVectorDisabled();
+        if (!this.enabled) {
+            console.log('[PGVector] Désactivé (fallback SQLite)');
+        }
+    }
+
     async initialize(): Promise<void> {
+        if (!this.enabled) return;
+        
         try {
             await sql`CREATE EXTENSION IF NOT EXISTS vector;`;
             await sql`
@@ -21,10 +42,15 @@ export class PGVectorAdapter implements IVectorDB {
             console.log('✅ PGVector initialized');
         } catch (e) {
             console.error('❌ Failed to initialize PGVector:', e);
+            this.enabled = false;
         }
     }
 
     async getStatus(): Promise<{ connected: boolean; version?: string; embeddingDimension?: number; error?: string }> {
+        if (!this.enabled) {
+            return { connected: false, error: 'PGVector désactivé (fallback SQLite)' };
+        }
+        
         try {
             await sql`SELECT 1`;
             return { connected: true, version: 'pgvector via @vercel/postgres' };
@@ -34,6 +60,8 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async addDocuments(collectionName: CollectionName, documents: VectorDocument[], traceId?: string): Promise<void> {
+        if (!this.enabled) return;
+        
         for (const doc of documents) {
             if (doc.embedding) {
                 const embeddingStr = `[${doc.embedding.join(',')}]`;
@@ -47,6 +75,8 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async upsertDocuments(collectionName: CollectionName, documents: VectorDocument[], traceId?: string): Promise<void> {
+        if (!this.enabled) return;
+        
         for (const doc of documents) {
             if (doc.embedding) {
                 const embeddingStr = `[${doc.embedding.join(',')}]`;
@@ -63,7 +93,9 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async deleteDocuments(collectionName: CollectionName, ids: string[], traceId?: string): Promise<void> {
+        if (!this.enabled) return;
         if (ids.length === 0) return;
+        
         await sql`
             DELETE FROM embeddings 
             WHERE collection_name = ${collectionName} 
@@ -72,6 +104,14 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async search(collectionName: CollectionName, query: string, options?: any): Promise<any> {
+        if (!this.enabled) {
+            return {
+                ids: [[]],
+                documents: [[]],
+                metadatas: [[]]
+            };
+        }
+        
         const res = await sql`
             SELECT id, content, metadata 
             FROM embeddings 
@@ -88,6 +128,10 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async searchSimilar(collectionName: CollectionName, queryEmbedding: number[], nResults: number = 10, threshold: number = 0.7, traceId?: string): Promise<VectorSearchResult[]> {
+        if (!this.enabled) {
+            return [];
+        }
+        
         const embeddingStr = `[${queryEmbedding.join(',')}]`;
         
         const res = await sql`
@@ -109,6 +153,14 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async getDocumentsByFilter(collectionName: CollectionName, where: Record<string, any>, limit: number = 1000): Promise<{ ids: string[]; documents: string[]; metadatas: Record<string, any>[] }> {
+        if (!this.enabled) {
+            return {
+                ids: [],
+                documents: [],
+                metadatas: []
+            };
+        }
+        
         const res = await sql`
             SELECT id, content, metadata
             FROM embeddings
@@ -124,6 +176,14 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async getCollectionStats(collectionName: CollectionName, traceId?: string): Promise<{ count: number; metadata: Record<string, any>; name: string; }> {
+        if (!this.enabled) {
+            return {
+                count: 0,
+                metadata: {},
+                name: collectionName
+            };
+        }
+        
         const res = await sql`
             SELECT COUNT(*) as count 
             FROM embeddings 
@@ -137,6 +197,10 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async getAllCollectionsStats(): Promise<any[]> {
+        if (!this.enabled) {
+            return [];
+        }
+        
         const res = await sql`
             SELECT collection_name, COUNT(*) as count
             FROM embeddings
@@ -150,6 +214,7 @@ export class PGVectorAdapter implements IVectorDB {
     }
 
     async clearAllCollections(): Promise<void> {
+        if (!this.enabled) return;
         await sql`TRUNCATE TABLE embeddings;`;
     }
 }

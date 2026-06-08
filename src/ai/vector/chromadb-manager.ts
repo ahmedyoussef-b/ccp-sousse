@@ -7,6 +7,17 @@ import { chromaDBAudit } from '../../lib/logger/chromadb-audit';
 import { IVectorDB, VectorDocument, VectorSearchResult } from './IVectorDB';
 
 // ============================================
+// VÉRIFICATION VERCEL - DÉSACTIVATION
+// ============================================
+
+const isChromaDBDisabled = (): boolean => {
+  // Sur Vercel, on désactive ChromaDB (utiliser SQLite)
+  if (process.env.VERCEL === '1') return true;
+  if (process.env.DISABLE_CHROMADB === 'true') return true;
+  return false;
+};
+
+// ============================================
 // CONFIGURATION MÉMOIRE BASSE
 // ============================================
 
@@ -83,11 +94,12 @@ function logError(message: string, error?: any, data?: Record<string, any>): voi
 
 export class ChromaDBManager implements IVectorDB {
     private static instance: ChromaDBManager;
-    private client: ChromaClient;
-    private embeddingFunction: IEmbeddingFunction;
+    private client: ChromaClient | null = null;
+    private embeddingFunction: IEmbeddingFunction | null = null;
     private collections: Map<CollectionName, Collection> = new Map();
     private initialized: boolean = false;
     private embeddingDimension: number | null = null;
+    private enabled: boolean = true;
 
     private cbFailures = 0;
     private cbOpenUntil = 0;
@@ -101,7 +113,41 @@ export class ChromaDBManager implements IVectorDB {
     
     private cleanupTimer: NodeJS.Timeout | null = null;
 
+    private constructor() {
+        // Vérifier si ChromaDB doit être désactivé
+        if (isChromaDBDisabled()) {
+            console.log('[ChromaDBManager] ⚠️ Désactivé sur Vercel (fallback SQLite)');
+            console.log('[ChromaDBManager] 💡 Utilisation des services SQLite comme fallback');
+            this.enabled = false;
+            return;
+        }
+        
+        const urlString = (process.env.CHROMADB_URL || 'http://127.0.0.1:8000').trim();
+        try {
+            this.client = new ChromaClient({
+                path: urlString
+            });
+            logInfo(`Client configuré pour ${urlString}`);
+        } catch (e) {
+            logError('Erreur parsing CHROMADB_URL, fallback sur http://127.0.0.1:8000', e);
+            this.client = new ChromaClient({
+                path: 'http://127.0.0.1:8000'
+            });
+        }
+        this.embeddingFunction = getEmbeddingFunction();
+        
+        this.startCleanupTimer();
+    }
+
+    static getInstance(): ChromaDBManager {
+        if (!ChromaDBManager.instance) {
+            ChromaDBManager.instance = new ChromaDBManager();
+        }
+        return ChromaDBManager.instance;
+    }
+
     private isCircuitOpen(): boolean {
+        if (!this.enabled) return true;
         if (this.cbFailures < this.CB_THRESHOLD) return false;
         if (Date.now() > this.cbOpenUntil) {
             logInfo('Circuit HALF-OPEN — tentative de reconnexion ChromaDB...');
@@ -124,6 +170,7 @@ export class ChromaDBManager implements IVectorDB {
     }
 
     private startCleanupTimer(): void {
+        if (!this.enabled) return;
         if (this.cleanupTimer) return;
         this.cleanupTimer = setInterval(() => {
             this.cleanupCache();
@@ -138,6 +185,7 @@ export class ChromaDBManager implements IVectorDB {
     }
 
     private cleanupCache(): void {
+        if (!this.enabled) return;
         const beforeSize = this.queryCache.size;
         const now = Date.now();
         let removedCount = 0;
@@ -168,35 +216,14 @@ export class ChromaDBManager implements IVectorDB {
         }
     }
 
-    private constructor() {
-        const urlString = (process.env.CHROMADB_URL || 'http://127.0.0.1:8000').trim();
-        try {
-            this.client = new ChromaClient({
-                path: urlString
-            });
-            logInfo(`Client configuré pour ${urlString}`);
-        } catch (e) {
-            logError('Erreur parsing CHROMADB_URL, fallback sur http://127.0.0.1:8000', e);
-            this.client = new ChromaClient({
-                path: 'http://127.0.0.1:8000'
-            });
-        }
-        this.embeddingFunction = getEmbeddingFunction();
-        
-        this.startCleanupTimer();
-    }
-
-    static getInstance(): ChromaDBManager {
-        if (!ChromaDBManager.instance) {
-            ChromaDBManager.instance = new ChromaDBManager();
-        }
-        return ChromaDBManager.instance;
-    }
-
     async initialize(): Promise<void> {
+        if (!this.enabled) {
+            console.log('[ChromaDBManager] Initialisation ignorée (désactivé sur Vercel)');
+            return;
+        }
         if (this.initialized) return;
         try {
-            await this.client.heartbeat();
+            await this.client!.heartbeat();
             
             if (!isDimensionDetected()) {
                 logInfo('🔍 Détection automatique de la dimension des embeddings...');
@@ -215,13 +242,18 @@ export class ChromaDBManager implements IVectorDB {
             this.initialized = true;
         } catch (error) {
             logError('ChromaDB initialization failed:', error);
+            this.enabled = false;
             throw error;
         }
     }
 
     async getStatus(): Promise<{ connected: boolean; version?: string; embeddingDimension?: number; error?: string }> {
+        if (!this.enabled) {
+            return { connected: false, error: 'ChromaDB désactivé (fallback SQLite)' };
+        }
+        
         try {
-            const version = await this.client.version();
+            const version = await this.client!.version();
             return { 
                 connected: true, 
                 version,
@@ -233,6 +265,10 @@ export class ChromaDBManager implements IVectorDB {
     }
 
     async getOrCreateCollection(name: CollectionName, traceId?: string): Promise<Collection> {
+        if (!this.enabled) {
+            throw new Error('ChromaDB désactivé sur Vercel');
+        }
+        
         if (this.collections.has(name)) {
             return this.collections.get(name)!;
         }
@@ -244,9 +280,9 @@ export class ChromaDBManager implements IVectorDB {
             logDebug(`Tentative de récupération de la collection: ${actualName} (ID: ${name})`);
             
             const targetDim = (ChromaCollections as any)[name]?.embeddingDimension || 768;
-            let collection = await this.client.getCollection({
+            let collection = await this.client!.getCollection({
                 name: actualName,
-                embeddingFunction: targetDim === getCurrentDimension() ? this.embeddingFunction : undefined
+                embeddingFunction: targetDim === getCurrentDimension() ? this.embeddingFunction! : undefined
             });
             const isCorrect = await this.validateCollectionDimension(collection, targetDim);
             if (!isCorrect) {
@@ -273,6 +309,7 @@ export class ChromaDBManager implements IVectorDB {
     }
 
     private async validateCollectionDimension(collection: Collection, expectedDim?: number): Promise<boolean> {
+        if (!this.enabled) return false;
         try {
             const dim = expectedDim || getCurrentDimension() || 768;
             await collection.query({
@@ -290,6 +327,10 @@ export class ChromaDBManager implements IVectorDB {
     }
 
     private async createNewCollection(name: CollectionName, traceId?: string): Promise<Collection> {
+        if (!this.enabled) {
+            throw new Error('ChromaDB désactivé sur Vercel');
+        }
+        
         const startTime = Date.now();
         const currentDim = (ChromaCollections as any)[name]?.embeddingDimension || getCurrentDimension() || 768;
 
@@ -300,9 +341,9 @@ export class ChromaDBManager implements IVectorDB {
         });
 
         const actualName = ChromaCollections[name]?.name || name;
-        const collection = await this.client.createCollection({
+        const collection = await this.client!.createCollection({
             name: actualName,
-            embeddingFunction: currentDim === getCurrentDimension() ? this.embeddingFunction : undefined,
+            embeddingFunction: currentDim === getCurrentDimension() ? this.embeddingFunction! : undefined,
             metadata: {
                 "hnsw:space": "cosine",
                 "embedding_dimension": currentDim,
@@ -348,6 +389,10 @@ export class ChromaDBManager implements IVectorDB {
         documents: VectorDocument[],
         traceId?: string
     ): Promise<void> {
+        if (!this.enabled) {
+            logDebug('[ChromaDBManager] addDocuments ignoré (désactivé sur Vercel)');
+            return;
+        }
         return this.processBatchAction(collectionName, documents, 'add', traceId);
     }
 
@@ -356,6 +401,10 @@ export class ChromaDBManager implements IVectorDB {
         documents: VectorDocument[],
         traceId?: string
     ): Promise<void> {
+        if (!this.enabled) {
+            logDebug('[ChromaDBManager] upsertDocuments ignoré (désactivé sur Vercel)');
+            return;
+        }
         return this.processBatchAction(collectionName, documents, 'upsert', traceId);
     }
 
@@ -364,6 +413,8 @@ export class ChromaDBManager implements IVectorDB {
         ids: string[],
         traceId?: string
     ): Promise<void> {
+        if (!this.enabled) return;
+        
         const startTime = Date.now();
         
         if (this.isCircuitOpen()) return;
@@ -406,6 +457,8 @@ export class ChromaDBManager implements IVectorDB {
         action: 'add' | 'upsert',
         traceId?: string
     ): Promise<void> {
+        if (!this.enabled) return;
+        
         const startTime = Date.now();
         
         if (!documents.length) return;
@@ -475,6 +528,10 @@ export class ChromaDBManager implements IVectorDB {
     }
 
     async search(collectionName: CollectionName, query: string, options: any = {}): Promise<any> {
+        if (!this.enabled) {
+            return { documents: [], metadatas: [], distances: [], ids: [] };
+        }
+        
         const timeoutMs = options.timeout || 12000;
         
         if (this.isCircuitOpen()) {
@@ -506,65 +563,74 @@ export class ChromaDBManager implements IVectorDB {
         }
     }
 
-  /**
- * 🔥 RECHERCHE PAR SIMILARITÉ VECTORIELLE (pour images)
- */
-async searchSimilar(
-    collectionName: CollectionName,
-    queryEmbedding: number[],
-    nResults: number = 10,
-    threshold: number = 0.7,
-    traceId?: string
-): Promise<VectorSearchResult[]> {
-    if (this.isCircuitOpen()) {
-        logWarn('Circuit ouvert, recherche vectorielle ignorée');
-        return [];
-    }
-    
-    try {
-        const collection = await this.getOrCreateCollection(collectionName, traceId);
-        
-        // 🔥 CORRECTION TYPESCRIPT : Utilisation de include explicite
-        const results = await collection.query({
-            queryEmbeddings: [queryEmbedding],
-            nResults: nResults,
-            include: ['distances' as any, 'metadatas' as any, 'documents' as any]
-        });
-        
-        this.recordSuccess();
-        
-        if (!results?.ids?.[0]?.length) return [];
-        
-        const formattedResults: VectorSearchResult[] = [];
-        for (let i = 0; i < results.ids[0].length; i++) {
-            const distance = results.distances?.[0]?.[i] || 0;
-            const similarity = Math.max(0, 1 - distance);
-            
-            if (similarity < threshold) continue;
-            
-            // 🔥 CORRECTION : Gérer le cas où document peut être null
-            const document = results.documents?.[0]?.[i];
-            
-            formattedResults.push({
-                id: results.ids[0][i] as string,
-                score: similarity,
-                metadata: results.metadatas?.[0]?.[i] || {},
-                document: document || undefined
-            });
+    /**
+     * 🔥 RECHERCHE PAR SIMILARITÉ VECTORIELLE (pour images)
+     */
+    async searchSimilar(
+        collectionName: CollectionName,
+        queryEmbedding: number[],
+        nResults: number = 10,
+        threshold: number = 0.7,
+        traceId?: string
+    ): Promise<VectorSearchResult[]> {
+        if (!this.enabled) {
+            return [];
         }
         
-        return formattedResults;
-    } catch (error) {
-        this.recordFailure();
-        logError(`searchSimilar failed for ${collectionName}:`, error);
-        return [];
+        if (this.isCircuitOpen()) {
+            logWarn('Circuit ouvert, recherche vectorielle ignorée');
+            return [];
+        }
+        
+        try {
+            const collection = await this.getOrCreateCollection(collectionName, traceId);
+            
+            // 🔥 CORRECTION TYPESCRIPT : Utilisation de include explicite
+            const results = await collection.query({
+                queryEmbeddings: [queryEmbedding],
+                nResults: nResults,
+                include: ['distances' as any, 'metadatas' as any, 'documents' as any]
+            });
+            
+            this.recordSuccess();
+            
+            if (!results?.ids?.[0]?.length) return [];
+            
+            const formattedResults: VectorSearchResult[] = [];
+            for (let i = 0; i < results.ids[0].length; i++) {
+                const distance = results.distances?.[0]?.[i] || 0;
+                const similarity = Math.max(0, 1 - distance);
+                
+                if (similarity < threshold) continue;
+                
+                // 🔥 CORRECTION : Gérer le cas où document peut être null
+                const document = results.documents?.[0]?.[i];
+                
+                formattedResults.push({
+                    id: results.ids[0][i] as string,
+                    score: similarity,
+                    metadata: results.metadatas?.[0]?.[i] || {},
+                    document: document || undefined
+                });
+            }
+            
+            return formattedResults;
+        } catch (error) {
+            this.recordFailure();
+            logError(`searchSimilar failed for ${collectionName}:`, error);
+            return [];
+        }
     }
-}
+    
     async getDocumentsByFilter(
         collectionName: CollectionName,
         where: Record<string, any>,
         limit: number = 1000
     ): Promise<{ ids: string[]; documents: string[]; metadatas: Record<string, any>[] }> {
+        if (!this.enabled) {
+            return { ids: [], documents: [], metadatas: [] };
+        }
+        
         try {
             const collection = await this.getOrCreateCollection(collectionName);
             const getArgs: any = { limit };
@@ -588,6 +654,10 @@ async searchSimilar(
         metadata: Record<string, any>;
         name: string;
     }> {
+        if (!this.enabled) {
+            return { count: 0, metadata: {}, name: collectionName };
+        }
+        
         const collection = await this.getOrCreateCollection(collectionName, traceId);
         const count = await collection.count();
         const metadata = await (collection as any).metadata;
@@ -595,6 +665,10 @@ async searchSimilar(
     }
 
     async getAllCollectionsStats(): Promise<any[]> {
+        if (!this.enabled) {
+            return [];
+        }
+        
         const stats = [];
         for (const key of Object.keys(ChromaCollections)) {
             try {
@@ -615,11 +689,13 @@ async searchSimilar(
     }
 
     async collectionExists(_zone: string, collectionName: CollectionName): Promise<boolean> {
+        if (!this.enabled) return false;
+        
         try {
             const actualName = ChromaCollections[collectionName]?.name || collectionName;
-            await this.client.getCollection({
+            await this.client!.getCollection({
                 name: actualName,
-                embeddingFunction: this.embeddingFunction
+                embeddingFunction: this.embeddingFunction!
             });
             return true;
         } catch {
@@ -628,6 +704,8 @@ async searchSimilar(
     }
 
     async clearAllCollections(): Promise<void> {
+        if (!this.enabled) return;
+        
         logInfo('Début du nettoyage de toutes les collections');
         for (const [key, config] of Object.entries(ChromaCollections)) {
             try {
@@ -646,6 +724,8 @@ async searchSimilar(
     }
 
     async deleteCollection(collectionName: CollectionName, traceId?: string): Promise<void> {
+        if (!this.enabled) return;
+        
         const startTime = Date.now();
         
         chromaDBAudit.appToChromaDB('DELETE_COLLECTION', 0, true, {
@@ -655,7 +735,7 @@ async searchSimilar(
         
         try {
             const actualName = ChromaCollections[collectionName]?.name || collectionName;
-            await this.client.deleteCollection({ name: actualName });
+            await this.client!.deleteCollection({ name: actualName });
             this.collections.delete(collectionName);
             this.invalidateCache(collectionName);
             const duration = Date.now() - startTime;
@@ -679,8 +759,10 @@ async searchSimilar(
     }
 
     async listCollections(): Promise<{ name: string }[]> {
+        if (!this.enabled) return [];
+        
         try {
-            const collections = await this.client.listCollections();
+            const collections = await this.client!.listCollections();
             // 🔥 CORRECTION ROBUSTE : Supporte à la fois string[] et Collection[]
             return collections.map((c: any) => ({ name: typeof c === 'string' ? c : c.name }));
         } catch (error) {
@@ -703,6 +785,7 @@ async searchSimilar(
     }
 
     getEmbeddingDimension(): number | null {
+        if (!this.enabled) return 768;
         return this.embeddingDimension || getCurrentDimension();
     }
     
