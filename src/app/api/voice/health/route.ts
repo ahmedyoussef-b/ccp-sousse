@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/voice/health/route.ts
 import { NextResponse } from 'next/server';
 import sttService from '@/lib/services/sttService';

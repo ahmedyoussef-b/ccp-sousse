@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/circuit-mindmap/export/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { mindMapManager } from '@/ai/mindmap/mindmap-manager';

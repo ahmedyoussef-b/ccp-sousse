@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';
 import visionService from '@/lib/services/visionService';

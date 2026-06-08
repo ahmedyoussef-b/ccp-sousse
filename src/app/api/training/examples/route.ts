@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/examples/route.ts
 // API CRUD pour les exemples d'entraînement
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import { DocumentProcessor } from '@/lib/document-manager/document-processor';

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/chat/route.ts
 // Point d'entrée Chat - Version Industrielle 9.0 (RAG + Multi-Provider Router intégré + Support Images + Intent Image + Vision Industrielle)
 // Centrale cycle combiné - Gestion RH, alarmes avancées, assistance terrain pupitres, VISION IA, ROUTEUR LLM + RAG

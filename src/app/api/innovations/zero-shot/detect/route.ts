@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { zeroShotAnomaly } from '@/ai/innovations/01-zero-shot-anomaly';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

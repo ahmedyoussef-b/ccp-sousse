@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/dataset/prepare/route.ts
 // API préparation dataset avec versionnement automatique
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/logs/route.ts
 // API pour consulter les traces
 

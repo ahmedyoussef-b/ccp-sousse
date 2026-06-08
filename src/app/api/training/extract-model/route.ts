@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/extract-model/route.ts
 // API pour extraire le fichier ZIP
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/ollama/status/route.ts
 // API pour vérifier le statut d'Ollama
 

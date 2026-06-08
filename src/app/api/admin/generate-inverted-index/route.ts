@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { invertedIndexService } from '@/ai/search/inverted-index.service';
 import fs from 'fs/promises';

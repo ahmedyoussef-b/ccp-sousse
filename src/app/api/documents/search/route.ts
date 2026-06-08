@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/documents/search/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { ChromaClient } from 'chromadb';

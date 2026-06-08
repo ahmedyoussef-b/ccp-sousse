@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';
 import { chromaDBManager } from '@/ai/vector/chromadb-manager';

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/voice/voices/route.ts
 import { NextResponse } from 'next/server';
 import ttsService from '@/lib/services/ttsService';

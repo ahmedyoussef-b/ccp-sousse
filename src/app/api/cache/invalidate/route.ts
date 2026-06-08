@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { predictiveCache } from '@/ai/orchestration/innovations/predictive-cache';
 import { semanticCacheService } from '@/ai/cache/semantic-cache';

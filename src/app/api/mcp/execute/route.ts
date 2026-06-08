@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * @fileOverview API Route MCP - Pont entre le frontend et le service MCP
  */

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/vision/suggestions/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { autoFolderClassifier } from '@/ai/innovations/04-auto-folder-classifier';

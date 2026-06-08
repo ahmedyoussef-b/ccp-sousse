@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/voice/stt/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';

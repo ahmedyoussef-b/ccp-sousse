@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { PanoramaMode, BlendingStrategy } from '@/ai/innovations/types';
 import { NextRequest, NextResponse } from 'next/server';
 

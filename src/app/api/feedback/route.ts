@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/feedback/route.ts
 /**
  * @fileOverview API pour enregistrer le feedback utilisateur

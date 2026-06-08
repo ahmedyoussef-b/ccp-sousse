@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { dualConsensusVision } from '@/ai/innovations/03-dual-consensus-vision';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

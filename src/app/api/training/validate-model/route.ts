@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/validate-model/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 

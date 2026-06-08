@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/rag-index/route.ts
 // API pour indexer le dataset de Collecte Manuelle de Q/R dans ChromaDB (RAG)
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { getCurrentActiveModel, listAllModels } from '@/ai/training/model-registry';
 import { TrainingDataCollector } from '@/ai/training/data-collector';
 import { getLearningStats } from '@/ai/learning/analytics';

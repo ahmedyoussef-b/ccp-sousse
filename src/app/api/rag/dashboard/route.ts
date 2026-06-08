@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/rag/dashboard/route.ts
 import { NextResponse } from 'next/server';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

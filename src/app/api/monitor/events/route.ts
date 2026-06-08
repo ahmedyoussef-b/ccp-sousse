@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * @fileOverview SSE Route - Streaming des événements d'action IA.
  */

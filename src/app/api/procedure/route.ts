@@ -1,10 +1,12 @@
-ï»¿// app/api/procedure/route.ts
+export const runtime = 'edge';
+
+// app/api/procedure/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { getProcedureHelp } from '@/ai/flows/procedure-help-flow';
 
-// Sessions temporaires (Map en mÃ©moire)
+// Sessions temporaires (Map en mémoire)
 const sessions = new Map();
 
 export async function POST(request: NextRequest) {
@@ -12,7 +14,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action, sessionId, problem } = body;
     
-    // Charger la procÃ©dure (plus dynamique basÃ© sur l'ID si fourni, sinon fallback)
+    // Charger la procédure (plus dynamique basé sur l'ID si fourni, sinon fallback)
     const procedureId = body.procedureId || 'demarrage-chaudiere';
     const procedurePath = path.join(process.cwd(), `data/procedures/${procedureId}.json`);
     
@@ -20,12 +22,12 @@ export async function POST(request: NextRequest) {
     try {
       procedureData = await fs.readFile(procedurePath, 'utf-8');
     } catch (e) {
-      // Fallback si l'ID spÃ©cifique n'existe pas
+      // Fallback si l'ID spécifique n'existe pas
       try {
         const defaultPath = path.join(process.cwd(), 'data/procedures/demarrage-chaudiere.json');
         procedureData = await fs.readFile(defaultPath, 'utf-8');
       } catch (err) {
-        return NextResponse.json({ error: 'Fichier de procÃ©dure introuvable' }, { status: 404 });
+        return NextResponse.json({ error: 'Fichier de procédure introuvable' }, { status: 404 });
       }
     }
     
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
           procedure: procedure.procedure,
           steps: procedure.steps.map((s: any) => ({
             number: s.number,
-            description: s.instruction, // Mapping pour compatibilitÃ© Chat.tsx
+            description: s.instruction, // Mapping pour compatibilité Chat.tsx
             safetyNote: s.safetyWarning,
             verification: s.verificationMethod,
             expectedValue: s.expectedValue
@@ -68,7 +70,7 @@ export async function POST(request: NextRequest) {
       case 'next':
         const session = sessions.get(sessionId);
         if (!session) {
-          return NextResponse.json({ error: 'Session inexistante ou expirÃ©e' }, { status: 404 });
+          return NextResponse.json({ error: 'Session inexistante ou expirée' }, { status: 404 });
         }
         
         session.completedSteps.push({
@@ -110,10 +112,10 @@ export async function POST(request: NextRequest) {
         
         try {
           const helpResult = await getProcedureHelp({
-            userName: 'OpÃ©rateur',
+            userName: 'Opérateur',
             stepTitle: step.title,
             instruction: step.instruction,
-            problem: problem || 'Besoin de prÃ©cisions techniques',
+            problem: problem || 'Besoin de précisions techniques',
             expectedValue: step.expectedValue,
             severity: 'medium',
             model: 'phi:2.7b',
@@ -127,7 +129,7 @@ export async function POST(request: NextRequest) {
         } catch (genkitError) {
           console.error('[API][PROCEDURE] Genkit Help Error:', genkitError);
           return NextResponse.json({ 
-            help: "DÃ©solÃ©, je n'arrive pas Ã  analyser ce problÃ¨me pour le moment. RÃ©fÃ©rez-vous au manuel technique.",
+            help: "Désolé, je n'arrive pas à analyser ce problème pour le moment. Référez-vous au manuel technique.",
             step: step 
           });
         }

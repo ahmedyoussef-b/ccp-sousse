@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { autoFolderClassifier } from '@/ai/innovations/04-auto-folder-classifier';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

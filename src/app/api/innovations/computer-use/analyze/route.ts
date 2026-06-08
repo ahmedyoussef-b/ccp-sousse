@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { computerUseAgent } from '@/ai/innovations/02-computer-use-agent';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

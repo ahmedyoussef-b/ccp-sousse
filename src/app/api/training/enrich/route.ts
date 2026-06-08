@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/training/enrich/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';

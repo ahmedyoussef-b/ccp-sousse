@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * @fileOverview API pour déclencher l'entraînement Colab
  */

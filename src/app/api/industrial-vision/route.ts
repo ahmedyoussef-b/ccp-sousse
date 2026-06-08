@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/industrial-vision/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';

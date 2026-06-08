@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 import * as fs from 'fs';
 import { DEFAULT_FILE, analyzeContextAndLinks, writeExample, TrainingExample } from '../store';

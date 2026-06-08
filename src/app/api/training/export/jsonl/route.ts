@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/export/jsonl/route.ts
 // API pour exporter le dataset au format JSONL
 

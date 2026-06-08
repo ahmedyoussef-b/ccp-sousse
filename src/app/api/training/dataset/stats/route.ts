@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/dataset/stats/route.ts
 // API pour les statistiques du dataset
 

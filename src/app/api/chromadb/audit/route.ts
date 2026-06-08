@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/chromadb/audit/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { chromaDBAudit } from '@/lib/logger/chromadb-audit';

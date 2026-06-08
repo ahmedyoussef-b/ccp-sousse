@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/vision/image-source/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import visionService from '@/lib/services/visionService';

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/admin/collections/route.ts
 // API pour gérer les collections
 

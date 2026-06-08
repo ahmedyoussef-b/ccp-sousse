@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/vision/register/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';

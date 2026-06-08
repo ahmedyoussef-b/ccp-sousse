@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 /**
  * @fileOverview API Dashboard d'Apprentissage Consolidé - Innovation Elite 32.

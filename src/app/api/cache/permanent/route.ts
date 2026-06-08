@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/cache/permanent/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { SQLiteCore } from '@/ai/core/sqlite';

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/groq/status/route.ts
 import { NextResponse } from 'next/server';
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 import { zeroShotAnomaly } from '@/ai/innovations/01-zero-shot-anomaly';
 import { computerUseAgent } from '@/ai/innovations/02-computer-use-agent';

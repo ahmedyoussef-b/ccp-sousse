@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextResponse } from 'next/server';
 import { SQLiteCore } from '@/ai/core/sqlite/manager';
 import { localEmbeddingService } from '@/ai/cache/local-embeddings';

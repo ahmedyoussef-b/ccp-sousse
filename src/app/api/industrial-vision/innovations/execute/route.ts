@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/industrial-vision/innovations/execute/route.ts
 //
 // Moteur d'exécution réel des 40 Innovations IA

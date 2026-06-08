@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/download-model/route.ts
 import { NextResponse } from 'next/server';
 import * as fs from 'fs';

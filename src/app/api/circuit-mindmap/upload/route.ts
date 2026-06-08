@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/circuit-mindmap/upload/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { mindMapParser } from '@/ai/mindmap/mindmap-parser';

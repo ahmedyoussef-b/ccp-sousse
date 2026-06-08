@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/circuit-mindmap/list/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { mindMapCircuitBinder } from '@/ai/mindmap/mindmap-circuit-binder';

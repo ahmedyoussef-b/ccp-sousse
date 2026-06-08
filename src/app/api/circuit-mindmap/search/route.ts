@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/circuit-mindmap/search/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { mindMapRagBridge } from '@/ai/mindmap/mindmap-rag-bridge';

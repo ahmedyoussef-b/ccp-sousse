@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * @fileOverview API Dashboard ML - Innovation Elite 32.
  * Fournit une vue d'ensemble du pipeline ML : Entraînement, Inférence et Recommandations.

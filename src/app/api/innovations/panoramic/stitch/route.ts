@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { panoramicStitching } from '@/ai/innovations/07-panoramic-stitching';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

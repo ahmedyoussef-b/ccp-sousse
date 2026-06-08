@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/import-ollama/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { exec } from 'child_process';

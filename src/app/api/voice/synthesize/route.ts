@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import ttsService from '@/lib/services/ttsService';
 import { cleanTextForTTS } from '@/lib/utils/textCleaner';

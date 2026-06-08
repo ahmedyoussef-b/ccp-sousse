@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { hybridVisionSearch } from '@/ai/innovations/05-hybrid-vision-search';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

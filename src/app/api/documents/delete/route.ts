@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/documents/delete/route.ts
 /**
  * @fileOverview API Route /api/documents/delete - Suppression industrielle robuste.

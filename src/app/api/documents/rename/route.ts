@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/documents/rename/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { fileService } from '@/lib/document-manager/file-service';

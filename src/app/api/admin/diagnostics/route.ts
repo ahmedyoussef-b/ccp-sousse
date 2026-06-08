@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/admin/diagnostics/route.ts
 import { NextResponse, NextRequest } from 'next/server';
 import { ChromaDBManager } from '@/ai/vector/chromadb-manager';

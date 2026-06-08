@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/innovations/part-matching/match-detail/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, unlink } from 'fs/promises';

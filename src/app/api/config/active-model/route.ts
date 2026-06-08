@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/config/active-model/route.ts
 // API pour gérer le modèle actif dans l'application
 

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { confidenceFeedback } from '@/ai/innovations/08-confidence-feedback';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

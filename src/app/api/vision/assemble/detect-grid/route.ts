@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/vision/assemble/detect-grid/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import visionService from '@/lib/services/visionService';

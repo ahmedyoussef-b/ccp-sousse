@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * @fileOverview API de validation des chunks sans indexation
  * @version 1.0.0

@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/documents/tree/route.ts
 import { NextResponse } from 'next/server';
 import { fileService } from '@/lib/document-manager/file-service';

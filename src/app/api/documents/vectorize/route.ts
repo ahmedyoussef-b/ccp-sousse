@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { DocumentProcessor } from '@/lib/document-manager/document-processor';
 import { ZoneType, ZONES_CONFIG } from '@/ai/vector/chromadb-schema';

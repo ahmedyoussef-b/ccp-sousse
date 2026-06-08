@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/llm-router/status/route.ts
 import { NextResponse } from 'next/server';
 import { getLLMHealthStatus } from '@/ai/providers/llm-router';

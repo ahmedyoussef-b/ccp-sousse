@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/feedback-alerts/route.ts
 // app/api/feedback-alerts/route.ts
 import { NextRequest, NextResponse } from 'next/server';

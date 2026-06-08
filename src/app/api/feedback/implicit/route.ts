@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/feedback/implicit/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { SQLiteCore } from '@/ai/core/sqlite';

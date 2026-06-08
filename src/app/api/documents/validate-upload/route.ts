@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 /**
  * @fileOverview API de validation par upload (fichier temporaire)
  * @version 1.0.0

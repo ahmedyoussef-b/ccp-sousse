@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 /**
  * @fileOverview Ingest API Route - Phase 1 de l'Architecture Elite 32.

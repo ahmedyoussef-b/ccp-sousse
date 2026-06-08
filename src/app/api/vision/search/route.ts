@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/vision/search/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, unlink } from 'fs/promises';

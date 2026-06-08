@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { fewShotDefectTrainer } from '@/ai/innovations/06-few-shot-defect-trainer';
 import { getSQLiteCore } from '@/ai/core/sqlite/manager';

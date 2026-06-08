@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/circuit-mindmap/sync-parameter/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getSQLiteCore } from '@/ai/core/sqlite';

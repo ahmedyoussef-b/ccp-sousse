@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/ollama/models/route.ts
 // API pour lister les modèles Ollama
 

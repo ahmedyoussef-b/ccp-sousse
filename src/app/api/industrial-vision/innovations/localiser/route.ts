@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // src/app/api/industrial-vision/innovations/localiser/route.ts
 //
 // API dédiée — Innovation #1 : Indexation texte → Localisation

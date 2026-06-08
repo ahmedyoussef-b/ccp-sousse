@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 // app/api/training/upload-dataset/route.ts
 // Version corrigée avec meilleure gestion des erreurs
 

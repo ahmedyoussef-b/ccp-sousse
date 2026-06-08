@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 /**
  * @fileOverview Agent API Route - Innovation Elite 32.
