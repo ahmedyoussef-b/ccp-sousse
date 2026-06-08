@@ -1,9 +1,9 @@
 // src/ai/providers/llm-router.ts
 /**
  * Routeur LLM unifié - Fallback automatique multi-provider
- * @version 1.5.0
- * @lastUpdated 2026-04-21
- * @changes Support des images + Intégration ImageIntentAnalyzer + Filtrage par pertinence + Recherche fiable
+ * @version 1.6.0
+ * @lastUpdated 2026-06-08
+ * @changes Support Vercel + Mode dégradé Groq prioritaire
  */
 
 import { FALLBACK_ORDER, ROUTER_CONFIG, getProviderConfig } from '@/ai/config/llm-config';
@@ -23,6 +23,16 @@ import llmCache from '@/cache/llm-cache';
 
 // 🔥 Import de l'analyseur d'intention image
 import { imageIntentAnalyzer, ImageIntentType } from '@/ai/query-intent-analyzer';
+
+// ============================================================================
+// DÉTECTION VERCEL
+// ============================================================================
+
+const IS_VERCEL = process.env.VERCEL === '1';
+
+if (IS_VERCEL) {
+  console.log('[LLM-ROUTER] 🚀 Mode Vercel détecté - Utilisation prioritaire de Groq');
+}
 
 // ============================================================================
 // TYPES
@@ -465,6 +475,95 @@ export async function callLLMRouter(options: LLMRouterOptions): Promise<LLMRoute
   if (opts.preferLocal) console.log(`[LLM-ROUTER] 🏠 Mode local prioritaire`);
   console.log(`${'═'.repeat(70)}`);
 
+  // ============================================
+  // 🔥 MODE VERCEL : Utiliser Groq directement
+  // ============================================
+  if (IS_VERCEL) {
+    console.log('[LLM-ROUTER] 🔥 Mode Vercel - Utilisation directe de Groq');
+    
+    if (process.env.GROQ_API_KEY) {
+      try {
+        const response = await callGroq(opts.prompt, {
+          maxTokens: opts.maxTokens,
+          temperature: opts.temperature
+        });
+        
+        const duration = Date.now() - startTime;
+        const tokenCount = estimateTokens(response);
+        
+        console.log(`[LLM-ROUTER] ✅ Succès Groq sur Vercel (${formatDuration(duration)})`);
+        
+        // Sauvegarder dans le cache
+        if (!opts.skipCache && ROUTER_CONFIG.enableCache) {
+          await llmCache.set(opts.prompt, opts.type, 'groq', response);
+        }
+        
+        llmUsageTracker.recordSuccess('groq', tokenCount);
+        
+        return {
+          success: true,
+          content: response,
+          provider: 'groq',
+          model: process.env.GROQ_MODEL || 'mixtral-8x7b-32768',
+          duration,
+          tokenCount,
+          fromCache: false,
+          fallbackChain: ['groq'],
+          imageIntent: {
+            type: 'none',
+            shouldDisplayImage: false,
+            shouldSuggestImage: false,
+            confidence: 0
+          }
+        };
+      } catch (error: any) {
+        console.error('[LLM-ROUTER] ❌ Erreur Groq sur Vercel:', error.message);
+        llmUsageTracker.recordFailure('groq', error.message.includes('rate limit'));
+        
+        return {
+          success: false,
+          content: `⚠️ Désolé, une erreur est survenue. Veuillez réessayer.\n\nDétail: ${error.message}`,
+          provider: 'error',
+          model: 'none',
+          duration: Date.now() - startTime,
+          tokenCount: 0,
+          fromCache: false,
+          fallbackChain: [],
+          error: error.message,
+          imageIntent: {
+            type: 'none',
+            shouldDisplayImage: false,
+            shouldSuggestImage: false,
+            confidence: 0
+          }
+        };
+      }
+    } else {
+      console.error('[LLM-ROUTER] ❌ GROQ_API_KEY manquante sur Vercel');
+      return {
+        success: false,
+        content: '⚠️ Service LLM non configuré. Veuillez ajouter GROQ_API_KEY dans les variables d\'environnement.',
+        provider: 'none',
+        model: 'none',
+        duration: 0,
+        tokenCount: 0,
+        fromCache: false,
+        fallbackChain: [],
+        error: 'GROQ_API_KEY missing',
+        imageIntent: {
+          type: 'none',
+          shouldDisplayImage: false,
+          shouldSuggestImage: false,
+          confidence: 0
+        }
+      };
+    }
+  }
+
+  // ============================================
+  // MODE LOCAL - CODE ORIGINAL INCHANGÉ
+  // ============================================
+
   // 🔥 Analyser l'intention image avec l'analyseur dédié
   // On utilise la requête originale si disponible pour éviter les hallucinations dues au contexte RAG
   const intentQuery = opts.query || opts.prompt;
@@ -538,7 +637,7 @@ export async function callLLMRouter(options: LLMRouterOptions): Promise<LLMRoute
         shouldDisplayImage: imageIntent.shouldDisplayImage,
         shouldSuggestImage: imageIntent.shouldSuggestImage,
         extractedEntity: imageIntent.extractedEntity,
-        extractedEntities: imageIntent.extractedEntities, // 🔥 AJOUTÉ
+        extractedEntities: imageIntent.extractedEntities,
         confidence: imageIntent.confidence
       }
     };
@@ -779,6 +878,37 @@ export async function* callLLMRouterStream(
   
   console.log(`[LLM-ROUTER] 🌊 Streaming: ${opts.type}`);
 
+  // 🔥 Mode Vercel pour le streaming
+  if (IS_VERCEL && process.env.GROQ_API_KEY) {
+    console.log('[LLM-ROUTER] 🔥 Mode Vercel Streaming - Utilisation de Groq');
+    try {
+      const stream = callGroqStream(opts.prompt, {
+        maxTokens: opts.maxTokens,
+        temperature: opts.temperature
+      });
+      
+      let fullResponse = '';
+      for await (const chunk of stream) {
+        fullResponse += chunk;
+        yield chunk;
+      }
+      
+      const duration = Date.now() - startTime;
+      console.log(`[LLM-ROUTER] ✅ Streaming Groq terminé (${formatDuration(duration)})`);
+      
+      if (ROUTER_CONFIG.enableCache) {
+        await llmCache.set(opts.prompt, opts.type, 'groq', fullResponse);
+      }
+      llmUsageTracker.recordSuccess('groq', estimateTokens(fullResponse));
+      return;
+    } catch (error: any) {
+      console.error('[LLM-ROUTER] ❌ Streaming Groq échoué:', error.message);
+      llmUsageTracker.recordFailure('groq', error.message.includes('rate limit'));
+      yield `⚠️ Erreur de streaming: ${error.message}`;
+      return;
+    }
+  }
+
   // 🔥 Analyser l'intention image
   const intentQuery = opts.query || opts.prompt;
   const imageIntent = imageIntentAnalyzer.analyzeImageIntent(intentQuery);
@@ -886,6 +1016,21 @@ export async function getLLMHealthStatus(): Promise<Record<string, { available: 
   if (healthCache && (now - healthCache.timestamp < HEALTH_CACHE_TTL)) {
     console.log(`[LLM-ROUTER] 💡 Récupération santé depuis le cache (${Math.round((now - healthCache.timestamp)/1000)}s)`);
     return healthCache.data;
+  }
+
+  // Sur Vercel, on simule un statut simplifié
+  if (IS_VERCEL) {
+    const status: Record<string, any> = {};
+    status.groq = { available: !!process.env.GROQ_API_KEY, latency: 0 };
+    status.gemini = { available: !!process.env.GEMINI_API_KEY, latency: 0 };
+    status.cerebras = { available: !!process.env.CEREBRAS_API_KEY, latency: 0 };
+    status.openrouter = { available: !!process.env.OPENROUTER_API_KEY, latency: 0 };
+    status['claude-local'] = { available: false, latency: 0, error: 'Non disponible sur Vercel' };
+    status.ollama = { available: false, latency: 0, error: 'Non disponible sur Vercel' };
+    status.hybrid = { available: false, latency: 0, error: 'Non disponible sur Vercel' };
+    
+    healthCache = { data: status, timestamp: Date.now() };
+    return status;
   }
 
   const providers = buildProviderList();
