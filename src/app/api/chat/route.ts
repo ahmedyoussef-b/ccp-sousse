@@ -74,6 +74,24 @@ import { ChromaDBManager } from '@/ai/vector/chromadb-manager';
 // Type pour les modèles supportés par chat()
 type ModelType = 'gemma2:2b' | 'tinyllama:latest' | 'gemma:2b';
 
+
+
+// ============================================
+// DÉTECTION VERCEL - MODE DÉGRADÉ
+// ============================================
+
+const IS_VERCEL = process.env.VERCEL === '1';
+
+if (IS_VERCEL) {
+  console.log('[CHAT-API] 🚀 Mode Vercel détecté - Utilisation du mode dégradé (LLM cloud via Groq)');
+}
+
+// Helper pour vérifier si un service doit être désactivé
+const isServiceDisabled = (service: string): boolean => {
+  if (IS_VERCEL) return true;
+  if (process.env[`DISABLE_${service}`] === 'true') return true;
+  return false;
+};
 // ============================================
 // VARIABLE POUR L'ANALYSE VISION COURANTE
 // ============================================
@@ -86,6 +104,7 @@ let smartRouter: SmartRouter | null = null;
 let intentAnalyzer: QueryIntentAnalyzer | null = null;
 
 function getSmartRouter() {
+  if (IS_VERCEL) return null; // Désactivé sur Vercel
   if (!smartRouter) {
     try {
       smartRouter = new SmartRouter();
@@ -97,6 +116,7 @@ function getSmartRouter() {
 }
 
 function getIntentAnalyzer() {
+  if (IS_VERCEL) return null; // Désactivé sur Vercel
   if (!intentAnalyzer) {
     try {
       intentAnalyzer = new QueryIntentAnalyzer();
@@ -106,16 +126,27 @@ function getIntentAnalyzer() {
   }
   return intentAnalyzer;
 }
-
 // ============================================
 // FONCTION RAG CORRIGÉE AVEC EXTRACTION D'IMAGES
 // ============================================
-
 /**
  * Récupère le contexte RAG depuis ChromaDB (Version Hybride Multi-Zone: Zones + VISION)
  * Retourne à la fois le contexte texte et les images trouvées
+ * 
+ * ⚠️ Sur Vercel : RAG désactivé (fallback vide)
  */
 async function getRAGContextWithImages(query: string, zones: string[] = ['SHARED'], includeVision: boolean = true): Promise<{ context: string | null; images: any[] }> {
+  // ============================================
+  // DÉSACTIVATION SUR VERCEL
+  // ============================================
+  const IS_VERCEL = process.env.VERCEL === '1';
+  
+  if (IS_VERCEL) {
+    console.log('[RAG-HYBRID] ⚠️ Mode Vercel - RAG désactivé (fallback sans contexte)');
+    return { context: null, images: [] };
+  }
+
+  // Cas spécial pour Ahmed Abbes (RH)
   if (query.toLowerCase().includes('ahmed abbes') || query.toLowerCase().includes('abbes') || query.toLowerCase().includes('chef de bloc tg2')) {
     console.log('[RAG] 🎯 Détection de profil RH : Ahmed Abbes dans getRAGContextWithImages');
     const fs = require('fs');
@@ -279,7 +310,6 @@ async function getRAGContextWithImages(query: string, zones: string[] = ['SHARED
     return { context: null, images: [] };
   }
 }
-
 
 // ============================================
 // VALIDATEURS MÉTIER
@@ -836,6 +866,15 @@ export async function PUT(request: NextRequest) {
 // HANDLER POST PRINCIPAL (avec RAG + Routeur LLM + Support Images + Intent Image + Vision RAG)
 // ============================================
 export async function POST(request: NextRequest) {
+  // ============================================
+  // DÉTECTION VERCEL - MODE DÉGRADÉ
+  // ============================================
+  const IS_VERCEL = process.env.VERCEL === '1';
+  
+  if (IS_VERCEL) {
+    console.log('[CHAT-API] 🚀 Mode Vercel détecté - Utilisation du mode dégradé');
+  }
+
   const startTime = Date.now();
   let body: any;
   try {
@@ -855,6 +894,76 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Requête invalide. Veuillez fournir un message.' }, { status: 400 });
       }
 
+      // ============================================
+      // MODE DÉGRADÉ VERCEL - RÉPONSE SIMPLE SANS RAG
+      // ============================================
+      if (IS_VERCEL) {
+        console.log('[CHAT-API] ⚠️ Mode Vercel dégradé - Réponse sans RAG ni analyse complexe');
+        
+        // Vérifier si GROQ_API_KEY est configurée
+        const hasGroqKey = !!process.env.GROQ_API_KEY;
+        
+        if (!hasGroqKey) {
+          // Réponse statique si pas de clé API
+          const answer = `⚠️ **Service en mode dégradé sur Vercel**
+
+L'instance Vercel ne dispose pas de toutes les ressources nécessaires (ChromaDB, Ollama).
+
+**Pour des réponses complètes :**
+- Utilisez la version locale avec \`npm run dev\`
+- Configurez une clé API Groq : \`GROQ_API_KEY\`
+
+**Message reçu :** "${rawMessage.substring(0, 100)}"
+
+🔧 Tapez \`/help\` pour voir les commandes disponibles.`;
+          
+          return NextResponse.json({
+            answer,
+            confidence: 0.8,
+            suggestions: ['/help', '/health', 'Comment utiliser l\'application?'],
+            metadata: { mode: 'vercel_degraded', fallback: true },
+            imageIntent: { type: 'none', shouldDisplayImage: false, shouldSuggestImage: false, confidence: 0 }
+          });
+        }
+        
+        // Si GROQ est configuré, on fait un appel simple
+        try {
+          const { callLLMRouter } = await import('@/ai/providers/llm-router');
+          const routerResult = await callLLMRouter({
+            prompt: rawMessage,
+            query: rawMessage,
+            type: 'response',
+            maxTokens: 500,
+            temperature: 0.3,
+            skipCache: false,
+            forceProvider: 'groq',
+            bypassRateLimit: false,
+            preferLocal: false
+          });
+          
+          return NextResponse.json({
+            answer: routerResult.content,
+            confidence: routerResult.success ? 0.85 : 0.5,
+            suggestions: ['/help', '/health'],
+            metadata: { mode: 'vercel', provider: routerResult.provider, fallback: false },
+            imageIntent: { type: 'none', shouldDisplayImage: false, shouldSuggestImage: false, confidence: 0 }
+          });
+        } catch (llmError) {
+          console.error('[CHAT-API] Erreur LLM sur Vercel:', llmError);
+          return NextResponse.json({
+            answer: `⚠️ Erreur de connexion au service LLM. Veuillez vérifier la configuration GROQ_API_KEY.\n\nMessage: ${rawMessage.substring(0, 100)}`,
+            confidence: 0.3,
+            suggestions: ['/help', '/health'],
+            metadata: { mode: 'vercel_error', fallback: true },
+            imageIntent: { type: 'none', shouldDisplayImage: false, shouldSuggestImage: false, confidence: 0 }
+          });
+        }
+      }
+
+      // ============================================
+      // CODE ORIGINAL POUR LE MODE LOCAL (inchangé à partir d'ici)
+      // ============================================
+      
       // 🤝 RÉPONSE INSTANTANÉE POUR LES SALUTATIONS (évite les pipelines inutiles)
       const greetingMatch = rawMessage.trim().match(/^(bonjour|bonsoir|salut|coucou|hello|hi|hey|merci|au revoir)[\s\!\.\?]*$/i);
       if (greetingMatch) {
@@ -904,7 +1013,6 @@ export async function POST(request: NextRequest) {
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
       // ========== ÉTAPE 0 : CACHE SÉMANTIQUE (DragonMemory) ==========
-      // Si la requête est identique ou très proche sémantiquement, on répond instantanément.
       try {
         const cachedResponse = await semanticCacheService.find(message);
         if (cachedResponse && body._useCache !== false) {
@@ -1034,7 +1142,6 @@ export async function POST(request: NextRequest) {
         },
         '/diagnose': async (msg) => {
           const query = msg.replace('/diagnose', '').trim();
-          // Pour /diagnose, on a besoin d'une image. On indique à l'utilisateur.
           if (!query || query === '') {
             return { answer: '🩺 **Mode Diagnostic activé.** Veuillez joindre une image à analyser avec votre prochain message. Je pourrai alors détecter les anomalies, l\'état des équipements et les problèmes potentiels.' };
           }
@@ -1100,7 +1207,6 @@ export async function POST(request: NextRequest) {
             metadata: { mode: 'slash_command', traceId }
           };
           
-          // Suggestion et contexte
           if (!responseData.suggestions || responseData.suggestions.length === 0) {
             responseData.suggestions = generateSuggestions({ category: 'general' });
           }
@@ -1115,32 +1221,27 @@ export async function POST(request: NextRequest) {
           return NextResponse.json(responseData, { status: 200 });
         }
       }
-      // ============================================
-      // FIN DU SYSTÈME DE COMMANDES SLASH
-      // ============================================
 
       try {
         // ========== ÉTAPE 0.5 : RECHERCHE INTELLIGENTE LOCALISATION COMPOSANTS PUPITRE ==========
-      // Si la requête concerne un bouton/vanne/organe/composant, on cherche dans la banque d'images
-      // et on remonte vers le pupitre global pour contextualiser précisément la réponse
-      let componentLocationContext: string | null = null;
-      let componentLocationImages: any[] = [];
+        let componentLocationContext: string | null = null;
+        let componentLocationImages: any[] = [];
 
-      if (isComponentLocalizationQuery(message)) {
-        console.log('[COMPONENT-SEARCH] 🧩 Requête de localisation de composant détectée');
-        try {
-          const componentResult = await searchComponentWithHierarchy(message);
-          if (componentResult.found && componentResult.contextText) {
-            componentLocationContext = componentResult.contextText;
-            componentLocationImages = componentResult.images;
-            console.log(`[COMPONENT-SEARCH] ✅ Contexte hiérarchique injecté: ${componentResult.patches.length} composants, ${componentResult.images.length} images`);
+        if (isComponentLocalizationQuery(message)) {
+          console.log('[COMPONENT-SEARCH] 🧩 Requête de localisation de composant détectée');
+          try {
+            const componentResult = await searchComponentWithHierarchy(message);
+            if (componentResult.found && componentResult.contextText) {
+              componentLocationContext = componentResult.contextText;
+              componentLocationImages = componentResult.images;
+              console.log(`[COMPONENT-SEARCH] ✅ Contexte hiérarchique injecté: ${componentResult.patches.length} composants, ${componentResult.images.length} images`);
+            }
+          } catch (compErr: any) {
+            console.warn('[COMPONENT-SEARCH] Erreur (non-bloquante):', compErr.message);
           }
-        } catch (compErr: any) {
-          console.warn('[COMPONENT-SEARCH] Erreur (non-bloquante):', compErr.message);
         }
-      }
 
-      // 1. INTÉGRATION VISION RAG GLOBALE (si une analyse est disponible ET pertinente)
+        // 1. INTÉGRATION VISION RAG GLOBALE (si une analyse est disponible ET pertinente)
         if (shouldUseVisionService) {
           try {
             const visionRAG = getVisionRAGService();
@@ -1161,11 +1262,9 @@ export async function POST(request: NextRequest) {
 
         // ========== TOOLFORMER ACTIONS (Calcul, Résumé Rapide, etc) ==========
         if (mode === 'auto' || mode === 'smart') {
-          // On évalue si un outil peut répondre plus efficacement (calcul mathématique, résumé, etc)
           const toolDecision = await toolformer.decideAction(message, visionContext || '');
           if (toolDecision.type === 'use_tool' && toolDecision.tool) {
             console.log(`[TOOLFORMER] Outil sélectionné : ${toolDecision.tool} avec confiance ${toolDecision.confidence}`);
-            // On exécute l'outil
             const toolResult = await toolformer.executeTool(toolDecision.tool, toolDecision.params);
             if (toolResult.success) {
               const toolOutput = typeof toolResult.result === 'object' ? JSON.stringify(toolResult.result, null, 2) : String(toolResult.result);
@@ -1185,15 +1284,12 @@ export async function POST(request: NextRequest) {
               success = true;
               toolformerHandled = true;
             } else {
-              // Si l'outil échoue, on continue vers le routeur normal
               console.warn(`[TOOLFORMER] Échec de l'outil ${toolDecision.tool}, basculement vers LLM Router.`);
             }
           }
         }
 
         if (!toolformerHandled && (mode === 'auto' || mode === 'agent')) {
-          // Si le Toolformer n'a pas répondu et que le mode est auto/agent, 
-          // on vérifie si une mission agentique autonome est préférable
           const isAgenticNeeded = mode === 'agent' || (mode === 'auto' && message.length > 50 && /organise|planifie|exécute/i.test(message));
           
           if (isAgenticNeeded) {
@@ -1214,13 +1310,11 @@ export async function POST(request: NextRequest) {
               success = true;
             } catch (agentError) {
               console.error("[AGENT] Échec de la mission:", agentError);
-              // On laisse toolformerHandled = false pour tomber sur le RAG/Router
             }
           }
         }
 
         if (!toolformerHandled) {
-          // ========== ASSISTANCE TERRAIN (pupitres) ==========
           if (validated.assistance_terrain) {
             const at = validated.assistance_terrain;
             if (at.type_requete === 'capture_pupitre' && at.capture) {
@@ -1236,170 +1330,151 @@ export async function POST(request: NextRequest) {
               throw new Error('Type de requête assistance terrain non supporté');
             }
           }
-          // ========== ALARMES ==========
           else if (validated.alarmes?.requete_type === 'traiter_alarme' && validated.alarmes.alarme) {
             const alarme = validated.alarmes.alarme;
             const reponse = `Alarme ${alarme.code} (${alarme.degre_urgence}) : ${alarme.consigne_immediate}`;
             responseData = { reponse, metadata: { mode: 'alarme', traceId } };
           }
-          // ========== RH ==========
           else if (validated.gestion_rh?.requete_type === 'demande_conge' && validated.gestion_rh.absence) {
             responseData = { message: 'Demande de congé enregistrée', metadata: { mode: 'rh', traceId } };
           }
-          // ========== MODES STANDARD AVEC ROUTEUR GENERIC LLM + RAG + VISION RAG ==========
           else if (useRouter) {
-          console.log(`[CHAT API] Utilisation du routeur LLM (RAG=${useRAG}, zone=${ragZones}, preferLocal=${preferLocal})`);
-          
-          let finalPrompt = message;
-          let ragImages: any[] = [];
-          
-          // 2. RAG CLASSIQUE (ChromaDB) si demandé
-          if (useRAG) {
-            console.log(`[RAG] Recherche de contexte pour: "${message.substring(0, 50)}..."`);
-            const ragResult = await getRAGContextWithImages(message, ragZones, shouldSearchVisionCollection);
+            console.log(`[CHAT API] Utilisation du routeur LLM (RAG=${useRAG}, zone=${ragZones}, preferLocal=${preferLocal})`);
             
-            // 🔍 ENRICHISSEMENT VISION INTELLIGENT (Exploitation optimale des fonctionnalités)
-            let visionEnrichment: any = null;
-            try {
-              const visionIntegration = getVisionIntegrationService();
-              if (visionIntegration.isReady()) {
-                console.log('[VISION-ENRICHMENT] Analyse et enrichissement de la requête...');
-                const enrichmentResult = await visionIntegration.processQuery(message);
-                visionEnrichment = enrichmentResult;
-                
-                // Intégrer l'enrichissement dans le prompt si disponible
-                if (enrichmentResult.enrichment.metadata.enriched) {
-                  console.log(`[VISION-ENRICHMENT] Enrichissement ajouté: ${enrichmentResult.enrichment.visionEnrichment.images?.length || 0} images`);
-                }
-              }
-            } catch (error) {
-              console.error('[VISION-ENRICHMENT] Erreur enrichissement:', error);
-            }
+            let finalPrompt = message;
+            let ragImages: any[] = [];
             
-            if (ragResult.context) {
-              let promptSections = [
-                'Voici des extraits de documents techniques pertinents pour répondre à la question.',
-                '',
-                '=== EXTRATS DOCUMENTS ===',
-                ragResult.context
-              ];
+            if (useRAG) {
+              console.log(`[RAG] Recherche de contexte pour: "${message.substring(0, 50)}..."`);
+              const ragResult = await getRAGContextWithImages(message, ragZones, shouldSearchVisionCollection);
               
-              // 🧩 Injecter le contexte de localisation de composants s'il existe
-              if (componentLocationContext) {
-                promptSections.splice(3, 0, '', '=== BANQUE D\'IMAGES - LOCALISATION COMPOSANTS PUPITRE ===', componentLocationContext);
+              let visionEnrichment: any = null;
+              try {
+                const visionIntegration = getVisionIntegrationService();
+                if (visionIntegration.isReady()) {
+                  console.log('[VISION-ENRICHMENT] Analyse et enrichissement de la requête...');
+                  const enrichmentResult = await visionIntegration.processQuery(message);
+                  visionEnrichment = enrichmentResult;
+                  
+                  if (enrichmentResult.enrichment.metadata.enriched) {
+                    console.log(`[VISION-ENRICHMENT] Enrichissement ajouté: ${enrichmentResult.enrichment.visionEnrichment.images?.length || 0} images`);
+                  }
+                }
+              } catch (error) {
+                console.error('[VISION-ENRICHMENT] Erreur enrichissement:', error);
               }
               
-              // Ajouter l'analyse vision si disponible
-              if (visionContext) {
-                promptSections.push('', '=== ANALYSE VISION INDUSTRIELLE ===', visionContext);
-              }
-              
-              // Ajouter l'enrichissement vision intelligent si disponible
-              if (visionEnrichment?.enrichment.metadata.enriched) {
-                const enrichmentData = visionEnrichment.enrichment.visionEnrichment;
-                promptSections.push('', '=== ENRICHISSEMENT VISION INTELLIGENT ===');
+              if (ragResult.context) {
+                let promptSections = [
+                  'Voici des extraits de documents techniques pertinents pour répondre à la question.',
+                  '',
+                  '=== EXTRATS DOCUMENTS ===',
+                  ragResult.context
+                ];
                 
-                // Ajouter les suggestions d'actions si disponibles
-                if (enrichmentData.suggestions && enrichmentData.suggestions.length > 0) {
-                  promptSections.push('Actions suggérées:');
-                  enrichmentData.suggestions.forEach((suggestion: string) => {
-                    promptSections.push(`- ${suggestion}`);
-                  });
-                }
-                
-                // Ajouter les références d'images si disponibles
-                if (enrichmentData.images && enrichmentData.images.length > 0) {
-                  promptSections.push('', 'Images pertinentes détectées:');
-                  enrichmentData.images.forEach((img: ImageMetadata) => {
-                    promptSections.push(`- ${img.filename}: ${img.description || 'Image disponible'}`);
-                  });
-                }
-                
-                // Ajouter les actions si disponibles
-                if (enrichmentData.actions && enrichmentData.actions.length > 0) {
-                  promptSections.push('', 'Actions disponibles:');
-                  enrichmentData.actions.forEach((action: { label: string; description: string; }) => {
-                    promptSections.push(`- ${action.label}: ${action.description}`);
-                  });
-                }
-              }
-              
-              promptSections.push('', '=== QUESTION ===', message, '', '=== INSTRUCTIONS ===');
-              
-              if (visionContext || visionEnrichment?.enrichment.metadata.enriched) {
-                promptSections.push('Répondez en vous basant sur les extraits ci-dessus et l\'analyse vision si disponible.');
-                promptSections.push('Exploitez pleinement les fonctionnalités vision pour enrichir votre réponse.');
                 if (componentLocationContext) {
-                  promptSections.push('Pour les composants de pupitre: précisez toujours dans quel pupitre global il se trouve, sa position (ligne/colonne, coordonnées) et ses tags/description.');
+                  promptSections.splice(3, 0, '', '=== BANQUE D\'IMAGES - LOCALISATION COMPOSANTS PUPITRE ===', componentLocationContext);
                 }
-              } else {
-                promptSections.push('Répondez en vous basant sur les extraits ci-dessus.');
-                if (componentLocationContext) {
-                  promptSections.push('Vous avez des informations précises de localisation dans la banque d\'images, utilisez-les pour répondre avec précision.');
+                
+                if (visionContext) {
+                  promptSections.push('', '=== ANALYSE VISION INDUSTRIELLE ===', visionContext);
+                }
+                
+                if (visionEnrichment?.enrichment.metadata.enriched) {
+                  const enrichmentData = visionEnrichment.enrichment.visionEnrichment;
+                  promptSections.push('', '=== ENRICHISSEMENT VISION INTELLIGENT ===');
+                  
+                  if (enrichmentData.suggestions && enrichmentData.suggestions.length > 0) {
+                    promptSections.push('Actions suggérées:');
+                    enrichmentData.suggestions.forEach((suggestion: string) => {
+                      promptSections.push(`- ${suggestion}`);
+                    });
+                  }
+                  
+                  if (enrichmentData.images && enrichmentData.images.length > 0) {
+                    promptSections.push('', 'Images pertinentes détectées:');
+                    enrichmentData.images.forEach((img: ImageMetadata) => {
+                      promptSections.push(`- ${img.filename}: ${img.description || 'Image disponible'}`);
+                    });
+                  }
+                  
+                  if (enrichmentData.actions && enrichmentData.actions.length > 0) {
+                    promptSections.push('', 'Actions disponibles:');
+                    enrichmentData.actions.forEach((action: { label: string; description: string; }) => {
+                      promptSections.push(`- ${action.label}: ${action.description}`);
+                    });
+                  }
+                }
+                
+                promptSections.push('', '=== QUESTION ===', message, '', '=== INSTRUCTIONS ===');
+                
+                if (visionContext || visionEnrichment?.enrichment.metadata.enriched) {
+                  promptSections.push('Répondez en vous basant sur les extraits ci-dessus et l\'analyse vision si disponible.');
+                  promptSections.push('Exploitez pleinement les fonctionnalités vision pour enrichir votre réponse.');
+                  if (componentLocationContext) {
+                    promptSections.push('Pour les composants de pupitre: précisez toujours dans quel pupitre global il se trouve, sa position (ligne/colonne, coordonnées) et ses tags/description.');
+                  }
+                } else {
+                  promptSections.push('Répondez en vous basant sur les extraits ci-dessus.');
+                  if (componentLocationContext) {
+                    promptSections.push('Vous avez des informations précises de localisation dans la banque d\'images, utilisez-les pour répondre avec précision.');
+                  }
+                }
+                
+                promptSections.push('Si des visuels sont mentionnés (ex: [IMAGE: image.jpg | ID: id]), parlez-en car ils seront affichés à l\'utilisateur.');
+                
+                finalPrompt = promptSections.join('\n');
+                
+                console.log(`[RAG] Contexte ajouté au prompt (${ragResult.context?.length || 0} caractères)`);
+                
+                ragImages = ragResult.images;
+                if (componentLocationImages.length > 0) {
+                  const existingIds = new Set(ragImages.map((i: any) => i.id));
+                  componentLocationImages.forEach(cImg => {
+                    if (!existingIds.has(cImg.id)) ragImages.push(cImg);
+                  });
+                }
+                if (ragImages.length > 0) {
+                  console.log(`[RAG] ${ragImages.length} image(s) trouvées dans le contexte (dont composants pupitre)`);
                 }
               }
               
-              promptSections.push('Si des visuels sont mentionnés (ex: [IMAGE: image.jpg | ID: id]), parlez-en car ils seront affichés à l\'utilisateur.');
-              
-              finalPrompt = promptSections.join('\n');
-              
-              console.log(`[RAG] Contexte ajouté au prompt (${ragResult.context?.length || 0} caractères)`);
-              
-              ragImages = ragResult.images;
-              // Fusionner avec les images de localisation de composants
-              if (componentLocationImages.length > 0) {
-                const existingIds = new Set(ragImages.map((i: any) => i.id));
-                componentLocationImages.forEach(cImg => {
-                  if (!existingIds.has(cImg.id)) ragImages.push(cImg);
-                });
+              if (!ragResult?.context && ragResult?.images?.length > 0) {
+                ragImages = ragResult.images;
+                if (componentLocationImages.length > 0) {
+                  const existingIds = new Set(ragImages.map((i: any) => i.id));
+                  componentLocationImages.forEach(cImg => {
+                    if (!existingIds.has(cImg.id)) ragImages.push(cImg);
+                  });
+                }
+                console.log(`[RAG-FILENAME] ${ragImages.length} image(s) trouvée(s) par correspondance de nom de fichier`);
+                
+                if (ragImages.length > 0) {
+                  const imageRefs = ragImages.map(img =>
+                    `[IMAGE: ${img.filename} | ID: ${img.id}]`
+                  ).join('\n');
+                  finalPrompt = `${imageRefs}\n\n=== QUESTION ===\n${message}\n\n=== INSTRUCTIONS ===\nL'utilisateur demande à voir l'image mentionnée. Elle sera affichée directement.`;
+                }
               }
-              if (ragImages.length > 0) {
-                console.log(`[RAG] ${ragImages.length} image(s) trouvées dans le contexte (dont composants pupitre)`);
-              }
-            }
-            
-            // 🎯 Images trouvées par nom de fichier même sans contexte texte
-            if (!ragResult?.context && ragResult?.images?.length > 0) {
-              ragImages = ragResult.images;
-              // Fusionner avec les images de localisation de composants
-              if (componentLocationImages.length > 0) {
-                const existingIds = new Set(ragImages.map((i: any) => i.id));
-                componentLocationImages.forEach(cImg => {
-                  if (!existingIds.has(cImg.id)) ragImages.push(cImg);
-                });
-              }
-              console.log(`[RAG-FILENAME] ${ragImages.length} image(s) trouvée(s) par correspondance de nom de fichier`);
               
-              // 🎯 Injecter les images dans le prompt au format reconnu par extractImagesFromPrompt()
-              // Cela permet au court-circuit du routeur LLM de se déclencher correctement
-              if (ragImages.length > 0) {
-                const imageRefs = ragImages.map(img =>
-                  `[IMAGE: ${img.filename} | ID: ${img.id}]`
-                ).join('\n');
-                finalPrompt = `${imageRefs}\n\n=== QUESTION ===\n${message}\n\n=== INSTRUCTIONS ===\nL'utilisateur demande à voir l'image mentionnée. Elle sera affichée directement.`;
+              if (!ragResult?.context && componentLocationContext) {
+                finalPrompt = [
+                  '=== BANQUE D\'IMAGES - LOCALISATION COMPOSANTS PUPITRE ===',
+                  componentLocationContext,
+                  '',
+                  '=== QUESTION ===',
+                  message,
+                  '',
+                  '=== INSTRUCTIONS ===',
+                  'Répondez en vous basant sur la localisation précise des composants dans la banque d\'images.',
+                  'Indiquez dans quel pupitre global se trouve le composant, sa position précise, et ses métadonnées.',
+                  'Si des images sont disponibles (patches et pupitre global), mentionnez-les car elles seront affichées.'
+                ].join('\n');
+                ragImages = componentLocationImages;
               }
-            }
-            
-            // 🧩 Si on a un contexte de localisation mais pas de contexte RAG, créer un prompt dédié
-            if (!ragResult?.context && componentLocationContext) {
-              finalPrompt = [
-                '=== BANQUE D\'IMAGES - LOCALISATION COMPOSANTS PUPITRE ===',
-                componentLocationContext,
-                '',
-                '=== QUESTION ===',
-                message,
-                '',
-                '=== INSTRUCTIONS ===',
-                'Répondez en vous basant sur la localisation précise des composants dans la banque d\'images.',
-                'Indiquez dans quel pupitre global se trouve le composant, sa position précise, et ses métadonnées.',
-                'Si des images sont disponibles (patches et pupitre global), mentionnez-les car elles seront affichées.'
-              ].join('\n');
-              ragImages = componentLocationImages;
-            }
 
-            // Cas où on a du contexte vision mais pas de RAG
-            if (!useRAG && visionContext) {
-              finalPrompt = `${visionContext}
+              if (!useRAG && visionContext) {
+                finalPrompt = `${visionContext}
 
 === QUESTION ===
 ${message}
@@ -1407,404 +1482,388 @@ ${message}
 === INSTRUCTIONS ===
 Répondez en vous basant sur l'analyse vision ci-dessus.
 Si des visuels sont mentionnés (ex: [IMAGE: image.jpg | ID: id]), parlez-en car ils seront affichés à l'utilisateur.`;
-              console.log(`[VISION-RAG] Contexte vision seul utilisé`);
+                console.log(`[VISION-RAG] Contexte vision seul utilisé`);
+              }
+            
+              console.log(`[ORCHESTRATION] Tentative d'orchestration intelligente pour: "${message.substring(0, 40)}..."`);
+              try {
+                const orchResult = await orchestrateResponse({
+                  query: message,
+                  sessionId,
+                  userId,
+                  options: {
+                    skipVision: !useVisionRAG,
+                    skipTraining: false,
+                    skipAmbiguityCheck: contextResult.contextSource === 'clarification_followup',
+                  },
+                  visionContext: visionContext || undefined,
+                  detectedInnovations: detectedInnovations
+                });
+
+                const isTrainingSource = orchResult.metadata?.usedTrainingVoix || orchResult.metadata?.bestSourceType === 'training';
+                const confidenceThreshold = isTrainingSource ? 0.6 : 0.85;
+                
+                if (orchResult.answer && (isTrainingSource || orchResult.confidence > confidenceThreshold)) {
+                  console.log(`[ORCHESTRATION] ✅ Succès via ${isTrainingSource ? 'VOIX TRAINING' : 'ORCHESTRATEUR'} (confiance: ${(orchResult.confidence * 100).toFixed(0)}%)`);
+                  
+                  const orchImages = orchResult.metadata?.images?.length ? orchResult.metadata.images : ragImages;
+                  const hasImages = orchImages && orchImages.length > 0;
+                  responseData = {
+                    answer: orchResult.answer,
+                    confidence: orchResult.confidence || 0.9,
+                    sources: orchResult.metadata?.sources ? [orchResult.metadata.sources] : [],
+                    suggestions: generateSuggestions({ category: 'training' }),
+                    usedTrainingVoix: !!orchResult.metadata?.usedTrainingVoix,
+                    images: hasImages ? orchImages : undefined,
+                    imageIntent: hasImages ? {
+                      type: 'explicit',
+                      shouldDisplayImage: true,
+                      shouldSuggestImage: true,
+                      confidence: 1.0
+                    } : undefined,
+                    metadata: {
+                      mode: 'orchestrator',
+                      traceId,
+                      strategy: orchResult.strategy,
+                      confidence: orchResult.confidence,
+                      usedTrainingVoix: !!orchResult.metadata?.usedTrainingVoix,
+                      needsClarification: orchResult.metadata?.needsClarification,
+                      clarificationQuestion: orchResult.metadata?.clarificationQuestion
+                    }
+                  };
+                  
+                  success = true;
+                  console.log(`[CHAT API] Orchestrateur terminé avec succès (Training=${!!orchResult.metadata?.usedTrainingVoix})`);
+                } else {
+                  console.log(`[ORCHESTRATION] ℹ️ Pas de réponse directe haute confiance, basculement vers LLM Router`);
+                  
+                  const routerResult = await callLLMRouter({
+                    prompt: finalPrompt,
+                    query: message,
+                    type: 'response',
+                    maxTokens: validated.ia?.maxTokens || 2000,
+                    temperature: validated.ia?.temperature || 0.3,
+                    skipCache: !validated.useCache,
+                    forceProvider: forceProvider,
+                    bypassRateLimit: false,
+                    preferLocal: preferLocal
+                  });
+                  
+                  const allImages = [...(routerResult.images || []), ...ragImages];
+                  const uniqueById = allImages.filter((img, index, self) => 
+                    index === self.findIndex(i => i.id === img.id)
+                  );
+                  const normalizedMessage = normalizeForSearch(message);
+                  uniqueById.forEach(img => {
+                    if (img.filename) {
+                      const normalizedFilename = normalizeForSearch(img.filename);
+                      if (normalizedMessage.includes(normalizedFilename)) {
+                        img.confidence = 1.0;
+                      }
+                    }
+                  });
+                  
+                  let uniqueImages = uniqueById;
+                  if (uniqueById.length > 1) {
+                    const sorted = [...uniqueById].sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+                    const bestConfidence = sorted[0].confidence || 0.1;
+                    uniqueImages = sorted.filter(img => (img.confidence || 0) >= Math.max(0.4, bestConfidence * 0.85));
+                  }
+
+                  responseData = {
+                    answer: routerResult.content,
+                    confidence: routerResult.success ? 0.85 : 0.3,
+                    suggestions: generateSuggestions({ category: 'general' }),
+                    images: uniqueImages.length > 0 ? uniqueImages : undefined,
+                    imageIntent: {
+                      type: (routerResult.imageIntent?.type !== 'none' ? routerResult.imageIntent?.type : (isVisionRelevant ? 'explicit' : 'none')) || 'none',
+                      shouldDisplayImage: (uniqueImages.length > 0 && isVisionRelevant) || !!routerResult.imageIntent?.shouldDisplayImage,
+                      shouldSuggestImage: !!routerResult.imageIntent?.shouldSuggestImage,
+                      confidence: routerResult.imageIntent?.confidence || (isVisionRelevant ? 1.0 : 0)
+                    },
+                    visionEnrichment: visionEnrichment?.enrichment || null,
+                    metadata: {
+                      mode: 'router',
+                      traceId,
+                      provider: routerResult.provider,
+                      model: routerResult.model,
+                      fallbackChain: routerResult.fallbackChain,
+                      fromCache: routerResult.fromCache,
+                      duration: routerResult.duration,
+                      visionUsed: !!visionContext,
+                      visionEnriched: !!visionEnrichment?.enrichment.metadata.enriched
+                    }
+                  };
+                  
+                  console.log(`[CHAT API] Routeur terminé: provider=${routerResult.provider}, images=${uniqueImages.length}`);
+                }
+              } catch (orchError) {
+                console.error('[ORCHESTRATION] Erreur fatale, fallback LLM Router:', orchError);
+                const routerResult = await callLLMRouter({
+                  prompt: finalPrompt,
+                  query: message,
+                  type: 'response'
+                });
+                responseData = { answer: routerResult.content, metadata: { mode: 'fallback' } };
+              }
             }
-          
-          // 📚🎓 TENTATIVE D'ORCHESTRATION (7ème voix: Training, Cache, QR Index, etc.)
-          console.log(`[ORCHESTRATION] Tentative d'orchestration intelligente pour: "${message.substring(0, 40)}..."`);
-          try {
-            const orchResult = await orchestrateResponse({
-              query: message,
-              sessionId,
-              userId,
-              options: {
-                skipVision: !useVisionRAG,
-                skipTraining: false, // On veut la 7ème voix !
-                skipAmbiguityCheck: contextResult.contextSource === 'clarification_followup',
-              },
+          } else if (mode === 'procedure') {
+            const result = await chat({
+              text: message,
+              history: validated.history || [],
+              documentContext: validated.documentContext || '',
+              episodicMemory: [],
+              distilledRules: [],
+              userProfile: validated.userProfile,
+              hierarchyNodes: [],
+              strictness: validated.ia?.strictness || 0.7,
+              maxTokens: validated.ia?.maxTokens || 1000,
+              temperature: validated.ia?.temperature || 0.3,
+              responseFormat: validated.ia?.responseFormat || 'détaillé',
+              procedureMode: validated.procedure?.mode || 'proposal',
+              currentProcedureId: validated.procedure?.id_procedure,
+              currentStepIndex: validated.procedure?.etape_actuelle,
+              procedureAction: validated.procedure?.action,
+              model: validated.ia?.model || 'tinyllama:latest',
               visionContext: visionContext || undefined,
               detectedInnovations: detectedInnovations
             });
-
-            // Si l'orchestrateur a trouvé une réponse directe (Training ou Cache) avec une confiance suffisante
-            const isTrainingSource = orchResult.metadata?.usedTrainingVoix || orchResult.metadata?.bestSourceType === 'training';
-            const confidenceThreshold = isTrainingSource ? 0.6 : 0.85;
-            
-            if (orchResult.answer && (isTrainingSource || orchResult.confidence > confidenceThreshold)) {
-              console.log(`[ORCHESTRATION] ✅ Succès via ${isTrainingSource ? 'VOIX TRAINING' : 'ORCHESTRATEUR'} (confiance: ${(orchResult.confidence * 100).toFixed(0)}%)`);
-              
-              
-              const orchImages = orchResult.metadata?.images?.length ? orchResult.metadata.images : ragImages;
-              const hasImages = orchImages && orchImages.length > 0;
-              responseData = {
-                answer: orchResult.answer,
-                confidence: orchResult.confidence || 0.9,
-                sources: orchResult.metadata?.sources ? [orchResult.metadata.sources] : [],
-                suggestions: generateSuggestions({ category: 'training' }),
-                usedTrainingVoix: !!orchResult.metadata?.usedTrainingVoix,
-                images: hasImages ? orchImages : undefined,
-                imageIntent: hasImages ? {
-                  type: 'explicit',
-                  shouldDisplayImage: true,
-                  shouldSuggestImage: true,
-                  confidence: 1.0
-                } : undefined,
-                metadata: {
-                  mode: 'orchestrator',
-                  traceId,
-                  strategy: orchResult.strategy,
-                  confidence: orchResult.confidence,
-                  usedTrainingVoix: !!orchResult.metadata?.usedTrainingVoix,
-                  needsClarification: orchResult.metadata?.needsClarification,
-                  clarificationQuestion: orchResult.metadata?.clarificationQuestion
-                }
-              };
-              
-              success = true;
-              console.log(`[CHAT API] Orchestrateur terminé avec succès (Training=${!!orchResult.metadata?.usedTrainingVoix})`);
-            } else {
-              // Sinon on continue avec le flux classique LLM Router
-              console.log(`[ORCHESTRATION] ℹ️ Pas de réponse directe haute confiance, basculement vers LLM Router`);
-              
-              const routerResult = await callLLMRouter({
-                prompt: finalPrompt,
-                query: message,
-                type: 'response',
-                maxTokens: validated.ia?.maxTokens || 2000,
-                temperature: validated.ia?.temperature || 0.3,
-                skipCache: !validated.useCache,
-                forceProvider: forceProvider,
-                bypassRateLimit: false,
-                preferLocal: preferLocal
-              });
-              
-              const allImages = [...(routerResult.images || []), ...ragImages];
-              const uniqueById = allImages.filter((img, index, self) => 
-                index === self.findIndex(i => i.id === img.id)
-              );
-              const normalizedMessage = normalizeForSearch(message);
-              uniqueById.forEach(img => {
-                if (img.filename) {
-                  const normalizedFilename = normalizeForSearch(img.filename);
-                  if (normalizedMessage.includes(normalizedFilename)) {
-                    img.confidence = 1.0;
-                  }
-                }
-              });
-              
-              let uniqueImages = uniqueById;
-              if (uniqueById.length > 1) {
-                const sorted = [...uniqueById].sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
-                const bestConfidence = sorted[0].confidence || 0.1;
-                uniqueImages = sorted.filter(img => (img.confidence || 0) >= Math.max(0.4, bestConfidence * 0.85));
-              }
-
-              responseData = {
-                answer: routerResult.content,
-                confidence: routerResult.success ? 0.85 : 0.3,
-                suggestions: generateSuggestions({ category: 'general' }),
-                images: uniqueImages.length > 0 ? uniqueImages : undefined,
-                imageIntent: {
-                  type: (routerResult.imageIntent?.type !== 'none' ? routerResult.imageIntent?.type : (isVisionRelevant ? 'explicit' : 'none')) || 'none',
-                  shouldDisplayImage: (uniqueImages.length > 0 && isVisionRelevant) || !!routerResult.imageIntent?.shouldDisplayImage,
-                  shouldSuggestImage: !!routerResult.imageIntent?.shouldSuggestImage,
-                  confidence: routerResult.imageIntent?.confidence || (isVisionRelevant ? 1.0 : 0)
-                },
-                visionEnrichment: visionEnrichment?.enrichment || null,
-                metadata: {
-                  mode: 'router',
-                  traceId,
-                  provider: routerResult.provider,
-                  model: routerResult.model,
-                  fallbackChain: routerResult.fallbackChain,
-                  fromCache: routerResult.fromCache,
-                  duration: routerResult.duration,
-                  visionUsed: !!visionContext,
-                  visionEnriched: !!visionEnrichment?.enrichment.metadata.enriched
-                }
-              };
-              
-              console.log(`[CHAT API] Routeur terminé: provider=${routerResult.provider}, images=${uniqueImages.length}`);
-            }
-          } catch (orchError) {
-            console.error('[ORCHESTRATION] Erreur fatale, fallback LLM Router:', orchError);
-            const routerResult = await callLLMRouter({
-              prompt: finalPrompt,
-              query: message,
-              type: 'response'
+            responseData = {
+              answer: result.answer,
+              confidence: result.confidence || 0.8,
+              sources: result.sources || [],
+              suggestions: result.suggestions || generateSuggestions({ category: 'procedure' }),
+              images: result.images || [],
+              showImagesDirectly: result.showImagesDirectly || false,
+              imagesAvailable: result.imagesAvailable || false,
+              imageIntent: {
+                type: 'none',
+                shouldDisplayImage: false,
+                shouldSuggestImage: false,
+                confidence: 0
+              },
+              metadata: { mode: 'procedure', traceId },
+            };
+          } else if (mode === 'smart') {
+            const router = getSmartRouter();
+            if (!router) throw new Error('SmartRouter non disponible');
+            const result = await router.route(message, {
+              userId: validated.userId,
+              sessionId: validated.sessionId,
+              image: validated.image ? Buffer.from(validated.image, 'base64') : undefined,
+              mode: validated.mode,
             });
-            responseData = { answer: routerResult.content, metadata: { mode: 'fallback' } };
-          }
-        }
-        // ========== MODE PROCEDURE (sans routeur) ==========
-       } else if (mode === 'procedure') {
-          const result = await chat({
-            text: message,
-            history: validated.history || [],
-            documentContext: validated.documentContext || '',
-            episodicMemory: [],
-            distilledRules: [],
-            userProfile: validated.userProfile,
-            hierarchyNodes: [],
-            strictness: validated.ia?.strictness || 0.7,
-            maxTokens: validated.ia?.maxTokens || 1000,
-            temperature: validated.ia?.temperature || 0.3,
-            responseFormat: validated.ia?.responseFormat || 'détaillé',
-            procedureMode: validated.procedure?.mode || 'proposal',
-            currentProcedureId: validated.procedure?.id_procedure,
-            currentStepIndex: validated.procedure?.etape_actuelle,
-            procedureAction: validated.procedure?.action,
-            model: validated.ia?.model || 'tinyllama:latest',
-            visionContext: visionContext || undefined,
-            detectedInnovations: detectedInnovations
-          });
-          responseData = {
-            answer: result.answer,
-            confidence: result.confidence || 0.8,
-            sources: result.sources || [],
-            suggestions: result.suggestions || generateSuggestions({ category: 'procedure' }),
-            images: result.images || [],
-            showImagesDirectly: result.showImagesDirectly || false,
-            imagesAvailable: result.imagesAvailable || false,
-            imageIntent: {
-              type: 'none',
-              shouldDisplayImage: false,
-              shouldSuggestImage: false,
-              confidence: 0
-            },
-            metadata: { mode: 'procedure', traceId },
-          };
-        } else if (mode === 'smart') {
-          const router = getSmartRouter();
-          if (!router) throw new Error('SmartRouter non disponible');
-          const result = await router.route(message, {
-            userId: validated.userId,
-            sessionId: validated.sessionId,
-            image: validated.image ? Buffer.from(validated.image, 'base64') : undefined,
-            mode: validated.mode,
-          });
-          const suggestions = generateSuggestions(result.intent);
-          responseData = {
-            answer: result.response,
-            confidence: result.intent.confidence,
-            source: result.intent.category,
-            intent: result.intent,
-            suggestions,
-            images: result.images,
-            imageIntent: {
-              type: 'none',
-              shouldDisplayImage: false,
-              shouldSuggestImage: false,
-              confidence: 0
-            },
-            metadata: { 
-              mode: 'smart', 
-              traceId,
-              hybrid: result.hybrid
-            },
-          };
-        } else if (mode === 'auto') {
-          const analyzer = getIntentAnalyzer();
-          if (!analyzer) throw new Error('IntentAnalyzer non disponible');
-          const intent = await analyzer.analyze(message);
-          const model = selectModelForIntent(intent);
-          const result = await chat({
-            text: message,
-            history: validated.history || [],
-            documentContext: validated.documentContext || '',
-            episodicMemory: [],
-            distilledRules: [],
-            userProfile: validated.userProfile,
-            hierarchyNodes: [],
-            strictness: validated.ia?.strictness || 0.7,
-            maxTokens: validated.ia?.maxTokens || 1000,
-            temperature: validated.ia?.temperature || 0.3,
-            responseFormat: validated.ia?.responseFormat || 'détaillé',
-            model,
-            procedureMode: 'proposal',
-            visionContext: visionContext || undefined,
-            detectedInnovations: detectedInnovations
-          });
-          const suggestions = generateSuggestions(intent);
-          responseData = {
-            answer: result.answer,
-            confidence: result.confidence || 0.8,
-            intent,
-            suggestions,
-            images: result.images || [],
-            imageIntent: {
-              type: 'none',
-              shouldDisplayImage: false,
-              shouldSuggestImage: false,
-              confidence: 0
-            },
-            metadata: { 
-              mode: 'auto', 
-              model, 
-              traceId,
-              hybrid: result.hybridMetadata
-            },
-          };
-        } else {
-          // mode legacy
-          const result = await callHybridProvider(message);
-          responseData = {
-            answer: result.answer,
-            source: result.source,
-            confidence: result.confidence || 0.7,
-            imageIntent: {
-              type: 'none',
-              shouldDisplayImage: false,
-              shouldSuggestImage: false,
-              confidence: 0
-            },
-            metadata: { mode: 'legacy', traceId },
-          };
-        } // fin du else (mode legacy)
-      } // fin du if (!toolformerHandled)
-    } // fin du try principal
-    catch (err: any) {
-      success = false;
-      errorMsg = err.message;
-      responseData = {
-        answer: 'Je suis désolé, une erreur technique est survenue. Veuillez réessayer.',
-        error: process.env.NODE_ENV === 'development' ? errorMsg : 'Erreur interne',
-        imageIntent: {
-          type: 'none' as const,
-          shouldDisplayImage: false,
-          shouldSuggestImage: false,
-          confidence: 0
-        },
-        metadata: { mode: 'error', traceId },
-      };
-    }
-
-    const duration = Date.now() - startTime;
-    performanceLogger.recordChatTotal(duration, success, traceId, { mode, query: message });
-    auditLogger.chatQuery(userId, message, responseData.answer?.length || 0, duration, success, errorMsg);
-    requestLogger.endTrace(responseData.answer, errorMsg);
-
-    if (!responseData.suggestions && responseData.answer) {
-      try {
-        // Création d'un historique simulé à partir de l'historique conversationnel
-        const historyMock = (validated.history || []).map((h: any) => ({
-           id: uuidv4(),
-           actionId: uuidv4(),
-           policyId: 'chat',
-           success: true,
-           timestamp: Date.now(),
-           context: h.content,
-           action: { type: 'chat', params: { text: h.content } },
-           result: { content: h.content },
-           feedback: 1
-        }));
-
-        const predictions = await predictNextActions(historyMock, responseData.answer, {
-           enableContextual: true,
-           maxSuggestions: 3
-        });
-
-        if (predictions && predictions.length > 0) {
-           responseData.suggestions = predictions.map((p: any) => p.description);
-        } else {
-           responseData.suggestions = generateSuggestions({ category: 'general' });
-        }
-      } catch (err) {
-        console.warn('[CHAT API] Erreur lors de la prédiction des suggestions:', err);
-        responseData.suggestions = generateSuggestions({ category: 'general' });
-      }
-    }
-
-    // 💬 ENREGISTREMENT CONTEXTE : stocker la réponse pour le suivi conversationnel
-    if (responseData.answer) {
-      const isClarification = responseData.metadata?.needsClarification ||
-        responseData.metadata?.strategy === 'clarification';
-
-      // Extraire les options de clarification si présentes
-      let clarificationOptions: string[] | undefined;
-      if (isClarification && responseData.answer) {
-        const optionsMatch = responseData.answer.match(/Options?\s*:\s*(.+)/i);
-        if (optionsMatch) {
-          clarificationOptions = optionsMatch[1].split(/[,;]/).map((o: string) => o.trim()).filter(Boolean);
-        }
-      }
-
-      conversationContext.recordAssistantMessage(sessionId, responseData.answer, {
-        wasAmbiguous: isClarification,
-        clarificationOptions,
-        originalQuery: message,
-        strategy: responseData.metadata?.strategy,
-        confidence: responseData.confidence
-      });
-    }
-
-    // Ajouter info d'enrichissement dans les métadonnées si applicable
-    if (contextResult.wasEnriched) {
-      responseData.metadata = {
-        ...responseData.metadata,
-        contextEnriched: true,
-        contextSource: contextResult.contextSource,
-        originalMessage: contextResult.originalMessage
-      };
-    }
-
-    // ========== ENRICHISSEMENT SCHÉMA MENTAL (MINDMAP) ==========
-    try {
-      const combinedTextForMindmap = `${message} ${responseData.answer || ''}`;
-      const detectedCircuits = mindMapChatEnricher.detectCircuitIds(combinedTextForMindmap);
-      if (detectedCircuits.length > 0) {
-        const mindmapMeta = mindMapChatEnricher.getClientEnrichmentMetadata(detectedCircuits);
-        if (mindmapMeta) {
-          responseData.metadata = {
-            ...responseData.metadata,
-            mindmap: mindmapMeta,
-            hasMindmap: true,
-            circuits: detectedCircuits,
-            messageHint: mindmapMeta.messageHint
-          };
-          
-          // Enrich suggestions list with visual mindmap command suggestion
-          const circuitId = detectedCircuits[0];
-          const suggestionText = `🧠 Schéma mental ${circuitId}`;
-          if (responseData.suggestions) {
-            if (!responseData.suggestions.includes(suggestionText)) {
-              responseData.suggestions = [suggestionText, ...responseData.suggestions].slice(0, 3);
-            }
+            const suggestions = generateSuggestions(result.intent);
+            responseData = {
+              answer: result.response,
+              confidence: result.intent.confidence,
+              source: result.intent.category,
+              intent: result.intent,
+              suggestions,
+              images: result.images,
+              imageIntent: {
+                type: 'none',
+                shouldDisplayImage: false,
+                shouldSuggestImage: false,
+                confidence: 0
+              },
+              metadata: { 
+                mode: 'smart', 
+                traceId,
+                hybrid: result.hybrid
+              },
+            };
+          } else if (mode === 'auto') {
+            const analyzer = getIntentAnalyzer();
+            if (!analyzer) throw new Error('IntentAnalyzer non disponible');
+            const intent = await analyzer.analyze(message);
+            const model = selectModelForIntent(intent);
+            const result = await chat({
+              text: message,
+              history: validated.history || [],
+              documentContext: validated.documentContext || '',
+              episodicMemory: [],
+              distilledRules: [],
+              userProfile: validated.userProfile,
+              hierarchyNodes: [],
+              strictness: validated.ia?.strictness || 0.7,
+              maxTokens: validated.ia?.maxTokens || 1000,
+              temperature: validated.ia?.temperature || 0.3,
+              responseFormat: validated.ia?.responseFormat || 'détaillé',
+              model,
+              procedureMode: 'proposal',
+              visionContext: visionContext || undefined,
+              detectedInnovations: detectedInnovations
+            });
+            const suggestions = generateSuggestions(intent);
+            responseData = {
+              answer: result.answer,
+              confidence: result.confidence || 0.8,
+              intent,
+              suggestions,
+              images: result.images || [],
+              imageIntent: {
+                type: 'none',
+                shouldDisplayImage: false,
+                shouldSuggestImage: false,
+                confidence: 0
+              },
+              metadata: { 
+                mode: 'auto', 
+                model, 
+                traceId,
+                hybrid: result.hybridMetadata
+              },
+            };
           } else {
-            responseData.suggestions = [suggestionText];
+            const result = await callHybridProvider(message);
+            responseData = {
+              answer: result.answer,
+              source: result.source,
+              confidence: result.confidence || 0.7,
+              imageIntent: {
+                type: 'none',
+                shouldDisplayImage: false,
+                shouldSuggestImage: false,
+                confidence: 0
+              },
+              metadata: { mode: 'legacy', traceId },
+            };
           }
         }
+      } catch (err: any) {
+        success = false;
+        errorMsg = err.message;
+        responseData = {
+          answer: 'Je suis désolé, une erreur technique est survenue. Veuillez réessayer.',
+          error: process.env.NODE_ENV === 'development' ? errorMsg : 'Erreur interne',
+          imageIntent: {
+            type: 'none' as const,
+            shouldDisplayImage: false,
+            shouldSuggestImage: false,
+            confidence: 0
+          },
+          metadata: { mode: 'error', traceId },
+        };
       }
-    } catch (enrichError) {
-      console.warn('[CHAT-API] Échec enrichissement mindmap:', enrichError);
-    }
 
-    // ========== SAUVEGARDE CACHE SÉMANTIQUE ==========
-    if (success && responseData.answer && responseData.answer.length > 50 && body._useCache !== false) {
+      const duration = Date.now() - startTime;
+      performanceLogger.recordChatTotal(duration, success, traceId, { mode, query: message });
+      auditLogger.chatQuery(userId, message, responseData.answer?.length || 0, duration, success, errorMsg);
+      requestLogger.endTrace(responseData.answer, errorMsg);
+
+      if (!responseData.suggestions && responseData.answer) {
+        try {
+          const historyMock = (validated.history || []).map((h: any) => ({
+             id: uuidv4(),
+             actionId: uuidv4(),
+             policyId: 'chat',
+             success: true,
+             timestamp: Date.now(),
+             context: h.content,
+             action: { type: 'chat', params: { text: h.content } },
+             result: { content: h.content },
+             feedback: 1
+          }));
+
+          const predictions = await predictNextActions(historyMock, responseData.answer, {
+             enableContextual: true,
+             maxSuggestions: 3
+          });
+
+          if (predictions && predictions.length > 0) {
+             responseData.suggestions = predictions.map((p: any) => p.description);
+          } else {
+             responseData.suggestions = generateSuggestions({ category: 'general' });
+          }
+        } catch (err) {
+          console.warn('[CHAT API] Erreur lors de la prédiction des suggestions:', err);
+          responseData.suggestions = generateSuggestions({ category: 'general' });
+        }
+      }
+
+      if (responseData.answer) {
+        const isClarification = responseData.metadata?.needsClarification ||
+          responseData.metadata?.strategy === 'clarification';
+
+        let clarificationOptions: string[] | undefined;
+        if (isClarification && responseData.answer) {
+          const optionsMatch = responseData.answer.match(/Options?\s*:\s*(.+)/i);
+          if (optionsMatch) {
+            clarificationOptions = optionsMatch[1].split(/[,;]/).map((o: string) => o.trim()).filter(Boolean);
+          }
+        }
+
+        conversationContext.recordAssistantMessage(sessionId, responseData.answer, {
+          wasAmbiguous: isClarification,
+          clarificationOptions,
+          originalQuery: message,
+          strategy: responseData.metadata?.strategy,
+          confidence: responseData.confidence
+        });
+      }
+
+      if (contextResult.wasEnriched) {
+        responseData.metadata = {
+          ...responseData.metadata,
+          contextEnriched: true,
+          contextSource: contextResult.contextSource,
+          originalMessage: contextResult.originalMessage
+        };
+      }
+
       try {
-        // On ne cache que les réponses consistantes et réussies
-        await semanticCacheService.save(message, responseData.answer, { mode, traceId });
-      } catch (saveError) {
-        console.warn('[CHAT-API] Échec sauvegarde cache sémantique:', saveError);
+        const combinedTextForMindmap = `${message} ${responseData.answer || ''}`;
+        const detectedCircuits = mindMapChatEnricher.detectCircuitIds(combinedTextForMindmap);
+        if (detectedCircuits.length > 0) {
+          const mindmapMeta = mindMapChatEnricher.getClientEnrichmentMetadata(detectedCircuits);
+          if (mindmapMeta) {
+            responseData.metadata = {
+              ...responseData.metadata,
+              mindmap: mindmapMeta,
+              hasMindmap: true,
+              circuits: detectedCircuits,
+              messageHint: mindmapMeta.messageHint
+            };
+            
+            const circuitId = detectedCircuits[0];
+            const suggestionText = `🧠 Schéma mental ${circuitId}`;
+            if (responseData.suggestions) {
+              if (!responseData.suggestions.includes(suggestionText)) {
+                responseData.suggestions = [suggestionText, ...responseData.suggestions].slice(0, 3);
+              }
+            } else {
+              responseData.suggestions = [suggestionText];
+            }
+          }
+        }
+      } catch (enrichError) {
+        console.warn('[CHAT-API] Échec enrichissement mindmap:', enrichError);
       }
-    }
 
-    return NextResponse.json(responseData, { status: success ? 200 : 500 });
-  } catch (error: any) {
-    console.error('[CHAT API] Erreur globale:', error);
-    requestLogger.endTrace(undefined, error.message);
-    auditLogger.errorOccurred(error.message, { endpoint: '/api/chat', traceId: 'unknown' });
-    return NextResponse.json(
-      {
-        error: 'Erreur interne du serveur',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
-      },
-      { status: 500 }
-    );
-  }
+      if (success && responseData.answer && responseData.answer.length > 50 && body._useCache !== false) {
+        try {
+          await semanticCacheService.save(message, responseData.answer, { mode, traceId });
+        } catch (saveError) {
+          console.warn('[CHAT-API] Échec sauvegarde cache sémantique:', saveError);
+        }
+      }
+
+      return NextResponse.json(responseData, { status: success ? 200 : 500 });
+    } catch (error: any) {
+      console.error('[CHAT API] Erreur globale:', error);
+      requestLogger.endTrace(undefined, error.message);
+      auditLogger.errorOccurred(error.message, { endpoint: '/api/chat', traceId: 'unknown' });
+      return NextResponse.json(
+        {
+          error: 'Erreur interne du serveur',
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        },
+        { status: 500 }
+      );
+    }
   });
 }
-
 // ============================================
 // HANDLER GET (documentation et streaming)
 // ============================================
