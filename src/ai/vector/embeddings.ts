@@ -27,10 +27,30 @@ export const EMBEDDING_CONFIG = {
 };
 
 // ============================================
+// VÉRIFICATION VERCEL - DÉSACTIVATION
+// ============================================
+
+const isEmbeddingsDisabled = (): boolean => {
+  // Désactiver sur Vercel (pas d'Ollama)
+  if (process.env.VERCEL === '1') return true;
+  if (process.env.DISABLE_EMBEDDINGS === 'true') return true;
+  if (process.env.NEXT_PUBLIC_DISABLE_EMBEDDINGS === 'true') return true;
+  // Désactiver si l'URL est 'disabled'
+  if (process.env.OLLAMA_URL === 'disabled') return true;
+  return false;
+};
+
+// ============================================
 // FONCTIONS DE GESTION DE DIMENSION
 // ============================================
 
 export async function detectEmbeddingDimension(): Promise<number> {
+  // Sur Vercel, on ne peut pas détecter
+  if (isEmbeddingsDisabled()) {
+    console.log('[EMBEDDING] 🔍 Détection dimension ignorée (Vercel)');
+    return EMBEDDING_CONFIG.defaultDimension;
+  }
+  
   try {
     const testText = "Test de dimension d'embedding";
     const tempProvider = new OllamaEmbeddingFunction();
@@ -96,6 +116,25 @@ export function isDimensionDetected(): boolean {
   return EMBEDDING_CONFIG.dimensionDetected;
 }
 
+/**
+ * Fonction utilitaire pour générer un embedding simulé (accessible publiquement)
+ */
+export function simulateEmbedding(text: string, dimension: number = 768): number[] {
+  const embedding = new Array(dimension).fill(0);
+  // Hash simple pour avoir des embeddings cohérents pour le même texte
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash = hash & hash;
+  }
+  hash = Math.abs(hash);
+  
+  for (let i = 0; i < dimension; i++) {
+    embedding[i] = (Math.sin(hash * (i + 1)) + 1) / 2;
+  }
+  return embedding;
+}
+
 // ============================================
 // IMPLÉMENTATION OLLAMA
 // ============================================
@@ -105,6 +144,7 @@ export class OllamaEmbeddingFunction implements IEmbeddingFunction {
   private url: string;
   private headers: Record<string, string>;
   private expectedDimension: number;
+  private enabled: boolean;
 
   constructor(
     model: string = process.env.EMBEDDING_MODEL || EMBEDDING_CONFIG.defaultModel,
@@ -112,6 +152,13 @@ export class OllamaEmbeddingFunction implements IEmbeddingFunction {
   ) {
     this.model = model;
     this.url = url;
+    this.enabled = !isEmbeddingsDisabled() && url !== 'disabled';
+    
+    // Si désactivé, on utilise une URL factice mais on ne fera pas d'appels
+    if (!this.enabled) {
+      console.log(`[EMBEDDING] ⚠️ Service désactivé sur Vercel (fallback embeddings simulés)`);
+    }
+    
     this.expectedDimension = getDimensionForModel(model);
     
     this.headers = {
@@ -122,7 +169,7 @@ export class OllamaEmbeddingFunction implements IEmbeddingFunction {
       this.headers['ngrok-skip-browser-warning'] = 'true';
     }
     
-    console.log(`[EMBEDDING] Initialisé: modèle=${this.model}, dimension attendue=${this.expectedDimension}`);
+    console.log(`[EMBEDDING] Initialisé: modèle=${this.model}, dimension attendue=${this.expectedDimension}, enabled=${this.enabled}`);
   }
 
   /**
@@ -133,78 +180,98 @@ export class OllamaEmbeddingFunction implements IEmbeddingFunction {
   }
 
   async generate(texts: string[]): Promise<number[][]> {
-  const results: number[][] = [];
-  const currentDim = this.expectedDimension;
-  
-  for (let i = 0; i < texts.length; i++) {
-    let text = texts[i] as any; // 🔥 Cast temporaire pour éviter l'erreur TypeScript
+    // Si désactivé, retourner des embeddings simulés
+    if (!this.enabled) {
+      console.log(`[EMBEDDING] 🔄 ${texts.length} embedding(s) simulé(s) (service désactivé)`);
+      return texts.map(text => simulateEmbedding(text, this.expectedDimension));
+    }
     
-    // 🔥 Conversion robuste en string (protection contre les objets/buffers)
-    if (typeof text !== 'string') {
-      if (text && typeof text === 'object') {
-        // Vérifier si c'est un Buffer (Node.js)
-        if (text.type === 'Buffer' && Array.isArray(text.data)) {
-          text = Buffer.from(text.data).toString('utf-8');
-        } else if (typeof text.toString === 'function') {
-          text = text.toString();
+    const results: number[][] = [];
+    const currentDim = this.expectedDimension;
+    
+    for (let i = 0; i < texts.length; i++) {
+      let text = texts[i] as any;
+      
+      // Conversion robuste en string
+      if (typeof text !== 'string') {
+        if (text && typeof text === 'object') {
+          if (text.type === 'Buffer' && Array.isArray(text.data)) {
+            text = Buffer.from(text.data).toString('utf-8');
+          } else if (typeof text.toString === 'function') {
+            text = text.toString();
+          } else {
+            text = text.content || text.text || JSON.stringify(text);
+          }
         } else {
-          text = text.content || text.text || JSON.stringify(text);
+          text = String(text || '');
         }
-      } else {
-        text = String(text || '');
+      }
+      
+      // Vérifier que le texte n'est pas vide
+      if (!text || text.trim().length === 0) {
+        console.warn(`[EMBEDDING] ⚠️ Texte vide pour l'index ${i}, utilisation d'un vecteur nul`);
+        results.push(new Array(currentDim).fill(0));
+        continue;
+      }
+      
+      try {
+        // Vérifier que l'URL est valide avant d'appeler fetch
+        if (!this.url || this.url === 'disabled') {
+          console.warn(`[EMBEDDING] ⚠️ URL invalide, embedding simulé`);
+          results.push(simulateEmbedding(text, currentDim));
+          continue;
+        }
+        
+        const response = await fetch(`${this.url}/api/embeddings`, {
+          method: 'POST',
+          headers: this.headers,
+          body: JSON.stringify({ model: this.model, prompt: text }),
+          signal: AbortSignal.timeout(60000)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Ollama error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.embedding || !Array.isArray(data.embedding)) {
+          throw new Error('Invalid embedding response from Ollama');
+        }
+
+        const embedding = data.embedding as number[];
+        
+        // Vérifier la dimension (auto-adaptatif)
+        if (!validateEmbeddingDimension(embedding.length)) {
+          console.warn(`[EMBEDDING] ⚠️ Dimension inattendue: ${embedding.length}`);
+        }
+        
+        results.push(embedding);
+        
+      } catch (error) {
+        const textPreview = typeof text === 'string' ? text.substring(0, 50) : String(text || '').substring(0, 50);
+        console.error(`[EMBEDDING] ❌ Échec pour le texte: "${textPreview}..."`, error);
+        // En cas d'erreur, retourner un embedding simulé
+        results.push(simulateEmbedding(text, currentDim));
       }
     }
     
-    // Vérifier que le texte n'est pas vide
-    if (!text || text.trim().length === 0) {
-      console.warn(`[EMBEDDING] ⚠️ Texte vide pour l'index ${i}, utilisation d'un vecteur nul`);
-      results.push(new Array(currentDim).fill(0));
-      continue;
-    }
-    
-    try {
-      const response = await fetch(`${this.url}/api/embeddings`, {
-        method: 'POST',
-        headers: this.headers,
-        body: JSON.stringify({ model: this.model, prompt: text }),
-        signal: AbortSignal.timeout(60000) // 🚀 Augmentation du timeout à 60s
-      });
-
-      if (!response.ok) {
-        throw new Error(`Ollama error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (!data.embedding || !Array.isArray(data.embedding)) {
-        throw new Error('Invalid embedding response from Ollama');
-      }
-
-      const embedding = data.embedding as number[];
-      
-      // Vérifier la dimension (auto-adaptatif)
-      if (!validateEmbeddingDimension(embedding.length)) {
-        console.warn(`[EMBEDDING] ⚠️ Dimension inattendue: ${embedding.length}`);
-      }
-      
-      results.push(embedding);
-      
-    } catch (error) {
-      const textPreview = typeof text === 'string' ? text.substring(0, 50) : String(text || '').substring(0, 50);
-      console.error(`[EMBEDDING] ❌ Échec pour le texte: "${textPreview}..."`, error);
-      results.push(new Array(currentDim).fill(0));
-    }
+    return results;
   }
-  
-  return results;
 }
-}
+
 // ============================================
 // FACTORY
 // ============================================
 
 export function getEmbeddingFunction(): IEmbeddingFunction {
   const provider = process.env.EMBEDDING_PROVIDER || 'ollama';
+  
+  // Sur Vercel, toujours utiliser Ollama (simulé)
+  if (isEmbeddingsDisabled()) {
+    console.log('[EMBEDDING] Utilisation du mode simulé (Vercel)');
+    return new OllamaEmbeddingFunction();
+  }
 
   switch (provider) {
     case 'ollama':
@@ -223,16 +290,26 @@ export class EmbeddingService {
   private activeModel: string;
   private provider: IEmbeddingFunction;
   private dimension: number;
+  private enabled: boolean;
 
   constructor() {
+    this.enabled = !isEmbeddingsDisabled();
     this.activeModel = process.env.EMBEDDING_MODEL || EMBEDDING_CONFIG.defaultModel;
     this.provider = getEmbeddingFunction();
     this.dimension = getDimensionForModel(this.activeModel);
     
-    console.log(`[EMBEDDING-SERVICE] Actif: modèle=${this.activeModel}, dimension=${this.dimension}`);
+    if (!this.enabled) {
+      console.log(`[EMBEDDING-SERVICE] ⚠️ Mode désactivé (Vercel) - embeddings simulés`);
+    } else {
+      console.log(`[EMBEDDING-SERVICE] Actif: modèle=${this.activeModel}, dimension=${this.dimension}`);
+    }
   }
   
   async generateEmbedding(text: string, model?: string): Promise<number[]> {
+    if (!this.enabled) {
+      return simulateEmbedding(text, this.dimension);
+    }
+    
     if (model && model !== this.activeModel) {
       const tempProvider = new OllamaEmbeddingFunction(model);
       const results = await tempProvider.generate([text]);
@@ -244,6 +321,10 @@ export class EmbeddingService {
   }
   
   async batchEmbed(texts: string[], model?: string): Promise<number[][]> {
+    if (!this.enabled) {
+      return texts.map(text => simulateEmbedding(text, this.dimension));
+    }
+    
     if (model && model !== this.activeModel) {
       const tempProvider = new OllamaEmbeddingFunction(model);
       return await tempProvider.generate(texts);
@@ -266,12 +347,16 @@ export class EmbeddingService {
   async autoDetectDimension(): Promise<number> {
     return detectEmbeddingDimension();
   }
+  
+  isEnabled(): boolean {
+    return this.enabled;
+  }
 }
 
 export const embeddingService = new EmbeddingService();
 
-// Auto-détection au chargement (côté serveur uniquement)
-if (typeof window === 'undefined' && !EMBEDDING_CONFIG.dimensionDetected) {
+// Auto-détection au chargement (côté serveur uniquement, et non sur Vercel)
+if (typeof window === 'undefined' && !EMBEDDING_CONFIG.dimensionDetected && !isEmbeddingsDisabled()) {
   detectEmbeddingDimension().then(dim => {
     console.log(`[EMBEDDING] ✅ Auto-configuration: dimension ${dim}`);
   }).catch(err => {
